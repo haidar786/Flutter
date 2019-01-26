@@ -1,5 +1,4 @@
-![Bitrise](https://app.bitrise.io/app/012ca4e62392dade.svg?token=4yOnk8UtsMDm3sLwcPYs-Q)
-
+[![Build Status](https://app.bitrise.io/app/012ca4e62392dade/status.svg?token=4yOnk8UtsMDm3sLwcPYs-Q&branch=master)](https://app.bitrise.io/app/012ca4e62392dade)
 
 # Flutter
 Emrals app in Flutter

@@ -1,3 +1,6 @@
+![Bitrise](https://app.bitrise.io/app/012ca4e62392dade.svg?token=4yOnk8UtsMDm3sLwcPYs-Q)
+
+
 # Flutter
 Emrals app in Flutter
 

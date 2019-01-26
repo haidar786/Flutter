@@ -8,8 +8,6 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:emrals_flutter/main.dart';
-
 void main() {
   test('test unit test', () {
     var answer = 42;

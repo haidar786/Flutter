@@ -1,36 +1,47 @@
-name: emrals
+name: crypto_tracker
 description: A new Flutter application.
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# Read more about versioning at semver.org.
-version: 1.0.0+1
-
-environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  fancy_bottom_navigation:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
+  cupertino_icons:
+  path_provider:
+  flutter_webview_plugin:
+  url_launcher:
+  flutter_list_drag_and_drop:
+  charts_flutter:
+  flutter_launcher_icons:
+  cached_network_image:
+  flutter_cache_manager:
+  dynamic_theme:
+      git:
+        url: git://github.com/Norbert515/dynamic_theme.git
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "icon/platypus.png"
+  image_path_android: "icon/platypus2.png"
+  image_path_ios: "icon/platypus.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - icon/platypus2.png
+  fonts:
+    - family: MavenPro
+      fonts:
+       - asset: fonts/MavenPro-Regular.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
@@ -65,5 +76,5 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
-  # For details regarding fonts from package dependencies,
+  # For details regarding fonts from package dependencies, 
   # see https://flutter.io/custom-fonts/#from-packages

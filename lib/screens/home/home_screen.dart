@@ -40,6 +40,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int _selectedIndex = 0;
     return Scaffold(
       appBar: AppBar(
         title: Text("Alerts"),
@@ -54,6 +55,16 @@ class MyHomePage extends StatelessWidget {
               : Center(child: CircularProgressIndicator());
         },
       ),
+      bottomNavigationBar: BottomNavigationBar(
+       currentIndex: _selectedIndex,
+       fixedColor: Colors.red, // this will be set when a new tab is tapped
+       items: [
+         BottomNavigationBarItem(icon: new Icon(Icons.home),title: new Text('Home')),
+         BottomNavigationBarItem(icon: new Icon(Icons.mail),title: new Text('Messages')),
+         //BottomNavigationBarItem(icon: new Icon(Icons.access_alarm),title: new Text('sdf')),
+         BottomNavigationBarItem(icon: new Icon(Icons.person),title: new Text('Profile'))
+       ],
+     ),
     );
   }
 }

@@ -16,3 +16,7 @@ A few resources to get you started:
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
+
+
+https://medium.com/@kashifmin/flutter-login-app-using-rest-api-and-sqflite-b4815aed2149
+https://stackoverflow.com/questions/49651673/converting-string-to-map-in-dart

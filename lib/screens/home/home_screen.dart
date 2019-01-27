@@ -5,13 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<List<Photo>> fetchPhotos(http.Client client) async {
-  final response =
-      await client.get('https://www.emrals.com/api/alerts/');
+Future<List<Photo>> fetchReports(http.Client client) async {
+  final response = await client.get('https://www.emrals.com/api/alerts/');
   return compute(parsePhotos, response.body);
 }
 
-// A function that will convert a response body into a List<Photo>
 List<Photo> parsePhotos(String responseBody) {
   var data = json.decode(responseBody);
   var parsed = data["results"] as List;
@@ -34,19 +32,24 @@ class Photo {
   }
 }
 
-
-
 class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     int _selectedIndex = 0;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Alerts"),
+        actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () { Navigator.pushNamed(context, '/settings'); }
+            )
+        ]
       ),
       body: FutureBuilder<List<Photo>>(
-        future: fetchPhotos(http.Client()),
+        future: fetchReports(http.Client()),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
 
@@ -70,22 +73,72 @@ class MyHomePage extends StatelessWidget {
 }
 
 class PhotosList extends StatelessWidget {
-  final List<Photo> photos;
-
   PhotosList({Key key, this.photos}) : super(key: key);
+
+  final List<Photo> photos;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-      //   crossAxisCount: 2,
-      // ),
       itemCount: photos.length,
       itemBuilder: (context, index) {
-        return Image.network(photos[index].thumbnail);
+        return Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Image.network(photos[index].thumbnail),
+                    Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),
+                      child: Text(
+                        photos[index].title,
+                        style: TextStyle(
+                            fontSize: 8.0, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
+                      child: Text(
+                        photos[index].title,
+                        style: TextStyle(fontSize: 8.0),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text(
+                        "5m",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.star_border,
+                          size: 35.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Divider(
+              height: 2.0,
+              color: Colors.grey,
+            )
+          ],
+        );
       },
     );
-
-
   }
 }

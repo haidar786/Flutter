@@ -1,11 +1,4 @@
 class User {
-  String _username;
-  String _token;
-  double _emrals; 
-  String _picture;
-  int _xp;
-  int _id;
-
   User(this._username, this._token, this._emrals, this._id, this._picture, this._xp);
 
   User.map(dynamic obj) {
@@ -17,11 +10,23 @@ class User {
     this._id = obj["id"];
   }
 
+  double _emrals; 
+  int _id;
+  String _picture;
+  String _token;
+  String _username;
+  int _xp;
+
   String get username => _username;
+
   String get token => _token;
+
   String get picture => _picture;
+
   int get id => _id;
+
   int get xp => _xp;
+
   double get emrals => _emrals;
 
   Map<String, dynamic> toMap() {

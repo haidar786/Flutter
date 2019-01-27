@@ -32,7 +32,6 @@ class DatabaseHelper {
   void _onCreate(Database db, int version) async {
     await db.execute(
     "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL)");
-    print("Created tables");
   }
 
   Future<int> saveUser(User user) async {

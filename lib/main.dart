@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:emrals/auth.dart';
 import 'package:emrals/routes.dart';
 import 'dart:io' show Platform;
 
@@ -9,8 +8,6 @@ void main() {
 }
 
 class LoginApp extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -21,6 +18,4 @@ class LoginApp extends StatelessWidget {
       routes: routes,
     );
   }
-
-
 }

@@ -1,4 +1,4 @@
-import 'package:example/second_page.dart';
+import 'package:emrals/second_page.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:flutter/material.dart';
 

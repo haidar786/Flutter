@@ -1,4 +1,4 @@
-package com.emrals.emralsflutter;
+package com.apps.emrals;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

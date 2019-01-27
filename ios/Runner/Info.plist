@@ -11,9 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>emrals_flutter</string>
-	<key>CFBundleDisplayName</key>
-	<string>emrals_flutter</string>
+	<string>emrals</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

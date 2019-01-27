@@ -13,14 +13,8 @@ Future<List<Photo>> fetchPhotos(http.Client client) async {
 
 // A function that will convert a response body into a List<Photo>
 List<Photo> parsePhotos(String responseBody) {
-  print('parsing');
-  //final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-  // final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-  // print(parsed);
   var data = json.decode(responseBody);
-//access the articles as List
   var parsed = data["results"] as List;
-
   return parsed.map<Photo>((json) => Photo.fromJson(json)).toList();
 }
 
@@ -71,14 +65,16 @@ class PhotosList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-      ),
+    return ListView.builder(
+      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      //   crossAxisCount: 2,
+      // ),
       itemCount: photos.length,
       itemBuilder: (context, index) {
         return Image.network(photos[index].thumbnail);
       },
     );
+
+
   }
 }

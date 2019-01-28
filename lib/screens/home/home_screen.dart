@@ -4,33 +4,21 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:emrals/screens/report_detail.dart';
+import 'package:emrals/models/report.dart';
 
-Future<List<Photo>> fetchReports(http.Client client) async {
+Future<List<Report>> fetchReports(http.Client client) async {
   final response = await client.get('https://www.emrals.com/api/alerts/');
   return compute(parsePhotos, response.body);
 }
 
-List<Photo> parsePhotos(String responseBody) {
+List<Report> parsePhotos(String responseBody) {
   var data = json.decode(responseBody);
   var parsed = data["results"] as List;
-  return parsed.map<Photo>((json) => Photo.fromJson(json)).toList();
+  return parsed.map<Report>((json) => Report.fromJson(json)).toList();
 }
 
-class Photo {
-  final int id;
-  final String title;
-  final String thumbnail;
 
-  Photo({this.id, this.title, this.thumbnail});
-
-  factory Photo.fromJson(Map<String, dynamic> json) {
-    return Photo(
-      id: json['id'] as int,
-      title: json['title'] as String,
-      thumbnail: json['thumbnail'] as String,
-    );
-  }
-}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({ Key key }) : super(key: key);
@@ -55,7 +43,7 @@ class _MyHomePage extends State<MyHomePage> {
             )
         ]
       ),
-      body: FutureBuilder<List<Photo>>(
+      body: FutureBuilder<List<Report>>(
         future: fetchReports(http.Client()),
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
@@ -69,7 +57,6 @@ class _MyHomePage extends State<MyHomePage> {
        currentIndex: _selectedIndex,
        onTap: (index) { 
          final routes = ["/home", "/camera",'/stats'];
-         print(routes[index]);
          Navigator.of(context).pushNamedAndRemoveUntil(routes[index], (route) => false);
         
          setState((){ this._selectedIndex = index; }); 
@@ -90,7 +77,7 @@ class _MyHomePage extends State<MyHomePage> {
 class PhotosList extends StatelessWidget {
   PhotosList({Key key, this.photos}) : super(key: key);
 
-  final List<Photo> photos;
+  final List<Report> photos;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +92,17 @@ class PhotosList extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Image.network(photos[index].thumbnail),
+                     GestureDetector(
+                      onTap: (){
+                        Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ReportDetail(report: photos[index])),
+                      );
+                      },
+                      child: new Image.network(photos[index].thumbnail),
+                    ),
+                    
                     Padding(
                       padding:
                           const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),

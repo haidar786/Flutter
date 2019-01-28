@@ -4,21 +4,10 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
-List<CameraDescription> cameras;
+
 
 void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
-
-Future<void> getCameras() async {
-
-  try {
-    cameras = await availableCameras();
-    print(cameras);
-  } on CameraException catch (e) {
-    logError(e.code, e.description);
-  }
-
-}
 
 class CameraApp extends StatefulWidget {
   
@@ -27,28 +16,46 @@ class CameraApp extends StatefulWidget {
 }
 
 class _CameraAppState extends State<CameraApp> {
+  List<CameraDescription> cameras;
   CameraController controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
   String imagePath;
-  
+   bool _isReady = false;
+
+  Future<void> _setupCameras() async {
+    try {
+      // initialize cameras.
+      cameras = await availableCameras();
+      // initialize camera controllers.
+      controller = new CameraController(cameras[0], ResolutionPreset.medium);
+      await controller.initialize();
+    } on CameraException catch (e) {
+       _showCameraException(e);
+    }
+    if (!mounted) { return; }
+    setState(() {
+      _isReady = true;
+    });
+  }
 
   @override
   void initState() {
-    getCameras();
-    print('camera');
     super.initState();
-    print('camera1');
-    controller = CameraController(cameras[0], ResolutionPreset.medium);
-    print('camera2');
-    controller.initialize().then((_) {
-      print('camera3');
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
-    print('camera inited');
+    _setupCameras();
+    // print('camera');
+    // super.initState();
+    // print('camera1');
+    // controller = CameraController(cameras[0], ResolutionPreset.medium);
+    // print('camera2');
+    // controller.initialize().then((_) {
+    //   print('camera3');
+    //   if (!mounted) {
+    //     return;
+    //   }
+    //   setState(() {});
+    // });
+    // print('camera inited');
   }
 
   @override
@@ -60,6 +67,7 @@ class _CameraAppState extends State<CameraApp> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_isReady) return new Container();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(

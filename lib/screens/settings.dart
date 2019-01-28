@@ -1,26 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// class Settings extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Settings'),
-//       ),
-//       body: Center(
-//         child: RaisedButton(
-//           child: Text('Launch screen'),
-//         ),
-//       ),
-//     );
+// class SharedPreferencesHelper {
+
+//   static Future<String> getUserPicture() async {
+//     final SharedPreferences prefs = await SharedPreferences.getInstance();
+//     print(prefs.getString("user_picture"));
+//     return prefs.getString("user_picture").toString() ?? 'http://www.google.com/logo.png';
 //   }
+
 // }
 
+class Settingg extends StatefulWidget {
+  const Settingg({ Key key }) : super(key: key);
 
+  @override
+  _SettingsPage createState() => new _SettingsPage();
+}
 
-class Settings extends StatelessWidget {
+Future<String> getUserPicture() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String picture = prefs.getString('user_picture');
+  return picture;
+}
+
+class _SettingsPage extends State<Settingg> {
+  String userPicture = "https://www.emrals.com/static/images/emrals128.png";
+
+  @override
+  void initState(){
+    getUserPicture().then(updatePicture);
+    super.initState();
+  }
   @override
     Widget build(BuildContext context) {
+     // var userPicture = SharedPreferencesHelper.getUserPicture();
     return new Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -32,7 +46,7 @@ class Settings extends StatelessWidget {
         ),
         Positioned(
             width: 350.0,
-            top: MediaQuery.of(context).size.height / 5,
+            top: MediaQuery.of(context).size.height / 9,
             child: Column(
               children: <Widget>[
                 Container(
@@ -41,14 +55,13 @@ class Settings extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.red,
                         image: DecorationImage(
-                            image: NetworkImage(
-                                'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg'),
+                            image: NetworkImage(userPicture),
                             fit: BoxFit.cover),
                         borderRadius: BorderRadius.all(Radius.circular(75.0)),
                         boxShadow: [
                           BoxShadow(blurRadius: 7.0, color: Colors.black)
                         ])),
-                SizedBox(height: 90.0),
+                SizedBox(height: 20.0),
                 Text(
                   'Tom Cruise',
                   style: TextStyle(
@@ -106,5 +119,10 @@ class Settings extends StatelessWidget {
             ))
       ],
     ));
+  }
+  void updatePicture(String picture){
+    setState(() {
+     this.userPicture = picture; 
+    });
   }
 }

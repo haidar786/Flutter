@@ -39,4 +39,13 @@ class User {
     map["emrals"] = _emrals;
     return map;
   }
+
+    User.fromMap(Map<String, dynamic> map) {
+    this._username = map["username"];
+    this._token = map["token"];
+    this._emrals = map["emrals"];
+    this._picture = map["picture"];
+    this._xp = map["xp"];
+    this._id = map["id"];
+  }
 }

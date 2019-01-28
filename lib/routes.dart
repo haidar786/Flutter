@@ -6,6 +6,6 @@ import 'package:emrals/screens/settings.dart';
 final routes = {
   '/login':        (BuildContext context) => new LoginScreen(),
   '/home':         (BuildContext context) => new MyHomePage(),
-  '/settings':     (BuildContext context) => new Settings(),
+  '/settings':     (BuildContext context) => new Settingg(),
   '/' :            (BuildContext context) => new LoginScreen(),
 };

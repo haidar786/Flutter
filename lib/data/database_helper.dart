@@ -27,7 +27,6 @@ class DatabaseHelper {
     var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
     return theDb;
   }
-  
 
   void _onCreate(Database db, int version) async {
     await db.execute(
@@ -50,6 +49,12 @@ class DatabaseHelper {
     var dbClient = await db;
     var res = await dbClient.query("User");
     return res.length > 0? true: false;
+  }
+
+  Future<User> getUser() async {
+    var dbClient = await db;
+    var res = await dbClient.query("User");
+    return res.isNotEmpty ? new User.fromMap(res.first) : [];
   }
 
 }

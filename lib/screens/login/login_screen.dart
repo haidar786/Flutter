@@ -5,6 +5,7 @@ import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login/login_screen_presenter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -137,6 +138,8 @@ class LoginScreenState extends State<LoginScreen>
     setState(() => _isLoading = false);
     var db = new DatabaseHelper();
     await db.saveUser(user);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('user_picture', user.picture);
     var authStateProvider = new AuthStateProvider();
     authStateProvider.notify(AuthState.LOGGED_IN);
   }

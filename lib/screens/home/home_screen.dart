@@ -32,11 +32,18 @@ class Photo {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({ Key key }) : super(key: key);
 
   @override
+  _MyHomePage createState() => _MyHomePage();
+}
+
+class _MyHomePage extends State<MyHomePage> {
+  int _selectedIndex = 0;
+  @override
   Widget build(BuildContext context) {
-    int _selectedIndex = 0;
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -60,10 +67,18 @@ class MyHomePage extends StatelessWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
        currentIndex: _selectedIndex,
+       onTap: (index) { 
+         final routes = ["/home", "/camera",'/stats'];
+         print(routes[index]);
+         Navigator.of(context).pushNamedAndRemoveUntil(routes[index], (route) => false);
+        
+         setState((){ this._selectedIndex = index; }); 
+       
+       },
        fixedColor: Colors.red, // this will be set when a new tab is tapped
        items: [
          BottomNavigationBarItem(icon: new Icon(Icons.home),title: new Text('Home')),
-         BottomNavigationBarItem(icon: new Icon(Icons.mail),title: new Text('Messages')),
+         BottomNavigationBarItem(icon: new Icon(Icons.camera),title: new Text('Camera')),
          //BottomNavigationBarItem(icon: new Icon(Icons.access_alarm),title: new Text('sdf')),
          BottomNavigationBarItem(icon: new Icon(Icons.person),title: new Text('Profile'))
        ],

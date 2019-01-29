@@ -14,15 +14,7 @@ class ReportDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text("Report Detail"),
       ),
-      body: Center(
-        
-        child: RaisedButton(
-          onPressed: () {
-            // Navigate back to first route when tapped.
-          },
-          child: Text(report.title),
-        ),
-      ),
+      body: Image.network(report.thumbnail)
     );
   }
 }

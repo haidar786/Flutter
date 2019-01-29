@@ -18,10 +18,8 @@ List<Report> parsePhotos(String responseBody) {
   return parsed.map<Report>((json) => Report.fromJson(json)).toList();
 }
 
-
-
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({ Key key }) : super(key: key);
+  const MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePage createState() => _MyHomePage();
@@ -31,18 +29,15 @@ class _MyHomePage extends State<MyHomePage> {
   int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Text("Alerts"),
-        actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () { Navigator.pushNamed(context, '/settings'); }
-            )
-        ]
-      ),
+      appBar: AppBar(title: Text("Alerts"), actions: <Widget>[
+        IconButton(
+            icon: Icon(Icons.home),
+            onPressed: () {
+              Navigator.pushNamed(context, '/settings');
+            })
+      ]),
       body: FutureBuilder<List<Report>>(
         future: fetchReports(http.Client()),
         builder: (context, snapshot) {
@@ -53,23 +48,28 @@ class _MyHomePage extends State<MyHomePage> {
               : Center(child: CircularProgressIndicator());
         },
       ),
-      bottomNavigationBar: BottomNavigationBar(
-       currentIndex: _selectedIndex,
-       onTap: (index) { 
-         final routes = ["/home", "/camera",'/stats'];
-         Navigator.of(context).pushNamedAndRemoveUntil(routes[index], (route) => false);
-        
-         setState((){ this._selectedIndex = index; }); 
-       
-       },
-       fixedColor: Colors.red, // this will be set when a new tab is tapped
-       items: [
-         BottomNavigationBarItem(icon: new Icon(Icons.home),title: new Text('Home')),
-         BottomNavigationBarItem(icon: new Icon(Icons.camera),title: new Text('Camera')),
-         //BottomNavigationBarItem(icon: new Icon(Icons.access_alarm),title: new Text('sdf')),
-         BottomNavigationBarItem(icon: new Icon(Icons.person),title: new Text('Profile'))
-       ],
-     ),
+      bottomNavigationBar: new BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: (index) {
+          final routes = ["/home", "/camera", '/stats'];
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(routes[index], (route) => false);
+
+          setState(() {
+            this._selectedIndex = index;
+          });
+        },
+        fixedColor: Colors.red, // this will be set when a new tab is tapped
+        items: [
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.home), title: new Text('Home')),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.camera), title: new Text('Camera')),
+          //BottomNavigationBarItem(icon: new Icon(Icons.access_alarm),title: new Text('sdf')),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.person), title: new Text('Profile'))
+        ],
+      ),
     );
   }
 }
@@ -86,67 +86,40 @@ class PhotosList extends StatelessWidget {
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                     GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ReportDetail(report: photos[index])),
-                      );
-                      },
-                      child: new Image.network(photos[index].thumbnail),
-                    ),
-                    
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),
-                      child: Text(
-                        photos[index].title,
-                        style: TextStyle(
-                            fontSize: 8.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
-                      child: Text(
-                        photos[index].title,
-                        style: TextStyle(fontSize: 8.0),
-                      ),
-                    ),
-                  ],
+            SizedBox(
+              child: Center(
+                child: Container(
+                  color: Color(0xFFe0e0e0),
+                  height: 8,
+                  margin: EdgeInsetsDirectional.only(start: 0),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Text(
-                        "5m",
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.star_border,
-                          size: 35.0,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
-            Divider(
-              height: 2.0,
-              color: Colors.grey,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ReportDetail(report: photos[index])),
+                );
+              },
+              child: new Image.network(photos[index].thumbnail),
+            ),
+            new Row(
+              children: <Widget>[
+                new Container(
+                    width: 100,
+                    height: 100,
+                    decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                            fit: BoxFit.fill,
+                            image:
+                                new NetworkImage(photos[index].posterAvatar)))),
+                Text('user' + photos[index].posterUsername),
+                Text('row'),
+              ],
             )
           ],
         );

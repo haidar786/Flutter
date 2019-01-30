@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:emrals/screens/report_detail.dart';
 import 'package:emrals/models/report.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 Future<List<Report>> fetchReports(http.Client client) async {
   final response = await client.get('https://www.emrals.com/api/alerts/');
@@ -91,7 +92,6 @@ class PhotosList extends StatelessWidget {
                 child: Container(
                   color: Color(0xFFe0e0e0),
                   height: 8,
-                  margin: EdgeInsetsDirectional.only(start: 0),
                 ),
               ),
             ),
@@ -104,7 +104,10 @@ class PhotosList extends StatelessWidget {
                           ReportDetail(report: photos[index])),
                 );
               },
-              child: new Image.network(photos[index].thumbnail),
+              child: FadeInImage(
+                placeholder: new AssetImage("assets/placeholder.png"),
+                image: new CachedNetworkImageProvider(photos[index].thumbnail),
+              ),
             ),
             new Row(
               children: <Widget>[

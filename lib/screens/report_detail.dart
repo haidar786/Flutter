@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ReportDetail extends StatelessWidget {
 
@@ -14,7 +15,10 @@ class ReportDetail extends StatelessWidget {
       appBar: AppBar(
         title: Text("Report Detail"),
       ),
-      body: Image.network(report.thumbnail)
+      body: FadeInImage(
+                placeholder: new AssetImage("assets/placeholder.png"),
+                image: new CachedNetworkImageProvider(report.thumbnail),
+              ),
     );
   }
 }

@@ -4,31 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
-import 'package:emrals/screens/login/login_screen_presenter.dart';
+import 'package:emrals/screens/login/signup_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignupScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new LoginScreenState();
+    return new SignupScreenState();
   }
 }
 
-class LoginScreenState extends State<LoginScreen>
-    implements LoginScreenContract, AuthStateListener {
+class SignupScreenState extends State<SignupScreen>
+    implements SignupScreenContract, AuthStateListener {
   BuildContext _ctx;
 
   bool _isLoading = false;
   final formKey = new GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
-  String _password, _username;
+  String _password, _username, _email;
 
-  LoginScreenPresenter _presenter;
+  SignupScreenPresenter _presenter;
 
-  LoginScreenState() {
-    _presenter = new LoginScreenPresenter(this);
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.subscribe(this);
+  SignupScreenState() {
+    _presenter = new SignupScreenPresenter(this);
+    var authStateProviderSignup = new AuthStateProvider();
+    authStateProviderSignup.subscribe(this);
   }
 
   void _submit() {
@@ -37,7 +37,7 @@ class LoginScreenState extends State<LoginScreen>
     if (form.validate()) {
       setState(() => _isLoading = true);
       form.save();
-      _presenter.doLogin(_username, _password);
+      _presenter.doSignup(_username, _password, _email);
     }
   }
 
@@ -48,23 +48,23 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   onAuthStateChanged(AuthState state) {
-   
-    if(state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).pushReplacementNamed("/home");
+     if(state == AuthState.LOGGED_IN)
+       Navigator.of(_ctx).pushReplacementNamed("/home");
+
   }
 
   @override
   Widget build(BuildContext context) {
     _ctx = context;
-    var loginBtn = new RaisedButton(
+    var signupBtn = new RaisedButton(
       onPressed: _submit,
-      child: new Text("LOGIN"),
+      child: new Text("Signup"),
       color: Colors.primaries[0],
     );
-    var loginForm = new Column(
+    var signupForm = new Column(
       children: <Widget>[
         new Text(
-          "Login",
+          "Signup",
           textScaleFactor: 2.0,
         ),
         new Form(
@@ -86,6 +86,18 @@ class LoginScreenState extends State<LoginScreen>
               new Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: new TextFormField(
+                  onSaved: (val) => _email = val,
+                  validator: (val) {
+                    return val.length < 1
+                        ? "Email must have atleast 1 chars"
+                        : null;
+                  },
+                  decoration: new InputDecoration(labelText: "Email"),
+                ),
+              ),
+              new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new TextFormField(
                   obscureText: true,
                   onSaved: (val) => _password = val,
                   decoration: new InputDecoration(labelText: "Password"),
@@ -94,14 +106,7 @@ class LoginScreenState extends State<LoginScreen>
             ],
           ),
         ),
-        _isLoading ? new CircularProgressIndicator() : loginBtn,
-        GestureDetector(
-  onTap: () {
-    Navigator.of(_ctx).pushReplacementNamed("/signup");
-  },
-  child: Text("Signup"),
-),
-
+        _isLoading ? new CircularProgressIndicator() : signupBtn
       ],
       crossAxisAlignment: CrossAxisAlignment.center,
     );
@@ -120,8 +125,8 @@ class LoginScreenState extends State<LoginScreen>
             child: new BackdropFilter(
               filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
               child: new Container(
-                child: loginForm,
-                height: 300.0,
+                child: signupForm,
+                height: 350.0,
                 width: 300.0,
                 decoration: new BoxDecoration(
                     color: Colors.grey.shade200.withOpacity(0.5)),
@@ -134,20 +139,20 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   @override
-  void onLoginError(String errorTxt) {
+  void onSignupError(String errorTxt) {
     _showSnackBar(errorTxt);
     setState(() => _isLoading = false);
   }
 
   @override
-  void onLoginSuccess(User user) async {
+  void onSignupSuccess(User user) async {
     _showSnackBar("logged in as"+user.username);
     setState(() => _isLoading = false);
     var db = new DatabaseHelper();
     await db.saveUser(user);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user_picture', user.picture);
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.notify(AuthState.LOGGED_IN);
+    Navigator.of(_ctx).pushReplacementNamed("/home");
+
   }
 }

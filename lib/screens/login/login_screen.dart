@@ -7,7 +7,7 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login/login_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
-import 'package:flutter/services.dart';
+//import 'package:flutter/services.dart';
 //import 'package:get_version/get_version.dart';
 // used https://gist.github.com/hvisser/b027af96f9c57f94cf430bbdae236da9 to get get_version working
 
@@ -41,7 +41,23 @@ class LoginScreenState extends State<LoginScreen>
 
   }
 
-
+LoginScreenPresenter _presenter;
+	
+	  LoginScreenState() {
+	    _presenter = new LoginScreenPresenter(this);
+	    var authStateProvider = new AuthStateProvider();
+	    authStateProvider.subscribe(this);
+	  }
+	
+	  void _submit() {
+	    final form = formKey.currentState;
+	
+	    if (form.validate()) {
+	      setState(() => _isLoading = true);
+	      form.save();
+	      _presenter.doLogin(_username, _password);
+	    }
+	  }
 
   void _showSnackBar(String text) {
     scaffoldKey.currentState

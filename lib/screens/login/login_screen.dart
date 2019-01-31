@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/services.dart';
 import 'package:get_version/get_version.dart';
-# used https://gist.github.com/hvisser/b027af96f9c57f94cf430bbdae236da9 to get get_version working
+// used https://gist.github.com/hvisser/b027af96f9c57f94cf430bbdae236da9 to get get_version working
 
 
 class LoginScreen extends StatefulWidget {

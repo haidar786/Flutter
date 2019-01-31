@@ -30,13 +30,13 @@
 	<string>Emrals uses the camera to report pictures of trash.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Emrals uses the camera and the microphone is part of that.</string>
-	<key>UISupportedInterfaceOrientations</key>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Emrals uses your location to know where you took the picture.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open and in the background.</string>
+	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>

@@ -13,8 +13,7 @@ class DatabaseHelper {
   static Database _db;
 
   Future<Database> get db async {
-    if(_db != null)
-      return _db;
+    if (_db != null) return _db;
     _db = await initDb();
     return _db;
   }
@@ -30,7 +29,7 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-    "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL)");
+        "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL)");
   }
 
   Future<int> saveUser(User user) async {
@@ -48,7 +47,7 @@ class DatabaseHelper {
   Future<bool> isLoggedIn() async {
     var dbClient = await db;
     var res = await dbClient.query("User");
-    return res.length > 0? true: false;
+    return res.length > 0 ? true : false;
   }
 
   Future<User> getUser() async {
@@ -56,5 +55,4 @@ class DatabaseHelper {
     var res = await dbClient.query("User");
     return res.isNotEmpty ? new User.fromMap(res.first) : [];
   }
-
 }

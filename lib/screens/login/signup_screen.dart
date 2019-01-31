@@ -48,9 +48,8 @@ class SignupScreenState extends State<SignupScreen>
 
   @override
   onAuthStateChanged(AuthState state) {
-     if(state == AuthState.LOGGED_IN)
-       Navigator.of(_ctx).pushReplacementNamed("/home");
-
+    if (state == AuthState.LOGGED_IN)
+      Navigator.of(_ctx).pushReplacementNamed("/home");
   }
 
   @override
@@ -146,13 +145,12 @@ class SignupScreenState extends State<SignupScreen>
 
   @override
   void onSignupSuccess(User user) async {
-    _showSnackBar("logged in as"+user.username);
+    _showSnackBar("logged in as" + user.username);
     setState(() => _isLoading = false);
     var db = new DatabaseHelper();
     await db.saveUser(user);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user_picture', user.picture);
     Navigator.of(_ctx).pushReplacementNamed("/home");
-
   }
 }

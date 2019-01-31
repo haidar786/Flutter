@@ -3,7 +3,6 @@ import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ReportDetail extends StatelessWidget {
-
   final Report report;
 
   ReportDetail({Key key, @required this.report}) : super(key: key);
@@ -16,9 +15,9 @@ class ReportDetail extends StatelessWidget {
         title: Text("Report Detail"),
       ),
       body: FadeInImage(
-                placeholder: new AssetImage("assets/placeholder.png"),
-                image: new CachedNetworkImageProvider(report.thumbnail),
-              ),
+        placeholder: new AssetImage("assets/placeholder.png"),
+        image: new CachedNetworkImageProvider(report.thumbnail),
+      ),
     );
   }
 }

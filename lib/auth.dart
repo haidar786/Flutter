@@ -1,12 +1,11 @@
 import 'package:emrals/data/database_helper.dart';
 
-enum AuthState{ LOGGED_IN, LOGGED_OUT }
+enum AuthState { LOGGED_IN, LOGGED_OUT }
 
 abstract class AuthStateListener {
   void onAuthStateChanged(AuthState state);
 }
 
-// A naive implementation of Observer/Subscriber Pattern. Will do for now.
 class AuthStateProvider {
   static final AuthStateProvider _instance = new AuthStateProvider.internal();
 
@@ -21,7 +20,7 @@ class AuthStateProvider {
   void initState() async {
     var db = new DatabaseHelper();
     var isLoggedIn = await db.isLoggedIn();
-    if(isLoggedIn)
+    if (isLoggedIn)
       notify(AuthState.LOGGED_IN);
     else
       notify(AuthState.LOGGED_OUT);
@@ -32,9 +31,8 @@ class AuthStateProvider {
   }
 
   void dispose(AuthStateListener listener) {
-    for(var l in _subscribers) {
-      if(l == listener)
-         _subscribers.remove(l);
+    for (var l in _subscribers) {
+      if (l == listener) _subscribers.remove(l);
     }
   }
 

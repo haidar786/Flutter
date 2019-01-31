@@ -12,11 +12,10 @@ class LoginScreenPresenter {
   LoginScreenPresenter(this._view);
 
   doLogin(String username, String password) async {
-
-    try{
+    try {
       var user = await api.login(username, password);
       _view.onLoginSuccess(user);
-    } on Exception catch(error){
+    } on Exception catch (error) {
       _view.onLoginError(error.toString());
     }
   }

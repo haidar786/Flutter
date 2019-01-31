@@ -6,12 +6,12 @@ class Report {
   final String posterUsername;
 
   Report({
-    this.id, 
-    this.title, 
+    this.id,
+    this.title,
     this.thumbnail,
     this.posterAvatar,
     this.posterUsername,
-    });
+  });
 
   factory Report.fromJson(Map<String, dynamic> json) {
     return Report(

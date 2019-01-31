@@ -12,11 +12,10 @@ class SignupScreenPresenter {
   SignupScreenPresenter(this._view);
 
   doSignup(String username, String email, String password) async {
-
-    try{
+    try {
       var user = await api.signup(username, email, password);
       _view.onSignupSuccess(user);
-    } on Exception catch(error){
+    } on Exception catch (error) {
       _view.onSignupError(error.toString());
     }
   }

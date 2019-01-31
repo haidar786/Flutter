@@ -12,11 +12,11 @@ class RestDatasource {
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
       "username": username,
-      "password": password
+      "password": password,
     }).then((dynamic res) {
-      if(res["error"] != null){
+      if (res["error"] != null) {
         throw new Exception(res["error"]);
-      } 
+      }
       return new User.map(res);
     });
   }
@@ -28,27 +28,22 @@ class RestDatasource {
       "password1": password,
       "password2": password
     }).then((dynamic res) {
-
-
-        if(res["error"] != null){
-          throw new Exception(res["error"]);
-        } 
-        if(res["email"] != null){
-          throw new Exception(res["email"]);
-        } 
-        if(res["username"] != null){
-          if(res["id"] == null){
-            throw new Exception(res["username"]);
-          }
-        } 
-        if(res["password1"] != null){
-          throw new Exception(res["password1"]);
-        } 
-
-
+      if (res["error"] != null) {
+        throw new Exception(res["error"]);
+      }
+      if (res["email"] != null) {
+        throw new Exception(res["email"]);
+      }
+      if (res["username"] != null) {
+        if (res["id"] == null) {
+          throw new Exception(res["username"]);
+        }
+      }
+      if (res["password1"] != null) {
+        throw new Exception(res["password1"]);
+      }
 
       return new User.map(res);
     });
   }
-
 }

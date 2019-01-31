@@ -7,10 +7,6 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login/login_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
-//import 'package:flutter/services.dart';
-//import 'package:get_version/get_version.dart';
-// used https://gist.github.com/hvisser/b027af96f9c57f94cf430bbdae236da9 to get get_version working
-
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -19,45 +15,32 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-
-
 class LoginScreenState extends State<LoginScreen>
     implements LoginScreenContract, AuthStateListener {
-
-  //String _platformVersion = 'Unknown';
-
   BuildContext _ctx;
 
   bool _isLoading = false;
   final formKey = new GlobalKey<FormState>();
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   String _password, _username;
-  
 
-  @override
-  initState() {
-    super.initState();
-    //initPlatformState();
+  LoginScreenPresenter _presenter;
 
+  LoginScreenState() {
+    _presenter = new LoginScreenPresenter(this);
+    var authStateProvider = new AuthStateProvider();
+    authStateProvider.subscribe(this);
   }
 
-LoginScreenPresenter _presenter;
-	
-	  LoginScreenState() {
-	    _presenter = new LoginScreenPresenter(this);
-	    var authStateProvider = new AuthStateProvider();
-	    authStateProvider.subscribe(this);
-	  }
-	
-	  void _submit() {
-	    final form = formKey.currentState;
-	
-	    if (form.validate()) {
-	      setState(() => _isLoading = true);
-	      form.save();
-	      _presenter.doLogin(_username, _password);
-	    }
-	  }
+  void _submit() {
+    final form = formKey.currentState;
+
+    if (form.validate()) {
+      setState(() => _isLoading = true);
+      form.save();
+      _presenter.doLogin(_username, _password);
+    }
+  }
 
   void _showSnackBar(String text) {
     scaffoldKey.currentState
@@ -70,23 +53,15 @@ LoginScreenPresenter _presenter;
       Navigator.of(_ctx).pushReplacementNamed("/home");
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    
-    //getPackageInfo();
-    //var asyncWidget;
     _ctx = context;
     var loginBtn = new RaisedButton(
       color: emralsColor(),
       disabledColor: emralsColor(),
-      //highlightedBorderColor: Colors.blue,
       highlightColor: emralsColor().shade500,
-      //splashColor: emralsColor().shade500,
-      disabledTextColor: Colors.blue,
+      disabledTextColor: emralsColor().shade500,
       textColor: Colors.white,
-      // width: MediaQuery.of(context).size.width,
       onPressed: _submit,
       child: new Text("LOGIN"),
       shape: StadiumBorder(
@@ -103,7 +78,6 @@ LoginScreenPresenter _presenter;
         SizedBox(
           height: 10,
         ),
-        
         new Form(
           key: formKey,
           child: new Column(
@@ -123,7 +97,6 @@ LoginScreenPresenter _presenter;
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     fillColor: Colors.white,
-                    //border: InputBorder.none,
                     contentPadding: EdgeInsets.all(10),
                     enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
@@ -200,16 +173,11 @@ LoginScreenPresenter _presenter;
         ),
         child: new Center(
           child: new ClipRect(
-            //child: new BackdropFilter(
-            //filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
             child: new Container(
               child: loginForm,
               height: 400.0,
               width: 300.0,
-              // decoration: new BoxDecoration(
-              //     color: Colors.grey.shade200.withOpacity(0.5)),
             ),
-            //),
           ),
         ),
       ),

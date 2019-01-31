@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-//import 'package:geolocator/geolocator.dart';
-//import 'package:geolocator/models/position.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
 
@@ -23,7 +21,6 @@ class _CameraAppState extends State<CameraApp> {
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
   String imagePath;
   bool _isReady = false;
-  //Position position;
   var currentLocation = <String, double>{};
 
   var location = new Location();
@@ -107,7 +104,7 @@ class _CameraAppState extends State<CameraApp> {
           Navigator.of(context)
               .pushNamedAndRemoveUntil(routes[index], (route) => false);
         },
-        fixedColor: Colors.blue, // this will be set when a new tab is tapped
+        fixedColor: Colors.blue,
         items: [
           BottomNavigationBarItem(
               icon: new Icon(Icons.home), title: new Text('Home')),
@@ -120,16 +117,6 @@ class _CameraAppState extends State<CameraApp> {
     );
   }
 
-  // Widget build(BuildContext context) {
-  //   print('camera widget');
-  //   if (!controller.value.isInitialized) {
-  //     return Container();
-  //   }
-  //   return AspectRatio(
-  //       aspectRatio:
-  //       controller.value.aspectRatio,
-  //       child: CameraPreview(controller));
-  // }
   Widget _captureControlRowWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -190,7 +177,6 @@ class _CameraAppState extends State<CameraApp> {
     final String filePath = '$dirPath/${timestamp()}.jpg';
 
     if (controller.value.isTakingPicture) {
-      // A capture is already pending, do nothing.
       return null;
     }
 
@@ -214,8 +200,6 @@ class _CameraAppState extends State<CameraApp> {
         setState(() {
           imagePath = filePath;
           print(currentLocation);
-          //videoController?.dispose();
-          //videoController = null;
         });
         if (filePath != null) showInSnackBar('Picture saved to $filePath');
       }

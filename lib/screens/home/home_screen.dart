@@ -104,9 +104,11 @@ class PhotosList extends StatelessWidget {
                           ReportDetail(report: photos[index])),
                 );
               },
-              child: Image(
-                //placeholder: new AssetImage("assets/placeholder.png"),
-                image: new CachedNetworkImageProvider(photos[index].thumbnail),
+              child: new CachedNetworkImage(
+                imageUrl: photos[index].thumbnail,
+                placeholder:
+                    new Image(image: AssetImage("assets/placeholder.png")),
+                errorWidget: new Icon(Icons.error),
               ),
             ),
             new Row(

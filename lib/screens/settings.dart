@@ -2,16 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/data/database_helper.dart';
 
-// class SharedPreferencesHelper {
-
-//   static Future<String> getUserPicture() async {
-//     final SharedPreferences prefs = await SharedPreferences.getInstance();
-//     print(prefs.getString("user_picture"));
-//     return prefs.getString("user_picture").toString() ?? 'http://www.google.com/logo.png';
-//   }
-
-// }
-
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
 

@@ -1,5 +1,6 @@
 class User {
-  User(this._username, this._token, this._emrals, this._id, this._picture, this._xp);
+  User(this._username, this._token, this._emrals, this._id, this._picture,
+      this._xp);
 
   User.map(dynamic obj) {
     this._username = obj["username"];
@@ -10,7 +11,7 @@ class User {
     this._id = obj["id"];
   }
 
-  double _emrals; 
+  double _emrals;
   int _id;
   String _picture;
   String _token;
@@ -40,7 +41,7 @@ class User {
     return map;
   }
 
-    User.fromMap(Map<String, dynamic> map) {
+  User.fromMap(Map<String, dynamic> map) {
     this._username = map["username"];
     this._token = map["token"];
     this._emrals = map["emrals"];

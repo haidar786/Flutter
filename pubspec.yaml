@@ -18,7 +18,6 @@ dependencies:
   camera: 
   cached_network_image:
   location:
-  get_version:
 
 
 dev_dependencies:

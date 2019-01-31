@@ -8,7 +8,7 @@ import 'package:emrals/screens/login/login_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/services.dart';
-import 'package:get_version/get_version.dart';
+//import 'package:get_version/get_version.dart';
 // used https://gist.github.com/hvisser/b027af96f9c57f94cf430bbdae236da9 to get get_version working
 
 
@@ -24,7 +24,7 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen>
     implements LoginScreenContract, AuthStateListener {
 
-  String _platformVersion = 'Unknown';
+  //String _platformVersion = 'Unknown';
 
   BuildContext _ctx;
 
@@ -37,43 +37,11 @@ class LoginScreenState extends State<LoginScreen>
   @override
   initState() {
     super.initState();
-    initPlatformState();
+    //initPlatformState();
 
   }
 
-initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      platformVersion = await GetVersion.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-     if (!mounted) return;
 
-    setState(() {
-      _platformVersion = platformVersion;
-
-    });
-
-}
-  LoginScreenPresenter _presenter;
-
-  LoginScreenState() {
-    _presenter = new LoginScreenPresenter(this);
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.subscribe(this);
-  }
-
-  void _submit() {
-    final form = formKey.currentState;
-
-    if (form.validate()) {
-      setState(() => _isLoading = true);
-      form.save();
-      _presenter.doLogin(_username, _password);
-    }
-  }
 
   void _showSnackBar(String text) {
     scaffoldKey.currentState
@@ -119,10 +87,7 @@ initPlatformState() async {
         SizedBox(
           height: 10,
         ),
-        new Text(
-          _platformVersion,
-          textScaleFactor: .8,
-        ),
+        
         new Form(
           key: formKey,
           child: new Column(

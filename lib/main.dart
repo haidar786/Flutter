@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
-import 'dart:io' show Platform;
+import 'package:emrals/styles.dart';
+//import 'dart:io' show Platform;
 
 void main() {
-  Map<String, String> envVars = Platform.environment;
-  runApp(new LoginApp());
+  //Map<String, String> envVars = Platform.environment;
+  runApp(new EmralsApp());
 }
 
-class LoginApp extends StatelessWidget {
+class EmralsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Emrals',
       theme: new ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: emralsColor(),
+        fontFamily: 'Montserrat',
       ),
       routes: routes,
     );

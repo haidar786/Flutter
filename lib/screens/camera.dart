@@ -3,14 +3,15 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-
-
+//import 'package:geolocator/geolocator.dart';
+//import 'package:geolocator/models/position.dart';
+import 'package:location/location.dart';
+import 'package:flutter/services.dart';
 
 void logError(String code, String message) =>
     print('Error: $code\nError Message: $message');
 
 class CameraApp extends StatefulWidget {
-  
   @override
   _CameraAppState createState() => _CameraAppState();
 }
@@ -21,19 +22,28 @@ class _CameraAppState extends State<CameraApp> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
   String imagePath;
-   bool _isReady = false;
+  bool _isReady = false;
+  //Position position;
+  var currentLocation = <String, double>{};
+
+  var location = new Location();
 
   Future<void> _setupCameras() async {
     try {
-      // initialize cameras.
       cameras = await availableCameras();
-      // initialize camera controllers.
       controller = new CameraController(cameras[0], ResolutionPreset.medium);
       await controller.initialize();
+      try {
+        currentLocation = await location.getLocation();
+      } on PlatformException {
+        currentLocation = null;
+      }
     } on CameraException catch (e) {
-       _showCameraException(e);
+      _showCameraException(e);
     }
-    if (!mounted) { return; }
+    if (!mounted) {
+      return;
+    }
     setState(() {
       _isReady = true;
     });
@@ -43,19 +53,6 @@ class _CameraAppState extends State<CameraApp> {
   void initState() {
     super.initState();
     _setupCameras();
-    // print('camera');
-    // super.initState();
-    // print('camera1');
-    // controller = CameraController(cameras[0], ResolutionPreset.medium);
-    // print('camera2');
-    // controller.initialize().then((_) {
-    //   print('camera3');
-    //   if (!mounted) {
-    //     return;
-    //   }
-    //   setState(() {});
-    // });
-    // print('camera inited');
   }
 
   @override
@@ -64,14 +61,13 @@ class _CameraAppState extends State<CameraApp> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (!_isReady) return new Container();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: const Text('Camera example'),
+        title: const Text('Report or Cleanup'),
       ),
       body: Column(
         children: <Widget>[
@@ -103,24 +99,27 @@ class _CameraAppState extends State<CameraApp> {
           ),
         ],
       ),
-       bottomNavigationBar: BottomNavigationBar(
-       currentIndex: 1,
-       onTap: (index) { 
-         final routes = ["/home", "/camera",'/stats'];
-         print(routes[index]);
-         Navigator.of(context).pushNamedAndRemoveUntil(routes[index], (route) => false);
-       
-       },
-       fixedColor: Colors.red, // this will be set when a new tab is tapped
-       items: [
-         BottomNavigationBarItem(icon: new Icon(Icons.home),title: new Text('Home')),
-         BottomNavigationBarItem(icon: new Icon(Icons.camera),title: new Text('Camera')),
-         //BottomNavigationBarItem(icon: new Icon(Icons.access_alarm),title: new Text('sdf')),
-         BottomNavigationBarItem(icon: new Icon(Icons.person),title: new Text('Profile'))
-       ],
-     ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 1,
+        onTap: (index) {
+          final routes = ["/home", "/camera", '/stats'];
+          print(routes[index]);
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(routes[index], (route) => false);
+        },
+        fixedColor: Colors.blue, // this will be set when a new tab is tapped
+        items: [
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.home), title: new Text('Home')),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.camera), title: new Text('Camera')),
+          BottomNavigationBarItem(
+              icon: new Icon(Icons.person), title: new Text('Profile')),
+        ],
+      ),
     );
   }
+
   // Widget build(BuildContext context) {
   //   print('camera widget');
   //   if (!controller.value.isInitialized) {
@@ -131,7 +130,7 @@ class _CameraAppState extends State<CameraApp> {
   //       controller.value.aspectRatio,
   //       child: CameraPreview(controller));
   // }
-    Widget _captureControlRowWidget() {
+  Widget _captureControlRowWidget() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       mainAxisSize: MainAxisSize.max,
@@ -146,7 +145,7 @@ class _CameraAppState extends State<CameraApp> {
               : null,
         ),
         IconButton(
-          icon: const Icon(Icons.videocam),
+          icon: const Icon(Icons.cloud_upload),
           color: Colors.blue,
           onPressed: controller != null &&
                   controller.value.isInitialized &&
@@ -154,19 +153,10 @@ class _CameraAppState extends State<CameraApp> {
               ? onTakePictureButtonPressed
               : null,
         ),
-        IconButton(
-          icon: const Icon(Icons.stop),
-          color: Colors.red,
-          onPressed: controller != null &&
-                  controller.value.isInitialized &&
-                  controller.value.isRecordingVideo
-              ? onTakePictureButtonPressed
-              : null,
-        )
       ],
     );
   }
-  
+
   void showInSnackBar(String message) {
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(message)));
   }
@@ -189,7 +179,7 @@ class _CameraAppState extends State<CameraApp> {
     }
   }
 
-    Future<String> takePicture() async {
+  Future<String> takePicture() async {
     if (!controller.value.isInitialized) {
       showInSnackBar('Error: select a camera first.');
       return null;
@@ -223,6 +213,7 @@ class _CameraAppState extends State<CameraApp> {
       if (mounted) {
         setState(() {
           imagePath = filePath;
+          print(currentLocation);
           //videoController?.dispose();
           //videoController = null;
         });
@@ -230,8 +221,4 @@ class _CameraAppState extends State<CameraApp> {
       }
     });
   }
-
 }
-
-
-

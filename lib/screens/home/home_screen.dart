@@ -104,8 +104,8 @@ class PhotosList extends StatelessWidget {
                           ReportDetail(report: photos[index])),
                 );
               },
-              child: FadeInImage(
-                placeholder: new AssetImage("assets/placeholder.png"),
+              child: Image(
+                //placeholder: new AssetImage("assets/placeholder.png"),
                 image: new CachedNetworkImageProvider(photos[index].thumbnail),
               ),
             ),

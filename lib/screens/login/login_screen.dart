@@ -7,6 +7,8 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login/login_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -25,6 +27,14 @@ class LoginScreenState extends State<LoginScreen>
   String _password, _username;
 
   LoginScreenPresenter _presenter;
+
+  launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   LoginScreenState() {
     _presenter = new LoginScreenPresenter(this);
@@ -154,6 +164,18 @@ class LoginScreenState extends State<LoginScreen>
               fontWeight: FontWeight.bold,
             ),
           ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        InkWell(
+          child: new Text(
+            "Forgot password?",
+            style: new TextStyle(
+                color: Colors.white, decoration: TextDecoration.underline),
+          ),
+          onTap: () =>
+              launchURL('https://www.emrals.com/accounts/password/reset'),
         ),
       ],
       crossAxisAlignment: CrossAxisAlignment.center,

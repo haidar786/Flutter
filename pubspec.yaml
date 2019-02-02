@@ -18,6 +18,7 @@ dependencies:
   camera: 
   cached_network_image:
   location:
+  url_launcher:
 
 
 dev_dependencies:

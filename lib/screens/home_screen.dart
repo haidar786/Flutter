@@ -95,12 +95,12 @@ class _MyHomePage extends State<MyHomePage> {
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
             icon: new Icon(
-              Icons.home,
+              Icons.view_stream,
             ),
             title: new Text('Activity'),
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.black,
             icon: new Icon(
               Icons.camera,
             ),
@@ -109,16 +109,16 @@ class _MyHomePage extends State<MyHomePage> {
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
             icon: new Icon(
-              Icons.person,
+              Icons.multiline_chart,
             ),
             title: new Text('Stats'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
             icon: new Icon(
-              Icons.person,
+              Icons.map,
             ),
-            title: new Text('test'),
+            title: new Text('ZOnes'),
           ),
         ],
       ),
@@ -132,13 +132,17 @@ class PhotosList extends StatelessWidget {
   final List<Report> photos;
 
   launchMaps(latitude, longitude) async {
-    String googleUrl = 'comgooglemaps://?center=$latitude,$longitude';
+    String googleUrl = 'geo:0,0?q=$latitude,$longitude';
+    String googleiOSUrl = 'googlemaps://?q=$latitude,$longitude';
     String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
-    if (await canLaunch("comgooglemaps://")) {
-      print('launching com googleUrl');
+    if (await canLaunch("geo://")) {
+      print('launching com googleUrl' + googleUrl);
       await launch(googleUrl);
+    } else if (await canLaunch(googleiOSUrl)) {
+      print('launching apple url' + googleiOSUrl);
+      await launch(googleiOSUrl);
     } else if (await canLaunch(appleUrl)) {
-      print('launching apple url');
+      print('launching apple url' + appleUrl);
       await launch(appleUrl);
     } else {
       throw 'Could not launch url';

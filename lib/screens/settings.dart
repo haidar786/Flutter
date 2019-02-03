@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/models/user.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -9,19 +9,24 @@ class Settingg extends StatefulWidget {
   _SettingsPage createState() => new _SettingsPage();
 }
 
-Future<String> getUserPicture() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String picture = prefs.getString('user_picture');
-  return picture;
-}
-
 class _SettingsPage extends State<Settingg> {
   String userPicture = "https://www.emrals.com/static/images/emrals128.png";
 
   @override
   void initState() {
-    getUserPicture().then(updatePicture);
+    initUser();
     super.initState();
+  }
+
+  initUser() async {
+    User userObject;
+    var db = new DatabaseHelper();
+    userObject = await db.getUser();
+
+    if (!mounted) return;
+    setState(() {
+      userPicture = userObject.picture;
+    });
   }
 
   @override
@@ -120,11 +125,5 @@ class _SettingsPage extends State<Settingg> {
                 ))
           ],
         ));
-  }
-
-  void updatePicture(String picture) {
-    setState(() {
-      this.userPicture = picture;
-    });
   }
 }

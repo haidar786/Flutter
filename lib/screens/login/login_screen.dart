@@ -197,7 +197,7 @@ class LoginScreenState extends State<LoginScreen>
           child: new ClipRect(
             child: new Container(
               child: loginForm,
-              height: 430.0,
+              height: 450.0,
               width: 300.0,
             ),
           ),
@@ -214,7 +214,7 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   void onLoginSuccess(User user) async {
-    _showSnackBar("logged in as" + user.username);
+    _showSnackBar("logged in as " + user.username);
     setState(() => _isLoading = false);
     var db = new DatabaseHelper();
     await db.saveUser(user);

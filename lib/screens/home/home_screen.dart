@@ -34,12 +34,15 @@ class _MyHomePage extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0), // here the desired height
+        preferredSize: Size.fromHeight(40.0),
         child: AppBar(
-          //title: Text("Alerts"),
           actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Text('228.34'),
+            ),
             IconButton(
-              icon: Icon(Icons.home),
+              icon: Image.asset("assets/JustElogo.png"),
               onPressed: () {
                 Navigator.pushNamed(
                   context,
@@ -98,14 +101,6 @@ class PhotosList extends StatelessWidget {
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
-            // SizedBox(
-            //   child: Center(
-            //     child: Container(
-            //       color: Color(0xFFe0e0e0),
-            //       height: 8,
-            //     ),
-            //   ),
-            // ),
             GestureDetector(
               onTap: () {
                 Navigator.push(

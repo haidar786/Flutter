@@ -10,8 +10,8 @@ class EmralsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
-      title: 'Emrals',
       theme: new ThemeData(
+        primaryColor: Colors.black,
         primarySwatch: emralsColor(),
         fontFamily: 'Montserrat',
       ),

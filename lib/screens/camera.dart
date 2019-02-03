@@ -63,77 +63,19 @@ class _CameraAppState extends State<CameraApp> {
     if (!_isReady) return new Container();
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: const Text('Report or Cleanup'),
-      ),
       body: Column(
         children: <Widget>[
           Expanded(
             child: Container(
-              child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: Center(
-                  child: _cameraPreviewWidget(),
-                ),
+              child: Center(
+                child: _cameraPreviewWidget(),
               ),
               decoration: BoxDecoration(
                 color: Colors.black,
-                border: Border.all(
-                  color: controller != null && controller.value.isRecordingVideo
-                      ? Colors.redAccent
-                      : Colors.grey,
-                  width: 3.0,
-                ),
               ),
             ),
           ),
           _captureControlRowWidget(),
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-            ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1,
-        onTap: (index) {
-          final routes = ["/home", "/camera", '/stats'];
-          print(routes[index]);
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(routes[index], (route) => false);
-        },
-        fixedColor: Colors.blue,
-        items: [
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: new Icon(
-              Icons.home,
-            ),
-            title: new Text('Activity'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.blue,
-            icon: new Icon(
-              Icons.camera,
-            ),
-            title: new Text('Report'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('Stats'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: new Icon(
-              Icons.person,
-            ),
-            title: new Text('test'),
-          ),
         ],
       ),
     );
@@ -171,21 +113,10 @@ class _CameraAppState extends State<CameraApp> {
   }
 
   Widget _cameraPreviewWidget() {
-    if (controller == null || !controller.value.isInitialized) {
-      return const Text(
-        'Tap a camera',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 24.0,
-          fontWeight: FontWeight.w900,
-        ),
-      );
-    } else {
-      return AspectRatio(
-        aspectRatio: controller.value.aspectRatio,
-        child: CameraPreview(controller),
-      );
-    }
+    return AspectRatio(
+      aspectRatio: controller.value.aspectRatio,
+      child: CameraPreview(controller),
+    );
   }
 
   Future<String> takePicture() async {

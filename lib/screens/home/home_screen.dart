@@ -10,6 +10,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/styles.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/screens/camera.dart';
+import 'package:emrals/screens/stats.dart';
 
 Future<List<Report>> fetchReports(http.Client client) async {
   final response = await client.get('https://www.emrals.com/api/alerts/');
@@ -32,6 +34,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   int _selectedIndex = 0;
   User _userObject;
+  final List<Widget> _children = [
+    ReportList(),
+    CameraApp(),
+    Stats(),
+  ];
 
   @override
   initState() {
@@ -74,30 +81,15 @@ class _MyHomePage extends State<MyHomePage> {
           ],
         ),
       ),
-      body: FutureBuilder<List<Report>>(
-        future: fetchReports(http.Client()),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-
-          return snapshot.hasData
-              ? PhotosList(photos: snapshot.data)
-              : Center(child: CircularProgressIndicator());
-        },
-      ),
+      body: _children[_selectedIndex],
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedIndex,
-
         onTap: (index) {
-          final routes = ["/home", "/camera", '/stats', '/stats'];
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(routes[index], (route) => false);
-
           setState(() {
             this._selectedIndex = index;
           });
         },
-        fixedColor: Colors.red, // this will be set when a new tab is tapped
-
+        fixedColor: Colors.red,
         items: [
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
@@ -197,28 +189,76 @@ class PhotosList extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text(
-                    photos[index].posterUsername,
-                    style: TextStyle(color: emralsColor(), fontSize: 15.0),
-                  ),
-                  RaisedButton(
-                    color: emralsColor(),
-                    disabledColor: emralsColor(),
-                    highlightColor: emralsColor().shade500,
-                    disabledTextColor: Colors.white,
-                    textColor: Colors.white,
-                    onPressed: null,
-                    child: new Text("CLEAN"),
-                    shape: StadiumBorder(
-                      side: BorderSide(width: 2.0, color: Colors.white),
+                  Expanded(
+                    child: Container(
+                      child: RichText(
+                        text: TextSpan(
+                          style: TextStyle(color: Colors.black, fontSize: 15.0),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: photos[index].posterUsername,
+                                style: TextStyle(
+                                    color: emralsColor(),
+                                    fontWeight: FontWeight.bold)),
+                            TextSpan(
+                                text: ' reports ',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(
+                              text: photos[index].title,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
+                  Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Icon(Icons.assessment, color: emralsColor()),
+                          Text('200'),
+                        ],
+                      ),
+                      OutlineButton(
+                        color: Colors.white,
+                        splashColor: emralsColor(),
+                        //disabledColor: emralsColor(),
+                        highlightColor: emralsColor().shade700,
+                        disabledTextColor: emralsColor(),
+                        textColor: emralsColor(),
+                        borderSide: BorderSide(
+                          color: emralsColor(),
+                        ),
+                        onPressed: () {},
+                        child: new Text("CLEAN"),
+                        shape: StadiumBorder(),
+                      ),
+                    ],
+                  )
                 ],
               ),
             ),
           ],
         );
       },
+    );
+  }
+}
+
+class ReportList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return new Container(
+      child: new FutureBuilder<List<Report>>(
+        future: fetchReports(http.Client()),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+
+          return snapshot.hasData
+              ? PhotosList(photos: snapshot.data)
+              : Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 }

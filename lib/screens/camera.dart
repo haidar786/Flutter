@@ -107,11 +107,33 @@ class _CameraAppState extends State<CameraApp> {
         fixedColor: Colors.blue,
         items: [
           BottomNavigationBarItem(
-              icon: new Icon(Icons.home), title: new Text('Home')),
+            backgroundColor: Colors.black,
+            icon: new Icon(
+              Icons.home,
+            ),
+            title: new Text('Activity'),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.camera), title: new Text('Camera')),
+            backgroundColor: Colors.blue,
+            icon: new Icon(
+              Icons.camera,
+            ),
+            title: new Text('Report'),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.person), title: new Text('Profile')),
+            backgroundColor: Colors.black,
+            icon: new Icon(
+              Icons.person,
+            ),
+            title: new Text('Stats'),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.black,
+            icon: new Icon(
+              Icons.person,
+            ),
+            title: new Text('test'),
+          ),
         ],
       ),
     );

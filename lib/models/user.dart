@@ -1,6 +1,12 @@
 class User {
-  User(this._username, this._token, this._emrals, this._id, this._picture,
-      this._xp);
+  User(
+    this._username,
+    this._token,
+    this._emrals,
+    this._id,
+    this._picture,
+    this._xp,
+  );
 
   User.map(dynamic obj) {
     this._username = obj["username"];
@@ -11,7 +17,7 @@ class User {
     this._id = obj["id"];
   }
 
-  double _emrals;
+  double _emrals = 0;
   int _id;
   String _picture;
   String _token;

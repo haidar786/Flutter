@@ -8,6 +8,8 @@ import 'package:emrals/screens/report_detail.dart';
 import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/styles.dart';
+import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/models/user.dart';
 
 Future<List<Report>> fetchReports(http.Client client) async {
   final response = await client.get('https://www.emrals.com/api/alerts/');
@@ -29,6 +31,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePage extends State<MyHomePage> {
   int _selectedIndex = 0;
+  User _userObject;
+
+  @override
+  initState() {
+    super.initState();
+    initUser();
+  }
+
+  initUser() async {
+    User userObject;
+    var db = new DatabaseHelper();
+    userObject = await db.getUser();
+
+    if (!mounted) return;
+    setState(() {
+      _userObject = userObject;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +60,7 @@ class _MyHomePage extends State<MyHomePage> {
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text('228.34'),
+              child: Text(_userObject.emrals.toString()),
             ),
             IconButton(
               icon: Image.asset("assets/JustElogo.png"),
@@ -65,8 +86,9 @@ class _MyHomePage extends State<MyHomePage> {
       ),
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _selectedIndex,
+
         onTap: (index) {
-          final routes = ["/home", "/camera", '/stats'];
+          final routes = ["/home", "/camera", '/stats', '/stats'];
           Navigator.of(context)
               .pushNamedAndRemoveUntil(routes[index], (route) => false);
 
@@ -75,14 +97,36 @@ class _MyHomePage extends State<MyHomePage> {
           });
         },
         fixedColor: Colors.red, // this will be set when a new tab is tapped
+
         items: [
           BottomNavigationBarItem(
-              icon: new Icon(Icons.home), title: new Text('Home')),
+            backgroundColor: Colors.black,
+            icon: new Icon(
+              Icons.home,
+            ),
+            title: new Text('Activity'),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.camera), title: new Text('Camera')),
-          //BottomNavigationBarItem(icon: new Icon(Icons.access_alarm),title: new Text('sdf')),
+            backgroundColor: Colors.blue,
+            icon: new Icon(
+              Icons.camera,
+            ),
+            title: new Text('Report'),
+          ),
           BottomNavigationBarItem(
-              icon: new Icon(Icons.person), title: new Text('Profile'))
+            backgroundColor: Colors.black,
+            icon: new Icon(
+              Icons.person,
+            ),
+            title: new Text('Stats'),
+          ),
+          BottomNavigationBarItem(
+            backgroundColor: Colors.black,
+            icon: new Icon(
+              Icons.person,
+            ),
+            title: new Text('test'),
+          ),
         ],
       ),
     );

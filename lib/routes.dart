@@ -11,5 +11,5 @@ final routes = {
   '/home': (BuildContext context) => new MyHomePage(),
   '/settings': (BuildContext context) => new Settingg(),
   '/camera': (BuildContext context) => new CameraApp(),
-  '/': (BuildContext context) => new LoginScreen(),
+  '/': (BuildContext context) => new MyHomePage(),
 };

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:emrals/screens/report_detail.dart';
 import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emrals/styles.dart';
 
 Future<List<Report>> fetchReports(http.Client client) async {
   final response = await client.get('https://www.emrals.com/api/alerts/');
@@ -32,13 +33,23 @@ class _MyHomePage extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text("Alerts"), actions: <Widget>[
-        IconButton(
-            icon: Icon(Icons.home),
-            onPressed: () {
-              Navigator.pushNamed(context, '/settings');
-            })
-      ]),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40.0), // here the desired height
+        child: AppBar(
+          //title: Text("Alerts"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/settings',
+                );
+              },
+            ),
+          ],
+        ),
+      ),
       body: FutureBuilder<List<Report>>(
         future: fetchReports(http.Client()),
         builder: (context, snapshot) {
@@ -87,14 +98,14 @@ class PhotosList extends StatelessWidget {
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
-            SizedBox(
-              child: Center(
-                child: Container(
-                  color: Color(0xFFe0e0e0),
-                  height: 8,
-                ),
-              ),
-            ),
+            // SizedBox(
+            //   child: Center(
+            //     child: Container(
+            //       color: Color(0xFFe0e0e0),
+            //       height: 8,
+            //     ),
+            //   ),
+            // ),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -111,21 +122,61 @@ class PhotosList extends StatelessWidget {
                 errorWidget: new Icon(Icons.error),
               ),
             ),
-            new Row(
-              children: <Widget>[
-                new Container(
-                    width: 100,
-                    height: 100,
-                    decoration: new BoxDecoration(
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: new Container(
+                      width: 77,
+                      height: 77,
+                      padding: EdgeInsets.all(1),
+                      decoration: new BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: FractionalOffset.topCenter,
+                          end: FractionalOffset.bottomCenter,
+                          stops: [0, 0.5, 1],
+                          colors: [
+                            const Color(0xFF7DB208),
+                            const Color(0xFFFFDC03),
+                            const Color(0xFFDD26BA),
+                          ],
+                        ),
                         shape: BoxShape.circle,
-                        image: new DecorationImage(
+                      ),
+                      child: new Container(
+                        decoration: new BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: new DecorationImage(
                             fit: BoxFit.fill,
-                            image:
-                                new NetworkImage(photos[index].posterAvatar)))),
-                Text('user' + photos[index].posterUsername),
-                Text('row'),
-              ],
-            )
+                            image: new NetworkImage(
+                              photos[index].posterAvatar,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Text(
+                    photos[index].posterUsername,
+                    style: TextStyle(color: emralsColor(), fontSize: 15.0),
+                  ),
+                  RaisedButton(
+                    color: emralsColor(),
+                    disabledColor: emralsColor(),
+                    highlightColor: emralsColor().shade500,
+                    disabledTextColor: Colors.white,
+                    textColor: Colors.white,
+                    onPressed: null,
+                    child: new Text("CLEAN"),
+                    shape: StadiumBorder(
+                      side: BorderSide(width: 2.0, color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         );
       },

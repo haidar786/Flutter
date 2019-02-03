@@ -197,7 +197,7 @@ class LoginScreenState extends State<LoginScreen>
           child: new ClipRect(
             child: new Container(
               child: loginForm,
-              height: 400.0,
+              height: 430.0,
               width: 300.0,
             ),
           ),

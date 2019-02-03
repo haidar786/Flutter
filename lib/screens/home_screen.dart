@@ -12,6 +12,7 @@ import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/stats.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<List<Report>> fetchReports(http.Client client) async {
   final response = await client.get('https://www.emrals.com/api/alerts/');
@@ -33,7 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePage extends State<MyHomePage> {
   int _selectedIndex = 0;
-  User _userObject;
+  double _emralsAmount = 0;
   final List<Widget> _children = [
     ReportList(),
     CameraApp(),
@@ -53,7 +54,7 @@ class _MyHomePage extends State<MyHomePage> {
 
     if (!mounted) return;
     setState(() {
-      _userObject = userObject;
+      _emralsAmount = userObject.emrals;
     });
   }
 
@@ -67,7 +68,7 @@ class _MyHomePage extends State<MyHomePage> {
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text(_userObject.emrals.toString()),
+              child: Text(_emralsAmount.toString()),
             ),
             IconButton(
               icon: Image.asset("assets/JustElogo.png"),
@@ -130,6 +131,20 @@ class PhotosList extends StatelessWidget {
 
   final List<Report> photos;
 
+  launchMaps(latitude, longitude) async {
+    String googleUrl = 'comgooglemaps://?center=$latitude,$longitude';
+    String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
+    if (await canLaunch("comgooglemaps://")) {
+      print('launching com googleUrl');
+      await launch(googleUrl);
+    } else if (await canLaunch(appleUrl)) {
+      print('launching apple url');
+      await launch(appleUrl);
+    } else {
+      throw 'Could not launch url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -146,16 +161,49 @@ class PhotosList extends StatelessWidget {
                           ReportDetail(report: photos[index])),
                 );
               },
-              child: new CachedNetworkImage(
-                imageUrl: photos[index].thumbnail,
-                placeholder:
-                    new Image(image: AssetImage("assets/placeholder.png")),
-                errorWidget: new Icon(Icons.error),
+              child: Stack(
+                alignment: const Alignment(.9, .9),
+                children: [
+                  new CachedNetworkImage(
+                    imageUrl: photos[index].thumbnail,
+                    placeholder:
+                        new Image(image: AssetImage("assets/placeholder.png")),
+                    errorWidget: new Icon(Icons.error),
+                  ),
+                  new GestureDetector(
+                    onTap: () {
+                      launchMaps(
+                        photos[index].latitude,
+                        photos[index].longitude,
+                      );
+
+                      print("Container clicked");
+                    },
+                    child: new Container(
+                      width: 100.0,
+                      height: 100.0,
+                      decoration: new BoxDecoration(
+                        color: const Color(0xff7c94b6),
+                        image: new DecorationImage(
+                          image: new NetworkImage(photos[index].googleURL),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius:
+                            new BorderRadius.all(new Radius.circular(50.0)),
+                        border: new Border.all(
+                          color: emralsColor(),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             Padding(
               padding: EdgeInsets.all(10.0),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.all(5),
@@ -192,6 +240,7 @@ class PhotosList extends StatelessWidget {
                   Expanded(
                     child: Container(
                       child: RichText(
+                        //textAlign: TextAlign.right,
                         text: TextSpan(
                           style: TextStyle(color: Colors.black, fontSize: 15.0),
                           children: <TextSpan>[

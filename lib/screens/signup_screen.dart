@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
-import 'package:emrals/screens/login/signup_screen_presenter.dart';
+import 'package:emrals/screens/signup_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {

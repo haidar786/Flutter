@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
-import 'package:emrals/screens/login/login_screen_presenter.dart';
+import 'package:emrals/screens/login_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';

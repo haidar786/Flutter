@@ -9,7 +9,7 @@ class Settingg extends StatefulWidget {
   _SettingsPage createState() => new _SettingsPage();
 }
 
-getUserPicture() async {
+Future<String> getUserPicture() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String picture = prefs.getString('user_picture');
   return picture;

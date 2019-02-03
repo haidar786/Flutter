@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:emrals/screens/home/home_screen.dart';
-import 'package:emrals/screens/login/login_screen.dart';
-import 'package:emrals/screens/login/signup_screen.dart';
+import 'package:emrals/screens/home_screen.dart';
+import 'package:emrals/screens/login_screen.dart';
+import 'package:emrals/screens/signup_screen.dart';
 import 'package:emrals/screens/settings.dart';
 import 'package:emrals/screens/camera.dart';
 

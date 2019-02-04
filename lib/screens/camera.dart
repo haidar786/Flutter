@@ -13,10 +13,20 @@ import 'package:async/async.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
 import 'package:exif/exif.dart';
+import 'package:open_file/open_file.dart';
 
 class CameraApp extends StatefulWidget {
   @override
   _CameraAppState createState() => _CameraAppState();
+}
+
+class OpenFile {
+  static const MethodChannel _channel = const MethodChannel('open_file');
+
+  static Future<String> open(filePath, {String type, String uti}) async {
+    Map<String, String> map = {"file_path": filePath, "type": type, "uti": uti};
+    return await _channel.invokeMethod('open_file', map);
+  }
 }
 
 class _CameraAppState extends State<CameraApp> {
@@ -179,7 +189,9 @@ class _CameraAppState extends State<CameraApp> {
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     print('get image');
+
     if (image != null) {
+      print(image.path);
       upload(image);
       setState(() {
         _image = image;
@@ -192,8 +204,9 @@ class _CameraAppState extends State<CameraApp> {
     if (_image == null) {
       return null;
     }
+    //File file = OpenFile.open(_image.path);
 
-    var bytes = await _image.readAsBytes();
+    var bytes = await new File(_image.path).readAsBytes();
     var tags = await readExifFromBytes(bytes);
     var sb = StringBuffer();
 

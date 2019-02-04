@@ -23,6 +23,7 @@ dependencies:
   flutter_launcher_icons: 
   photo_view:
   exif: 
+  open_file:
 
 
 dev_dependencies:

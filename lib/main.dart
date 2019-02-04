@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
+//import 'package:flutter/rendering.dart';
 
 void main() {
+  //debugPaintSizeEnabled = true;
+  //debugPaintLayerBordersEnabled = true;
+  //debugPaintPointersEnabled = true;
+  //debugPaintBaselinesEnabled = true;
+  //debugRepaintRainbowEnabled = true;
   runApp(new EmralsApp());
 }
 

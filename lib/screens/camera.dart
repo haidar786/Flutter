@@ -5,9 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:location/location.dart';
 import 'package:flutter/services.dart';
-
-void logError(String code, String message) =>
-    print('Error: $code\nError Message: $message');
+import 'package:http/http.dart' as http;
+import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/models/user.dart';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 
 class CameraApp extends StatefulWidget {
   @override
@@ -21,9 +25,21 @@ class _CameraAppState extends State<CameraApp> {
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
   String imagePath;
   bool _isReady = false;
+  String userToken;
+  File _image;
   var currentLocation = <String, double>{};
 
   var location = new Location();
+
+  _setuserToken() async {
+    User userObject;
+    var db = new DatabaseHelper();
+    userObject = await db.getUser();
+
+    setState(() {
+      userToken = userObject.token ?? '';
+    });
+  }
 
   Future<void> _setupCameras() async {
     try {
@@ -50,6 +66,7 @@ class _CameraAppState extends State<CameraApp> {
   void initState() {
     super.initState();
     _setupCameras();
+    _setuserToken();
   }
 
   @override
@@ -101,7 +118,7 @@ class _CameraAppState extends State<CameraApp> {
           onPressed: controller != null &&
                   controller.value.isInitialized &&
                   !controller.value.isRecordingVideo
-              ? onTakePictureButtonPressed
+              ? onUploadPictureButtonPressed
               : null,
         ),
       ],
@@ -143,7 +160,6 @@ class _CameraAppState extends State<CameraApp> {
   }
 
   void _showCameraException(CameraException e) {
-    logError(e.code, e.description);
     showInSnackBar('Error: ${e.code}\n${e.description}');
   }
 
@@ -156,6 +172,42 @@ class _CameraAppState extends State<CameraApp> {
         });
         if (filePath != null) showInSnackBar('Picture saved to $filePath');
       }
+    });
+  }
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    print('get image');
+    setState(() {
+      _image = image;
+    });
+    return image;
+  }
+
+  onUploadPictureButtonPressed() async {
+    getImage().then(upload(_image));
+  }
+
+  upload(File imageFile) async {
+    var stream =
+        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    var length = await imageFile.length();
+
+    var uri = Uri.parse('http://192.168.0.8:8000/api/upload/');
+
+    var request = new http.MultipartRequest("POST", uri);
+
+    var multipartFile = new http.MultipartFile('file', stream, length,
+        filename: basename(imageFile.path));
+
+    Map<String, String> headers = {"Authorization": "bearer " + userToken};
+
+    request.headers.addAll(headers);
+    request.files.add(multipartFile);
+
+    var response = await request.send();
+    response.stream.transform(utf8.decoder).listen((value) {
+      showInSnackBar(value);
     });
   }
 }

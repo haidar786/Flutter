@@ -19,6 +19,7 @@ dependencies:
   cached_network_image:
   location:
   url_launcher:
+  image_picker:
 
 
 dev_dependencies:

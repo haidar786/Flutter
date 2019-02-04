@@ -219,6 +219,7 @@ class LoginScreenState extends State<LoginScreen>
     await db.saveUser(user);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user_picture', user.picture);
+    prefs.setString('user_token', user.token);
     var authStateProvider = new AuthStateProvider();
     authStateProvider.notify(AuthState.LOGGED_IN);
   }

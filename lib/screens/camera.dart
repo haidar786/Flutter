@@ -193,7 +193,7 @@ class _CameraAppState extends State<CameraApp> {
         new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
     var length = await imageFile.length();
 
-    var uri = Uri.parse('http://192.168.0.8:8000/api/upload/');
+    var uri = Uri.parse('https://www.emrals.com/api/upload/');
 
     var request = new http.MultipartRequest("POST", uri);
 

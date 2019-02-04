@@ -159,17 +159,22 @@ class _ReportList extends State<ReportListWidget> {
                                 //textAlign: TextAlign.right,
                                 text: TextSpan(
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 15.0),
+                                    color: Colors.black,
+                                    fontSize: 15.0,
+                                  ),
                                   children: <TextSpan>[
                                     TextSpan(
-                                        text: reports[index].posterUsername,
-                                        style: TextStyle(
-                                            color: emralsColor(),
-                                            fontWeight: FontWeight.bold)),
+                                      text: reports[index].posterUsername,
+                                      style: TextStyle(
+                                          color: emralsColor(),
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                     TextSpan(
-                                        text: ' reports ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
+                                      text: ' reports ',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                     TextSpan(
                                       text: reports[index].title,
                                     ),
@@ -182,7 +187,10 @@ class _ReportList extends State<ReportListWidget> {
                             children: <Widget>[
                               Row(
                                 children: <Widget>[
-                                  Icon(Icons.assessment, color: emralsColor()),
+                                  Icon(
+                                    Icons.assessment,
+                                    color: emralsColor(),
+                                  ),
                                   Text('200'),
                                 ],
                               ),

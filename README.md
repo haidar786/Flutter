@@ -24,3 +24,4 @@ https://pub.dartlang.org/packages/pull_to_refresh
 https://docs.flutter.io/flutter/material/BottomNavigationBar-class.html
 https://medium.com/coding-with-flutter/flutter-case-study-multiple-navigators-with-bottomnavigationbar-90eb6caa6dbf
 https://flutter.io/docs/cookbook/maintenance/error-reporting
+https://stackoverflow.com/questions/43916323/how-do-i-create-an-animated-number-counter

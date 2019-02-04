@@ -12,6 +12,7 @@ import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
+import 'package:exif/exif.dart';
 
 class CameraApp extends StatefulWidget {
   @override
@@ -182,8 +183,26 @@ class _CameraAppState extends State<CameraApp> {
       upload(image);
       setState(() {
         _image = image;
+        getExifFromFile();
       });
     }
+  }
+
+  Future<String> getExifFromFile() async {
+    if (_image == null) {
+      return null;
+    }
+
+    var bytes = await _image.readAsBytes();
+    var tags = await readExifFromBytes(bytes);
+    var sb = StringBuffer();
+
+    tags.forEach((k, v) {
+      sb.write("$k: $v \n");
+    });
+    print(sb.toString());
+    showInSnackBar(sb.toString());
+    return sb.toString();
   }
 
   onUploadPictureButtonPressed() async {

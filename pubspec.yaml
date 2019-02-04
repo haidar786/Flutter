@@ -21,6 +21,7 @@ dependencies:
   url_launcher:
   image_picker:
   flutter_launcher_icons: 
+  photo_view:
 
 
 dev_dependencies:

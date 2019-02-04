@@ -178,14 +178,17 @@ class _CameraAppState extends State<CameraApp> {
   Future getImage() async {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     print('get image');
-    setState(() {
-      _image = image;
-    });
-    return image;
+    if (image != null) {
+      upload(image);
+      setState(() {
+        _image = image;
+      });
+    }
   }
 
   onUploadPictureButtonPressed() async {
-    getImage().then(upload(_image));
+    //getImage().then(upload(_image));
+    getImage();
   }
 
   upload(File imageFile) async {
@@ -194,6 +197,7 @@ class _CameraAppState extends State<CameraApp> {
     var length = await imageFile.length();
 
     var uri = Uri.parse('https://www.emrals.com/api/upload/');
+    //var uri = Uri.parse('http://192.168.0.8:8000/api/upload/');
 
     var request = new http.MultipartRequest("POST", uri);
 

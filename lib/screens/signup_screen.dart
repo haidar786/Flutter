@@ -195,9 +195,9 @@ class SignupScreenState extends State<SignupScreen>
         ),
         _isLoading ? CircularProgressIndicator() : signupBtn,
         InkWell(
-          child: new Text(
+          child: Text(
             "By signing up you agree to our Terms and Conditions",
-            style: new TextStyle(
+            style: TextStyle(
                 color: Colors.white, decoration: TextDecoration.underline),
           ),
           onTap: () => launchURL('https://www.emrals.com/terms/'),

@@ -33,7 +33,7 @@ class _MyHomePage extends State<MyHomePage> {
 
   initUser() async {
     User userObject;
-    var db = new DatabaseHelper();
+    var db = DatabaseHelper();
     userObject = await db.getUser();
 
     if (!mounted) return;
@@ -67,7 +67,7 @@ class _MyHomePage extends State<MyHomePage> {
         ),
       ),
       body: _children[_selectedIndex],
-      bottomNavigationBar: new BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) {
           setState(() {
@@ -78,31 +78,31 @@ class _MyHomePage extends State<MyHomePage> {
         items: [
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
-            icon: new Icon(
+            icon: Icon(
               Icons.view_stream,
             ),
-            title: new Text('Activity'),
+            title: Text('Activity'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
-            icon: new Icon(
+            icon: Icon(
               Icons.camera,
             ),
-            title: new Text('Report'),
+            title: Text('Report'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
-            icon: new Icon(
+            icon: Icon(
               Icons.multiline_chart,
             ),
-            title: new Text('Stats'),
+            title: Text('Stats'),
           ),
           BottomNavigationBarItem(
             backgroundColor: Colors.black,
-            icon: new Icon(
+            icon: Icon(
               Icons.map,
             ),
-            title: new Text('Zones'),
+            title: Text('Zones'),
           ),
         ],
       ),

@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = new DatabaseHelper.internal();
+  static final DatabaseHelper _instance = DatabaseHelper.internal();
   factory DatabaseHelper() => _instance;
 
   static Database _db;
@@ -53,6 +53,6 @@ class DatabaseHelper {
   Future<User> getUser() async {
     var dbClient = await db;
     var res = await dbClient.query("User");
-    return res.isNotEmpty ? new User.fromMap(res.first) : [];
+    return res.isNotEmpty ? User.fromMap(res.first) : [];
   }
 }

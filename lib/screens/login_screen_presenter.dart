@@ -8,7 +8,7 @@ abstract class LoginScreenContract {
 
 class LoginScreenPresenter {
   LoginScreenContract _view;
-  RestDatasource api = new RestDatasource();
+  RestDatasource api = RestDatasource();
   LoginScreenPresenter(this._view);
 
   doLogin(String username, String password) async {

@@ -4,7 +4,7 @@ import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
 
 class RestDatasource {
-  NetworkUtil _netUtil = new NetworkUtil();
+  NetworkUtil _netUtil = NetworkUtil();
   static final baseURL = "https://www.emrals.com/api/";
   static final loginURL = baseURL + "login/";
   static final signupURL = baseURL + "rest-auth/registration/";
@@ -15,9 +15,9 @@ class RestDatasource {
       "password": password,
     }).then((dynamic res) {
       if (res["error"] != null) {
-        throw new Exception(res["error"]);
+        throw Exception(res["error"]);
       }
-      return new User.map(res);
+      return User.map(res);
     });
   }
 
@@ -29,21 +29,21 @@ class RestDatasource {
       "password2": password
     }).then((dynamic res) {
       if (res["error"] != null) {
-        throw new Exception(res["error"]);
+        throw Exception(res["error"]);
       }
       if (res["email"] != null) {
-        throw new Exception(res["email"]);
+        throw Exception(res["email"]);
       }
       if (res["username"] != null) {
         if (res["id"] == null) {
-          throw new Exception(res["username"]);
+          throw Exception(res["username"]);
         }
       }
       if (res["password1"] != null) {
-        throw new Exception(res["password1"]);
+        throw Exception(res["password1"]);
       }
 
-      return new User.map(res);
+      return User.map(res);
     });
   }
 }

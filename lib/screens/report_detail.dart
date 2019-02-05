@@ -17,7 +17,7 @@ class ReportDetail extends StatelessWidget {
       ),
       body: Container(
         child: PhotoView(
-          imageProvider: new CachedNetworkImageProvider(report.thumbnail),
+          imageProvider: CachedNetworkImageProvider(report.thumbnail),
         ),
       ),
     );

@@ -8,7 +8,7 @@ abstract class SignupScreenContract {
 
 class SignupScreenPresenter {
   SignupScreenContract _view;
-  RestDatasource api = new RestDatasource();
+  RestDatasource api = RestDatasource();
   SignupScreenPresenter(this._view);
 
   doSignup(String username, String email, String password) async {

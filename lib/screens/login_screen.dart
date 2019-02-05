@@ -12,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 class LoginScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return new LoginScreenState();
+    return LoginScreenState();
   }
 }
 
@@ -21,8 +21,8 @@ class LoginScreenState extends State<LoginScreen>
   BuildContext _ctx;
 
   bool _isLoading = false;
-  final formKey = new GlobalKey<FormState>();
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   String _password, _username;
 
   LoginScreenPresenter _presenter;
@@ -36,8 +36,8 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   LoginScreenState() {
-    _presenter = new LoginScreenPresenter(this);
-    var authStateProvider = new AuthStateProvider();
+    _presenter = LoginScreenPresenter(this);
+    var authStateProvider = AuthStateProvider();
     authStateProvider.subscribe(this);
   }
 
@@ -52,8 +52,7 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   void _showSnackBar(String text) {
-    scaffoldKey.currentState
-        .showSnackBar(new SnackBar(content: new Text(text)));
+    scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(text)));
   }
 
   @override
@@ -65,40 +64,45 @@ class LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     _ctx = context;
-    var loginBtn = new RaisedButton(
-      color: emralsColor(),
-      disabledColor: emralsColor(),
-      highlightColor: emralsColor().shade500,
-      disabledTextColor: emralsColor().shade500,
-      textColor: Colors.white,
-      onPressed: _submit,
-      child: new Text("LOGIN"),
-      shape: StadiumBorder(
-        side: BorderSide(width: 2.0, color: Colors.white),
+    var loginBtn = Container(
+      padding: const EdgeInsets.all(10.0),
+      child: RaisedButton(
+        color: emralsColor(),
+        disabledColor: emralsColor(),
+        highlightColor: emralsColor().shade500,
+        disabledTextColor: emralsColor().shade500,
+        textColor: Colors.white,
+        onPressed: _submit,
+        child: Text("LOGIN"),
+        shape: StadiumBorder(
+          side: BorderSide(width: 2.0, color: Colors.white),
+        ),
       ),
     );
-    var loginForm = new Column(
+    var loginForm = Column(
       children: <Widget>[
-        new Image(image: AssetImage("assets/logo.png")),
-        new Text(
-          "rewarding city cleanup",
-          textScaleFactor: 1,
+        Image(image: AssetImage("assets/logo.png")),
+        Center(
+          child: Text(
+            "rewarding city cleanup",
+            textScaleFactor: 1,
+          ),
         ),
         SizedBox(
           height: 10,
         ),
-        new Form(
+        Form(
           key: formKey,
-          child: new Column(
+          child: Column(
             children: <Widget>[
-              new Padding(
+              Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: new TextFormField(
+                child: TextFormField(
                   onSaved: (val) => _username = val,
                   validator: (val) {
                     return val.length < 1 ? "Please fill in a username." : null;
                   },
-                  decoration: new InputDecoration(
+                  decoration: InputDecoration(
                     filled: true,
                     labelText: "Username",
                     focusedBorder: OutlineInputBorder(
@@ -118,12 +122,12 @@ class LoginScreenState extends State<LoginScreen>
                   ),
                 ),
               ),
-              new Padding(
+              Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: new TextFormField(
+                child: TextFormField(
                   obscureText: true,
                   onSaved: (val) => _password = val,
-                  decoration: new InputDecoration(
+                  decoration: InputDecoration(
                     filled: true,
                     labelText: "Password",
                     focusedBorder: OutlineInputBorder(
@@ -147,7 +151,7 @@ class LoginScreenState extends State<LoginScreen>
             ],
           ),
         ),
-        _isLoading ? new CircularProgressIndicator() : loginBtn,
+        _isLoading ? CircularProgressIndicator() : loginBtn,
         SizedBox(
           height: 10,
         ),
@@ -155,46 +159,50 @@ class LoginScreenState extends State<LoginScreen>
           onTap: () {
             Navigator.pushNamed(context, '/signup');
           },
-          child: Text(
-            "SIGN UP HERE",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+          child: Center(
+            child: Text(
+              "SIGN UP HERE",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
         SizedBox(
           height: 10,
         ),
-        InkWell(
-          child: new Text(
-            "Forgot password?",
-            style: new TextStyle(
-                color: Colors.white, decoration: TextDecoration.underline),
+        Center(
+          child: InkWell(
+            child: Text(
+              "Forgot password?",
+              style: TextStyle(
+                  color: Colors.white, decoration: TextDecoration.underline),
+            ),
+            onTap: () =>
+                launchURL('https://www.emrals.com/accounts/password/reset'),
           ),
-          onTap: () =>
-              launchURL('https://www.emrals.com/accounts/password/reset'),
         ),
       ],
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
     );
 
-    return new Scaffold(
+    return Scaffold(
       appBar: null,
       key: scaffoldKey,
-      body: new Container(
-        decoration: new BoxDecoration(
+      body: Container(
+        decoration: BoxDecoration(
           color: emralsColor(),
-          image: new DecorationImage(
-            image: new AssetImage("assets/citybg.png"),
+          image: DecorationImage(
+            image: AssetImage("assets/citybg.png"),
             fit: BoxFit.contain,
             alignment: Alignment.bottomCenter,
           ),
         ),
-        child: new Center(
-          child: new ClipRect(
-            child: new Container(
+        child: Center(
+          child: ClipRect(
+            child: Container(
               child: loginForm,
               height: 450.0,
               width: 300.0,
@@ -215,12 +223,12 @@ class LoginScreenState extends State<LoginScreen>
   void onLoginSuccess(User user) async {
     _showSnackBar("logged in as " + user.username);
     setState(() => _isLoading = false);
-    var db = new DatabaseHelper();
+    var db = DatabaseHelper();
     await db.saveUser(user);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user_picture', user.picture);
     prefs.setString('user_token', user.token);
-    var authStateProvider = new AuthStateProvider();
+    var authStateProvider = AuthStateProvider();
     authStateProvider.notify(AuthState.LOGGED_IN);
   }
 }

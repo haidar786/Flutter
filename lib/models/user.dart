@@ -37,7 +37,7 @@ class User {
   double get emrals => _emrals;
 
   Map<String, dynamic> toMap() {
-    var map = new Map<String, dynamic>();
+    var map = Map<String, dynamic>();
     map["username"] = _username;
     map["token"] = _token;
     map["picture"] = _picture;

@@ -6,7 +6,7 @@ class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
 
   @override
-  _SettingsPage createState() => new _SettingsPage();
+  _SettingsPage createState() => _SettingsPage();
 }
 
 class _SettingsPage extends State<Settingg> {
@@ -20,7 +20,7 @@ class _SettingsPage extends State<Settingg> {
 
   initUser() async {
     User userObject;
-    var db = new DatabaseHelper();
+    var db = DatabaseHelper();
     userObject = await db.getUser();
 
     if (!mounted) return;
@@ -31,11 +31,11 @@ class _SettingsPage extends State<Settingg> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: Text('Settings'),
         ),
-        body: new Stack(
+        body: Stack(
           children: <Widget>[
             ClipPath(
               child: Container(color: Colors.black.withOpacity(0.8)),
@@ -106,7 +106,7 @@ class _SettingsPage extends State<Settingg> {
                           elevation: 7.0,
                           child: GestureDetector(
                             onTap: () {
-                              var db = new DatabaseHelper();
+                              var db = DatabaseHelper();
                               db.deleteUsers().then((_) {
                                 Navigator.pushNamed(context, '/login');
                               });

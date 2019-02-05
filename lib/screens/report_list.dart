@@ -16,8 +16,8 @@ class ReportListWidget extends StatefulWidget {
 class _ReportList extends State<ReportListWidget> {
   int limit = 50;
   int offset = 0;
-  ScrollController _scrollController = new ScrollController();
-  List<Report> reports = new List();
+  ScrollController _scrollController = ScrollController();
+  List<Report> reports = List();
   bool _progressBarActive = true;
   @override
   void initState() {
@@ -59,10 +59,10 @@ class _ReportList extends State<ReportListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: _progressBarActive == true
           ? Center(child: CircularProgressIndicator())
-          : new ListView.builder(
+          : ListView.builder(
               controller: _scrollController,
               itemCount: reports.length,
               itemBuilder: (BuildContext context, int index) {
@@ -80,12 +80,12 @@ class _ReportList extends State<ReportListWidget> {
                       child: Stack(
                         alignment: const Alignment(.9, .9),
                         children: [
-                          new CachedNetworkImage(
+                          CachedNetworkImage(
                             placeholder: Image.asset('assets/placeholder.png'),
                             imageUrl: reports[index].thumbnail,
-                            errorWidget: new Icon(Icons.error),
+                            errorWidget: Icon(Icons.error),
                           ),
-                          new GestureDetector(
+                          GestureDetector(
                             onTap: () {
                               launchMaps(
                                 reports[index].latitude,
@@ -94,19 +94,18 @@ class _ReportList extends State<ReportListWidget> {
 
                               print("Container clicked");
                             },
-                            child: new Container(
+                            child: Container(
                               width: 100.0,
                               height: 100.0,
-                              decoration: new BoxDecoration(
+                              decoration: BoxDecoration(
                                 color: const Color(0xff7c94b6),
-                                image: new DecorationImage(
-                                  image: new NetworkImage(
-                                      reports[index].googleURL),
+                                image: DecorationImage(
+                                  image: NetworkImage(reports[index].googleURL),
                                   fit: BoxFit.cover,
                                 ),
-                                borderRadius: new BorderRadius.all(
-                                    new Radius.circular(50.0)),
-                                border: new Border.all(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50.0)),
+                                border: Border.all(
                                   color: emralsColor(),
                                   width: 2,
                                 ),
@@ -123,11 +122,11 @@ class _ReportList extends State<ReportListWidget> {
                         children: <Widget>[
                           Padding(
                             padding: EdgeInsets.all(5),
-                            child: new Container(
+                            child: Container(
                               width: 77,
                               height: 77,
                               padding: EdgeInsets.all(1),
-                              decoration: new BoxDecoration(
+                              decoration: BoxDecoration(
                                 gradient: LinearGradient(
                                   begin: FractionalOffset.topCenter,
                                   end: FractionalOffset.bottomCenter,
@@ -140,12 +139,12 @@ class _ReportList extends State<ReportListWidget> {
                                 ),
                                 shape: BoxShape.circle,
                               ),
-                              child: new Container(
-                                decoration: new BoxDecoration(
+                              child: Container(
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  image: new DecorationImage(
+                                  image: DecorationImage(
                                     fit: BoxFit.fill,
-                                    image: new NetworkImage(
+                                    image: NetworkImage(
                                       reports[index].posterAvatar,
                                     ),
                                   ),
@@ -205,7 +204,7 @@ class _ReportList extends State<ReportListWidget> {
                                   color: emralsColor(),
                                 ),
                                 onPressed: () {},
-                                child: new Text("CLEAN"),
+                                child: Text("CLEAN"),
                                 shape: StadiumBorder(),
                               ),
                             ],

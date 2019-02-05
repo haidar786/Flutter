@@ -29,11 +29,11 @@ class _CameraAppState extends State<CameraApp> {
   String userToken;
   var currentLocation = <String, double>{};
 
-  var location = new Location();
+  var location = Location();
 
   _setuserToken() async {
     User userObject;
-    var db = new DatabaseHelper();
+    var db = DatabaseHelper();
     userObject = await db.getUser();
 
     setState(() {
@@ -44,7 +44,7 @@ class _CameraAppState extends State<CameraApp> {
   Future<void> _setupCameras() async {
     try {
       cameras = await availableCameras();
-      controller = new CameraController(cameras[0], ResolutionPreset.medium);
+      controller = CameraController(cameras[0], ResolutionPreset.medium);
       await controller.initialize();
       try {
         currentLocation = await location.getLocation();
@@ -80,7 +80,7 @@ class _CameraAppState extends State<CameraApp> {
   @override
   Widget build(BuildContext context) {
     _ctx = context;
-    if (!_isReady) return new Container();
+    if (!_isReady) return Container();
     return Scaffold(
       key: _scaffoldKey,
       body: Column(
@@ -170,16 +170,16 @@ class _CameraAppState extends State<CameraApp> {
   upload(File imageFile) async {
     if (currentLocation != null) {
       var stream =
-          new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+          http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
       var length = await imageFile.length();
 
       var uri = Uri.parse('https://www.emrals.com/api/upload/');
       //var uri = Uri.parse('http://192.168.0.8:8000/api/upload/');
 
-      var request = new http.MultipartRequest("POST", uri);
+      var request = http.MultipartRequest("POST", uri);
       request.fields['longitude'] = currentLocation["longitude"].toString();
       request.fields['latitude'] = currentLocation["latitude"].toString();
-      var multipartFile = new http.MultipartFile(
+      var multipartFile = http.MultipartFile(
         'file',
         stream,
         length,

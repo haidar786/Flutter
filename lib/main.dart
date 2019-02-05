@@ -9,14 +9,14 @@ void main() {
   //debugPaintPointersEnabled = true;
   //debugPaintBaselinesEnabled = true;
   //debugRepaintRainbowEnabled = true;
-  runApp(new EmralsApp());
+  runApp(EmralsApp());
 }
 
 class EmralsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      theme: new ThemeData(
+    return MaterialApp(
+      theme: ThemeData(
         primaryColor: Colors.black,
         primarySwatch: emralsColor(),
         fontFamily: 'Montserrat',

@@ -11,19 +11,16 @@ dependencies:
     sdk: flutter
   fancy_bottom_navigation:
   cupertino_icons: ^0.1.2
-  sqflite: 
-  path_provider:
-  http:
-  shared_preferences:
-  camera: 
-  cached_network_image:
-  location:
-  url_launcher:
-  image_picker:
+  sqflite: 1.1.0
+  path_provider: 0.4.1
+  http: 0.12.0+1
+  shared_preferences: 0.4.3
+  camera: 0.3.0
+  cached_network_image: 0.5.1
+  location: 1.4.1
+  url_launcher: 5.0.0
   flutter_launcher_icons: 
-  photo_view:
-  exif: 
-  open_file:
+  photo_view: 0.1.3
 
 
 dev_dependencies:

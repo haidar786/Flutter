@@ -11,33 +11,22 @@ import 'package:emrals/models/user.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'dart:convert';
-import 'package:image_picker/image_picker.dart';
-import 'package:exif/exif.dart';
-import 'package:open_file/open_file.dart';
 
 class CameraApp extends StatefulWidget {
   @override
   _CameraAppState createState() => _CameraAppState();
 }
 
-class OpenFile {
-  static const MethodChannel _channel = const MethodChannel('open_file');
-
-  static Future<String> open(filePath, {String type, String uti}) async {
-    Map<String, String> map = {"file_path": filePath, "type": type, "uti": uti};
-    return await _channel.invokeMethod('open_file', map);
-  }
-}
-
 class _CameraAppState extends State<CameraApp> {
+  BuildContext _ctx;
   List<CameraDescription> cameras;
   CameraController controller;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
   String imagePath;
   bool _isReady = false;
+  bool _isLoading = false;
   String userToken;
-  File _image;
   var currentLocation = <String, double>{};
 
   var location = new Location();
@@ -59,7 +48,9 @@ class _CameraAppState extends State<CameraApp> {
       await controller.initialize();
       try {
         currentLocation = await location.getLocation();
+        print(currentLocation);
       } on PlatformException {
+        print('no location available');
         currentLocation = null;
       }
     } on CameraException catch (e) {
@@ -88,6 +79,7 @@ class _CameraAppState extends State<CameraApp> {
 
   @override
   Widget build(BuildContext context) {
+    _ctx = context;
     if (!_isReady) return new Container();
     return Scaffold(
       key: _scaffoldKey,
@@ -103,36 +95,19 @@ class _CameraAppState extends State<CameraApp> {
               ),
             ),
           ),
-          _captureControlRowWidget(),
         ],
       ),
-    );
-  }
-
-  Widget _captureControlRowWidget() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.camera_alt),
-          color: Colors.blue,
-          onPressed: controller != null &&
-                  controller.value.isInitialized &&
-                  !controller.value.isRecordingVideo
-              ? onTakePictureButtonPressed
-              : null,
-        ),
-        IconButton(
-          icon: const Icon(Icons.cloud_upload),
-          color: Colors.blue,
-          onPressed: controller != null &&
-                  controller.value.isInitialized &&
-                  !controller.value.isRecordingVideo
-              ? onUploadPictureButtonPressed
-              : null,
-        ),
-      ],
+      floatingActionButton: _isLoading
+          ? CircularProgressIndicator(
+              backgroundColor: Colors.red,
+            )
+          : FloatingActionButton(
+              onPressed: controller != null && controller.value.isInitialized
+                  ? onTakePictureButtonPressed
+                  : null,
+              child: Icon(Icons.camera_alt),
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -174,76 +149,55 @@ class _CameraAppState extends State<CameraApp> {
     showInSnackBar('Error: ${e.code}\n${e.description}');
   }
 
+  Future getLocaion() async {
+    currentLocation = await location.getLocation();
+  }
+
   void onTakePictureButtonPressed() {
+    _isLoading = true;
     takePicture().then((String filePath) {
       if (mounted) {
         setState(() {
           imagePath = filePath;
-          print(currentLocation);
+          getLocaion();
+          upload(File(filePath));
         });
-        if (filePath != null) showInSnackBar('Picture saved to $filePath');
+        _isLoading = false;
       }
     });
   }
 
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print('get image');
-
-    if (image != null) {
-      print(image.path);
-      upload(image);
-      setState(() {
-        _image = image;
-        getExifFromFile();
-      });
-    }
-  }
-
-  Future<String> getExifFromFile() async {
-    if (_image == null) {
-      return null;
-    }
-    //File file = OpenFile.open(_image.path);
-
-    var bytes = await new File(_image.path).readAsBytes();
-    var tags = await readExifFromBytes(bytes);
-    var sb = StringBuffer();
-
-    tags.forEach((k, v) {
-      sb.write("$k: $v \n");
-    });
-    print(sb.toString());
-    showInSnackBar(sb.toString());
-    return sb.toString();
-  }
-
-  onUploadPictureButtonPressed() async {
-    //getImage().then(upload(_image));
-    getImage();
-  }
-
   upload(File imageFile) async {
-    var stream =
-        new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-    var length = await imageFile.length();
+    if (currentLocation != null) {
+      var stream =
+          new http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+      var length = await imageFile.length();
 
-    var uri = Uri.parse('https://www.emrals.com/api/upload/');
-    //var uri = Uri.parse('http://192.168.0.8:8000/api/upload/');
+      var uri = Uri.parse('https://www.emrals.com/api/upload/');
+      //var uri = Uri.parse('http://192.168.0.8:8000/api/upload/');
 
-    var request = new http.MultipartRequest("POST", uri);
+      var request = new http.MultipartRequest("POST", uri);
+      request.fields['longitude'] = currentLocation["longitude"].toString();
+      request.fields['latitude'] = currentLocation["latitude"].toString();
+      var multipartFile = new http.MultipartFile(
+        'file',
+        stream,
+        length,
+        filename: basename(imageFile.path),
+      );
 
-    var multipartFile = new http.MultipartFile('file', stream, length,
-        filename: basename(imageFile.path));
+      Map<String, String> headers = {"Authorization": "bearer " + userToken};
 
-    Map<String, String> headers = {"Authorization": "bearer " + userToken};
+      request.headers.addAll(headers);
+      request.files.add(multipartFile);
 
-    request.headers.addAll(headers);
-    request.files.add(multipartFile);
-
-    var response = await request.send();
-    response.stream.transform(utf8.decoder).listen((value) {
-      showInSnackBar(value);
-    });
+      var response = await request.send();
+      response.stream.transform(utf8.decoder).listen((value) {
+        showInSnackBar(value);
+        Navigator.pushNamed(_ctx, '/home');
+      });
+    } else {
+      showInSnackBar("Please enable GPS");
+    }
   }
 }

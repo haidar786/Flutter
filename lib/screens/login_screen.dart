@@ -153,7 +153,7 @@ class LoginScreenState extends State<LoginScreen>
         ),
         GestureDetector(
           onTap: () {
-            Navigator.of(_ctx).pushReplacementNamed("/signup");
+            Navigator.pushNamed(context, '/signup');
           },
           child: Text(
             "SIGN UP HERE",

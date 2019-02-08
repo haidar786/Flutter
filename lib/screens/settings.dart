@@ -38,7 +38,7 @@ class _SettingsPage extends State<Settingg> {
         body: Stack(
           children: <Widget>[
             ClipPath(
-              child: Container(color: Colors.black.withOpacity(0.8)),
+              child: Container(color: Colors.black38),
             ),
             Positioned(
                 width: 350.0,
@@ -64,24 +64,32 @@ class _SettingsPage extends State<Settingg> {
                       style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
+                          color: Color.fromRGBO(33, 219, 244, 1),
+                          fontFamily: 'Montserrat'),
+                    ),
+                    SizedBox(height: 12.0),
+                    Text(
+                      'wallet address',
+                      style: TextStyle(
+                          fontSize: 17.0,
                           fontFamily: 'Montserrat'),
                     ),
                     SizedBox(height: 15.0),
                     Text(
-                      'Subscribe guys',
+                      'hdsuhvuehvpsuvbwpibviowbiwort',
                       style: TextStyle(
-                          fontSize: 17.0,
-                          fontStyle: FontStyle.italic,
+                          fontSize: 11.0,
+                          color: Color.fromRGBO(250, 250, 250, 1),
                           fontFamily: 'Montserrat'),
                     ),
                     SizedBox(height: 25.0),
                     Container(
                         height: 30.0,
-                        width: 95.0,
+                        width: 120.0,
                         child: Material(
                           borderRadius: BorderRadius.circular(20.0),
-                          shadowColor: Colors.greenAccent,
-                          color: Colors.green,
+                          shadowColor: Colors.black12,
+                          color: Color.fromRGBO(164, 211, 34, 1),
                           elevation: 7.0,
                           child: GestureDetector(
                             onTap: () {},
@@ -98,11 +106,11 @@ class _SettingsPage extends State<Settingg> {
                     SizedBox(height: 25.0),
                     Container(
                         height: 30.0,
-                        width: 95.0,
+                        width: 120.0,
                         child: Material(
                           borderRadius: BorderRadius.circular(20.0),
-                          shadowColor: Colors.redAccent,
-                          color: Colors.red,
+                          shadowColor: Colors.black12,
+                          color: Color.fromRGBO(8, 158, 178, 1),
                           elevation: 7.0,
                           child: GestureDetector(
                             onTap: () {

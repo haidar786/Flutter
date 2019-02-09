@@ -13,9 +13,39 @@ class ReportListWidget extends StatefulWidget {
   _ReportList createState() => _ReportList();
 }
 
+class DialogDemoItem extends StatelessWidget {
+  const DialogDemoItem(
+      {Key key, this.icon, this.color, this.text, this.onPressed})
+      : super(key: key);
+
+  final IconData icon;
+  final Color color;
+  final String text;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialogOption(
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Icon(icon, size: 36.0, color: color),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: Text(text),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _ReportList extends State<ReportListWidget> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int limit = 50;
   int offset = 0;
   ScrollController _scrollController = ScrollController();
@@ -39,6 +69,19 @@ class _ReportList extends State<ReportListWidget> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void showDemoDialog<T>({BuildContext context, Widget child}) {
+    showDialog<T>(
+      context: context,
+      builder: (BuildContext context) => child,
+    ).then<void>((T value) {
+      // The value passed to Navigator.pop() or null.
+      if (value != null) {
+        _scaffoldKey.currentState
+            .showSnackBar(SnackBar(content: Text('You tipped: $value')));
+      }
+    });
   }
 
   launchMaps(latitude, longitude) async {
@@ -70,6 +113,7 @@ class _ReportList extends State<ReportListWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: _progressBarActive == true
           ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -268,7 +312,58 @@ class _ReportList extends State<ReportListWidget> {
                               borderSide: BorderSide(
                                 color: emralsColor(),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                showDemoDialog<String>(
+                                  context: context,
+                                  child: SimpleDialog(
+                                    title: const Text('Select tip amount'),
+                                    children: <Widget>[
+                                      DialogDemoItem(
+                                        icon: Icons.send,
+                                        color: emralsColor(),
+                                        text: 'Tip ' +
+                                            reports[index].posterUsername +
+                                            ' 10 EMRALS',
+                                        onPressed: () {
+                                          Navigator.pop(
+                                            context,
+                                            '10 EMRALS to ' +
+                                                reports[index].posterUsername,
+                                          );
+                                        },
+                                      ),
+                                      DialogDemoItem(
+                                        icon: Icons.send,
+                                        color: emralsColor(),
+                                        text: 'Tip ' +
+                                            reports[index].posterUsername +
+                                            ' 50 EMRALS',
+                                        onPressed: () {
+                                          Navigator.pop(
+                                            context,
+                                            '50 EMRALS to ' +
+                                                reports[index].posterUsername,
+                                          );
+                                        },
+                                      ),
+                                      DialogDemoItem(
+                                        icon: Icons.send,
+                                        text: 'Tip ' +
+                                            reports[index].posterUsername +
+                                            ' 100 EMRALS',
+                                        color: emralsColor(),
+                                        onPressed: () {
+                                          Navigator.pop(
+                                            context,
+                                            '100 EMRALS to ' +
+                                                reports[index].posterUsername,
+                                          );
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                );
+                              },
                               child: Text("TIP"),
                               shape: StadiumBorder(),
                             ),

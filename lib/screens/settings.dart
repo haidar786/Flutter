@@ -159,7 +159,7 @@ class _SettingsPage extends State<Settingg> {
                 SizedBox(height: 15.0),
                 new GestureDetector(
                   child: Text(
-                    'hdsuhvuehvpsuvbwpibviowbiwort',
+                    emralsAddress,
                     style: TextStyle(
                         fontSize: 20.0,
                         color: Colors.black,
@@ -167,7 +167,7 @@ class _SettingsPage extends State<Settingg> {
                   ),
                   onTap: () {
                     Clipboard.setData(
-                      new ClipboardData(text: 'hdsuhvuehvpsuvbwpibviowbiwort'),
+                      new ClipboardData(text: emralsAddress),
                     );
                     key.currentState.showSnackBar(new SnackBar(
                       content: new Text("Copied to Clipboard"),
@@ -177,7 +177,7 @@ class _SettingsPage extends State<Settingg> {
                 SizedBox(height: 15.0),
                 Image.network(
                   'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=' +
-                      'hdsuhvuehvpsuvbwpibviowbiwort',
+                      emralsAddress,
                 )
               ],
             )),

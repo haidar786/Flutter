@@ -5,6 +5,7 @@ import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:async';
 
 class Stats extends StatefulWidget {
   @override
@@ -35,6 +36,7 @@ class StatsState extends State<Stats> {
           json.decode(response.body)['data'][0]['timestamp'] * 1000);
       var now = new DateTime.now();
       Duration difference = now.difference(date);
+      if (!mounted) return;
       setState(() {
         this.lastBlockTime = difference.inMinutes.toString() + "m ";
         this.blockHeight = json.decode(response.body)['data'][0]['blockindex'];
@@ -79,13 +81,12 @@ class StatsState extends State<Stats> {
                       ),
                     ],
                   ),
-                  Text(
-                    'Updating in XXXs',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),
-                  ),
+                  CountDownText(
+                    onUpdate: () {
+                      if (!mounted) return;
+                      setState(() {});
+                    },
+                  )
                 ],
               ),
             ),
@@ -858,6 +859,48 @@ class StatsState extends State<Stats> {
           SizedBox(width: 4),
           Icon(icon)
         ],
+      ),
+    );
+  }
+}
+
+class CountDownText extends StatefulWidget {
+  final VoidCallback onUpdate;
+
+  const CountDownText({Key key, this.onUpdate}) : super(key: key);
+  _CountDownTextState createState() => _CountDownTextState();
+}
+
+class _CountDownTextState extends State<CountDownText> {
+  StreamSubscription periodicSub;
+  int countdown = 100;
+
+  @override
+  void dispose() {
+    periodicSub.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    periodicSub = periodicSub ??
+        Stream.periodic(const Duration(seconds: 1), (v) => v).listen(
+          (count) {
+            if (count % 100 == 0) {
+              widget.onUpdate();
+              countdown = 100;
+            } else {
+              countdown = 100 - (count % 100);
+            }
+            if (!mounted) return;
+            setState(() {});
+          },
+        );
+    return Text(
+      'Updating in ${countdown}s',
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
       ),
     );
   }

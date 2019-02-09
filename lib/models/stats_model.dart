@@ -35,5 +35,5 @@ class StatsModel {
         users = json['users'],
         emralsWon = json['emrals_won'],
         emralsAdded = json['emrals_added'],
-        countries = json['zones'];
+        countries = json['country_count'];
 }

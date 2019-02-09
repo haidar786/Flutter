@@ -1,6 +1,6 @@
 class Crex24Model {
   final double last;
-  final double percent_change;
+  final double percentChange;
   final double volume;
   final double high;
   final double low;
@@ -9,7 +9,7 @@ class Crex24Model {
 
   Crex24Model.fromJson(Map json) 
       : last = json['last'],
-      percent_change = json['percentChange'],
+      percentChange = json['percentChange'],
       volume = json['baseVolume'],
       high = json['high'],
       low = json['low'],

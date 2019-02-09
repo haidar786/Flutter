@@ -80,7 +80,7 @@ class StatsState extends State<Stats> {
                     ],
                   ),
                   Text(
-                    'Auto refresh in XXXs',
+                    'Updating in XXXs',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -274,7 +274,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emrals_won : 0}',
+                                '${stats != null ? stats.emralsWon : 0}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -298,7 +298,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emrals_added : 0}',
+                                '${stats != null ? stats.emralsAdded : 0}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -333,7 +333,7 @@ class StatsState extends State<Stats> {
                     ),
                     child: Center(
                       child: Text(
-                        '${stats != null ? stats.e_cans : 0} eCans',
+                        '${stats != null ? stats.eCans : 0} eCans',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -498,7 +498,7 @@ class StatsState extends State<Stats> {
                               ),
                             ),
                             Text(
-                              '${crex24data != null ? crex24data.percent_change.toStringAsFixed(2) : 0}%',
+                              '${crex24data != null ? crex24data.percentChange.toStringAsFixed(2) : 0}%',
                               style: TextStyle(
                                 color: emralsColor(),
                                 fontSize: 16,

@@ -4,9 +4,9 @@ class StatsModel {
   final int cleanups;
   final int reports;
   final int users;
-  final int emrals_won;
-  final int emrals_added;
-  final int e_cans;
+  final int emralsWon;
+  final int emralsAdded;
+  final int eCans;
   final int tosses;
   final int scans;
   final int barcodes;
@@ -25,7 +25,7 @@ class StatsModel {
       this.barcodes); */
 
   StatsModel.fromJson(Map json)
-      : e_cans = json['eCans'],
+      : eCans = json['eCans'],
         cities = json['zones'],
         reports = json['reports'],
         cleanups = json['cleanups'],
@@ -33,7 +33,7 @@ class StatsModel {
         tosses = json['tosses'],
         barcodes = json['barcodes'],
         users = json['users'],
-        emrals_won = json['emrals_won'],
-        emrals_added = json['emrals_added'],
+        emralsWon = json['emrals_won'],
+        emralsAdded = json['emrals_added'],
         countries = json['zones'];
 }

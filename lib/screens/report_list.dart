@@ -43,10 +43,10 @@ class _ReportList extends State<ReportListWidget> {
 
   launchMaps(latitude, longitude) async {
     String googleUrl = 'geo:0,0?q=$latitude,$longitude';
-    String comgoogleUrl = 'comgooglemaps://q?=$latitude,$longitude';
+    String comgoogleUrl = 'comgooglemaps://?center=$latitude,$longitude';
     String googleiOSUrl = 'googlemaps://?q=$latitude,$longitude';
     String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
-    if (await canLaunch("comgooglemaps://")) {
+    if (await canLaunch(comgoogleUrl)) {
       print('launching com googleUrl' + comgoogleUrl);
       await launch(comgoogleUrl);
     } else if (await canLaunch(googleUrl)) {
@@ -105,8 +105,6 @@ class _ReportList extends State<ReportListWidget> {
                                   reports[index].latitude,
                                   reports[index].longitude,
                                 );
-
-                                print("Container clicked");
                               },
                               child: Container(
                                 width: 100.0,

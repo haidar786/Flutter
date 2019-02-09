@@ -29,7 +29,7 @@ class _SettingsPage extends State<Settingg> {
     if (!mounted) return;
     setState(() {
       userPicture = userObject.picture;
-      emralsAddress = userObject.emrals_address;
+      emralsAddress = userObject.emralsaddress;
     });
   }
 

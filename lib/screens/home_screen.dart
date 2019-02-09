@@ -7,6 +7,8 @@ import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/stats.dart';
+import 'package:emrals/styles.dart';
+import 'package:intl/intl.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -16,6 +18,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePage extends State<MyHomePage> {
+  final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
   double _emralsAmount = 0;
   final List<Widget> _children = [
@@ -46,25 +49,29 @@ class _MyHomePage extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(40.0),
-        child: AppBar(
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 12),
-              child: Text(_emralsAmount.toString()),
+      appBar: AppBar(
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: Text(
+              formatter.format(_emralsAmount),
+              style: TextStyle(
+                color: emralsColor(),
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            IconButton(
-              icon: Image.asset("assets/JustElogo.png"),
-              onPressed: () {
-                Navigator.pushNamed(
-                  context,
-                  '/settings',
-                );
-              },
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: Image.asset("assets/JustElogo.png"),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/settings',
+              );
+            },
+          ),
+        ],
       ),
       body: _children[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

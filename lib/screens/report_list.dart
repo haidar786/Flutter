@@ -14,6 +14,8 @@ class ReportListWidget extends StatefulWidget {
 }
 
 class _ReportList extends State<ReportListWidget> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      new GlobalKey<RefreshIndicatorState>();
   int limit = 50;
   int offset = 0;
   ScrollController _scrollController = ScrollController();
@@ -57,164 +59,174 @@ class _ReportList extends State<ReportListWidget> {
     }
   }
 
+  Future<void> _handleRefresh() {
+    return fetchReports(0, 0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _progressBarActive == true
           ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              controller: _scrollController,
-              itemCount: reports.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Column(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ReportDetail(report: reports[index])),
-                        );
-                      },
-                      child: Stack(
-                        alignment: const Alignment(.9, .9),
-                        children: [
-                          CachedNetworkImage(
-                            placeholder: Image.asset('assets/placeholder.png'),
-                            imageUrl: reports[index].thumbnail,
-                            errorWidget: Icon(Icons.error),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              launchMaps(
-                                reports[index].latitude,
-                                reports[index].longitude,
-                              );
+          : RefreshIndicator(
+              key: _refreshIndicatorKey,
+              onRefresh: _handleRefresh,
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: reports.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: <Widget>[
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ReportDetail(report: reports[index])),
+                          );
+                        },
+                        child: Stack(
+                          alignment: const Alignment(.9, .9),
+                          children: [
+                            CachedNetworkImage(
+                              placeholder:
+                                  Image.asset('assets/placeholder.png'),
+                              imageUrl: reports[index].thumbnail,
+                              errorWidget: Icon(Icons.error),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                launchMaps(
+                                  reports[index].latitude,
+                                  reports[index].longitude,
+                                );
 
-                              print("Container clicked");
-                            },
-                            child: Container(
-                              width: 100.0,
-                              height: 100.0,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff7c94b6),
-                                image: DecorationImage(
-                                  image: NetworkImage(reports[index].googleURL),
-                                  fit: BoxFit.cover,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50.0)),
-                                border: Border.all(
-                                  color: emralsColor(),
-                                  width: 2,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(5),
-                            child: Container(
-                              width: 77,
-                              height: 77,
-                              padding: EdgeInsets.all(1),
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: FractionalOffset.topCenter,
-                                  end: FractionalOffset.bottomCenter,
-                                  stops: [0, 0.5, 1],
-                                  colors: [
-                                    const Color(0xFF7DB208),
-                                    const Color(0xFFFFDC03),
-                                    const Color(0xFFDD26BA),
-                                  ],
-                                ),
-                                shape: BoxShape.circle,
-                              ),
+                                print("Container clicked");
+                              },
                               child: Container(
+                                width: 100.0,
+                                height: 100.0,
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
+                                  color: const Color(0xff7c94b6),
                                   image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(
-                                      reports[index].posterAvatar,
-                                    ),
+                                    image:
+                                        NetworkImage(reports[index].googleURL),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50.0)),
+                                  border: Border.all(
+                                    color: emralsColor(),
+                                    width: 2,
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: RichText(
-                                //textAlign: TextAlign.right,
-                                text: TextSpan(
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15.0,
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.all(5),
+                              child: Container(
+                                width: 77,
+                                height: 77,
+                                padding: EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: FractionalOffset.topCenter,
+                                    end: FractionalOffset.bottomCenter,
+                                    stops: [0, 0.5, 1],
+                                    colors: [
+                                      const Color(0xFF7DB208),
+                                      const Color(0xFFFFDC03),
+                                      const Color(0xFFDD26BA),
+                                    ],
                                   ),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                      text: reports[index].posterUsername,
-                                      style: TextStyle(
-                                          color: emralsColor(),
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                      text: ' reports ',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        reports[index].posterAvatar,
                                       ),
                                     ),
-                                    TextSpan(
-                                      text: reports[index].title,
-                                    ),
-                                  ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.assessment,
+                            Expanded(
+                              child: Container(
+                                child: RichText(
+                                  //textAlign: TextAlign.right,
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15.0,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: reports[index].posterUsername,
+                                        style: TextStyle(
+                                            color: emralsColor(),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      TextSpan(
+                                        text: ' reports ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: reports[index].title,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.assessment,
+                                      color: emralsColor(),
+                                    ),
+                                    Text('200'),
+                                  ],
+                                ),
+                                OutlineButton(
+                                  color: Colors.white,
+                                  splashColor: emralsColor(),
+                                  //disabledColor: emralsColor(),
+                                  highlightColor: emralsColor().shade700,
+                                  disabledTextColor: emralsColor(),
+                                  textColor: emralsColor(),
+                                  borderSide: BorderSide(
                                     color: emralsColor(),
                                   ),
-                                  Text('200'),
-                                ],
-                              ),
-                              OutlineButton(
-                                color: Colors.white,
-                                splashColor: emralsColor(),
-                                //disabledColor: emralsColor(),
-                                highlightColor: emralsColor().shade700,
-                                disabledTextColor: emralsColor(),
-                                textColor: emralsColor(),
-                                borderSide: BorderSide(
-                                  color: emralsColor(),
+                                  onPressed: () {},
+                                  child: Text("CLEAN"),
+                                  shape: StadiumBorder(),
                                 ),
-                                onPressed: () {},
-                                child: Text("CLEAN"),
-                                shape: StadiumBorder(),
-                              ),
-                            ],
-                          )
-                        ],
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
     );
   }

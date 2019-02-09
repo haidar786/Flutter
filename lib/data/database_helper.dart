@@ -29,7 +29,9 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-        "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL)");
+        "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL, emralsaddress TEXT)");
+    // await db.execute(
+    //     "CREATE TABLE OfflineReport(id INTEGER PRIMARY KEY, filename TEXT, longitude REAL, latitude REAL)");
   }
 
   Future<int> saveUser(User user) async {
@@ -37,6 +39,12 @@ class DatabaseHelper {
     int res = await dbClient.insert("User", user.toMap());
     return res;
   }
+
+  // Future<int> saveOfflineReport(OfflineReport offlineReport) async {
+  //   var dbClient = await db;
+  //   int res = await dbClient.insert("OfflineReport", offlineReport.toMap());
+  //   return res;
+  // }
 
   Future<int> deleteUsers() async {
     var dbClient = await db;

@@ -28,8 +28,10 @@ class StatsState extends State<Stats> {
           json.decode(response.body)['data'][0]['timestamp'] * 1000);
       var now = new DateTime.now();
       Duration difference = now.difference(date);
-      this.lastBlockTime = difference.inMinutes.toString() + "m ";
-      this.blockHeight = json.decode(response.body)['data'][0]['blockindex'];
+      setState(() {
+        this.lastBlockTime = difference.inMinutes.toString() + "m ";
+        this.blockHeight = json.decode(response.body)['data'][0]['blockindex'];
+      });
     } else {
       throw Exception('Failed to load post');
     }

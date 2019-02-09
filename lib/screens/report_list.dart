@@ -96,7 +96,9 @@ class _ReportList extends State<ReportListWidget> {
                             CachedNetworkImage(
                               placeholder:
                                   Image.asset('assets/placeholder.png'),
-                              imageUrl: reports[index].thumbnail,
+                              imageUrl: reports[index].solution != ''
+                                  ? reports[index].solution
+                                  : reports[index].thumbnail,
                               errorWidget: Icon(Icons.error),
                             ),
                             GestureDetector(
@@ -182,7 +184,9 @@ class _ReportList extends State<ReportListWidget> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       TextSpan(
-                                        text: ' reports ',
+                                        text: reports[index].solution != ''
+                                            ? ' cleans #${reports[index].id} '
+                                            : ' reports #${reports[index].id} ',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -200,28 +204,74 @@ class _ReportList extends State<ReportListWidget> {
                                 Row(
                                   children: <Widget>[
                                     Icon(
-                                      Icons.assessment,
+                                      reports[index].solution != ''
+                                          ? Icons.local_florist
+                                          : Icons.assessment,
                                       color: emralsColor(),
                                     ),
-                                    Text('200'),
+                                    Text(reports[index].solution != ''
+                                        ? reports[index].solutionEmralsAmount
+                                        : reports[index].reportEmralsAmount),
                                   ],
-                                ),
-                                OutlineButton(
-                                  color: Colors.white,
-                                  splashColor: emralsColor(),
-                                  //disabledColor: emralsColor(),
-                                  highlightColor: emralsColor().shade700,
-                                  disabledTextColor: emralsColor(),
-                                  textColor: emralsColor(),
-                                  borderSide: BorderSide(
-                                    color: emralsColor(),
-                                  ),
-                                  onPressed: () {},
-                                  child: Text("CLEAN"),
-                                  shape: StadiumBorder(),
                                 ),
                               ],
                             )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Opacity(
+                              opacity: reports[index].solution != '' ? 0.0 : 1,
+                              child: OutlineButton(
+                                color: Colors.white,
+                                splashColor: emralsColor(),
+                                //disabledColor: emralsColor(),
+                                highlightColor: emralsColor().shade700,
+                                disabledTextColor: emralsColor(),
+                                textColor: emralsColor(),
+                                borderSide: BorderSide(
+                                  color: emralsColor(),
+                                ),
+                                onPressed: () {},
+                                child: Text("CLEAN"),
+                                shape: StadiumBorder(),
+                              ),
+                            ),
+                            Opacity(
+                              opacity: reports[index].solution != '' ? 0.0 : 1,
+                              child: OutlineButton(
+                                color: Colors.white,
+                                splashColor: emralsColor(),
+                                //disabledColor: emralsColor(),
+                                highlightColor: emralsColor().shade700,
+                                disabledTextColor: emralsColor(),
+                                textColor: emralsColor(),
+                                borderSide: BorderSide(
+                                  color: emralsColor(),
+                                ),
+                                onPressed: () {},
+                                child: Text("FUND"),
+                                shape: StadiumBorder(),
+                              ),
+                            ),
+                            OutlineButton(
+                              color: Colors.white,
+                              splashColor: emralsColor(),
+                              //disabledColor: emralsColor(),
+                              highlightColor: emralsColor().shade700,
+                              disabledTextColor: emralsColor(),
+                              textColor: emralsColor(),
+                              borderSide: BorderSide(
+                                color: emralsColor(),
+                              ),
+                              onPressed: () {},
+                              child: Text("TIP"),
+                              shape: StadiumBorder(),
+                            ),
                           ],
                         ),
                       ),

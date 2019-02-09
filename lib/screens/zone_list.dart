@@ -170,6 +170,7 @@ class _ZoneList extends State<ZoneListWidget> {
 
     var data = json.decode(response.body);
     var parsed = data["results"] as List;
+    if (!mounted) return;
     setState(() {
       zones.addAll(parsed.map<Zone>((json) => Zone.fromJson(json)).toList());
       _progressBarActive = false;

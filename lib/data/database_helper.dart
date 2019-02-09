@@ -29,7 +29,7 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-        "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL, emralsaddress TEXT)");
+        "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL, emrals_address TEXT)");
     // await db.execute(
     //     "CREATE TABLE OfflineReport(id INTEGER PRIMARY KEY, filename TEXT, longitude REAL, latitude REAL)");
   }

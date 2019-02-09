@@ -1,4 +1,5 @@
 import 'package:emrals/data/stats_api.dart';
+import 'package:emrals/models/exchange_crex24_model.dart';
 import 'package:emrals/models/stats_model.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class StatsState extends State<Stats> {
   String lastBlockTime = '';
   int blockHeight;
   StatsModel stats;
+  Crex24Model crex24data;
   final StatsApi _statsApi = StatsApi();
 
   @override
@@ -46,6 +48,9 @@ class StatsState extends State<Stats> {
   Widget build(BuildContext context) {
     _statsApi.getStats().then((stats) {
       this.stats = stats;
+    });
+    _statsApi.getCrex24Data().then((data) {
+      this.crex24data = data;
     });
     return Theme(
       data: ThemeData(
@@ -221,7 +226,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.reports : 0 }',
+                                '${stats != null ? stats.reports : 0}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -245,7 +250,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.users : 0 }',
+                                '${stats != null ? stats.users : 0}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -269,7 +274,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emrals_won: 0 }',
+                                '${stats != null ? stats.emrals_won : 0}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -293,7 +298,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emrals_added : 0 }',
+                                '${stats != null ? stats.emrals_added : 0}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -328,7 +333,7 @@ class StatsState extends State<Stats> {
                     ),
                     child: Center(
                       child: Text(
-                        '${stats != null ? stats.e_cans : 0 } eCans',
+                        '${stats != null ? stats.e_cans : 0} eCans',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -343,7 +348,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${stats != null ? stats.tosses : 0 }',
+                              '${stats != null ? stats.tosses : 0}',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -362,7 +367,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${stats != null ? stats.scans: 0 }',
+                              '${stats != null ? stats.scans : 0}',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -381,7 +386,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${stats != null ? stats.barcodes : 0 }',
+                              '${stats != null ? stats.barcodes : 0}',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -416,7 +421,7 @@ class StatsState extends State<Stats> {
         children: <Widget>[
           // Box containing exchanges and the current price information
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Container(
               height: 150,
               color: Colors.black,
@@ -455,7 +460,7 @@ class StatsState extends State<Stats> {
           ),
           SizedBox(width: 8),
           Expanded(
-            flex: 2,
+            flex: 5,
             child: Container(
               height: 150,
               color: Colors.black,
@@ -481,56 +486,65 @@ class StatsState extends State<Stats> {
                   Expanded(
                     child: Row(
                       children: <Widget>[
-                        Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Text(
-                                '\$X.XXX',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22,
-                                ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: <Widget>[
+                            Text(
+                              '\$${crex24data != null ? crex24data.last.toStringAsFixed(7) : 0}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w800,
+                                fontSize: 18,
                               ),
-                              Text(
-                                '-X.XX%',
-                                style: TextStyle(
-                                  color: emralsColor(),
-                                  fontSize: 16,
-                                ),
+                            ),
+                            Text(
+                              '${crex24data != null ? crex24data.percent_change.toStringAsFixed(2) : 0}%',
+                              style: TextStyle(
+                                color: emralsColor(),
+                                fontSize: 16,
                               ),
-                              Text(
-                                'Vol. X,XXX',
-                                style: TextStyle(
-                                  color: emralsColor()[1400],
-                                  fontSize: 16,
-                                ),
+                            ),
+                            Text(
+                              'Vol. ${crex24data != null ? crex24data.volume.toStringAsFixed(0) : 0}',
+                              style: TextStyle(
+                                color: emralsColor()[1400],
+                                fontSize: 16,
                               ),
-                              Text(
-                                'EMRALS'.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              )
-                            ],
-                          ),
+                            ),
+                            Text(
+                              'EMRALS'.toUpperCase(),
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            )
+                          ],
                         ),
-                        SizedBox(width: 24),
+                        SizedBox(width: 8),
                         Expanded(
                           flex: 1,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
                               _row2NameValueWidget(context,
-                                  name: 'High', value: 0.001),
+                                  name: 'High',
+                                  value: crex24data != null
+                                      ? crex24data.high.toStringAsFixed(7)
+                                      : '0'),
                               _row2NameValueWidget(context,
-                                  name: 'Low', value: 0.001),
+                                  name: 'Low',
+                                  value: crex24data != null
+                                      ? crex24data.low.toStringAsFixed(7)
+                                      : '0'),
                               _row2NameValueWidget(context,
-                                  name: 'Bid', value: 0.001),
+                                  name: 'Bid',
+                                  value: crex24data != null
+                                      ? crex24data.bid.toStringAsFixed(7)
+                                      : '0'),
                               _row2NameValueWidget(context,
-                                  name: 'Ask', value: 0.001),
+                                  name: 'Ask',
+                                  value: crex24data != null
+                                      ? crex24data.ask.toStringAsFixed(7)
+                                      : '0'),
                             ],
                           ),
                         )
@@ -547,7 +561,7 @@ class StatsState extends State<Stats> {
   }
 
   Widget _row2NameValueWidget(BuildContext context,
-      {@required String name, @required double value}) {
+      {@required String name, @required String value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -830,7 +844,7 @@ class StatsState extends State<Stats> {
             '$count',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: emralsColor()[200],
+              color: emralsColor()[1200],
             ),
             textAlign: TextAlign.end,
           ),

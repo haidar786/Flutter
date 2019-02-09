@@ -11,7 +11,7 @@ class StatsModel {
   final int scans;
   final int barcodes;
 
-  StatsModel(
+ /*  StatsModel(
       this.cities,
       this.countries,
       this.cleanups,
@@ -22,7 +22,7 @@ class StatsModel {
       this.e_cans,
       this.tosses,
       this.scans,
-      this.barcodes);
+      this.barcodes); */
 
   StatsModel.fromJson(Map json)
       : e_cans = json['eCans'],

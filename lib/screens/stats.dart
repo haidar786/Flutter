@@ -33,7 +33,7 @@ class StatsState extends State<Stats> {
         this.blockHeight = json.decode(response.body)['data'][0]['blockindex'];
       });
     } else {
-      throw Exception('Failed to update stats');
+      throw Exception('Failed to update');
     }
   }
 

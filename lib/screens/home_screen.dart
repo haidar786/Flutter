@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:emrals/screens/report_list.dart';
-
+import 'package:emrals/screens/zone_list.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
@@ -25,7 +25,7 @@ class _MyHomePage extends State<MyHomePage> {
     ReportListWidget(),
     CameraApp(),
     Stats(),
-    //ReportListWidget(),
+    ZoneListWidget(),
   ];
 
   @override

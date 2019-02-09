@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:flutter/services.dart';
+import 'package:emrals/styles.dart';
+import 'package:intl/intl.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -11,9 +13,9 @@ class Settingg extends StatefulWidget {
 }
 
 class _SettingsPage extends State<Settingg> {
-  String userPicture = "https://www.emrals.com/static/images/emrals128.png";
-  String emralsAddress = "";
+  User _userObject;
   final key = new GlobalKey<ScaffoldState>();
+  final formatter = new NumberFormat("#,###");
 
   @override
   void initState() {
@@ -28,8 +30,7 @@ class _SettingsPage extends State<Settingg> {
 
     if (!mounted) return;
     setState(() {
-      userPicture = userObject.picture;
-      emralsAddress = userObject.emralsaddress;
+      _userObject = userObject;
     });
   }
 
@@ -60,6 +61,28 @@ class _SettingsPage extends State<Settingg> {
             ],
           ),
           title: Text('Settings'),
+          actions: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Text(
+                formatter.format(_userObject.emrals),
+                style: TextStyle(
+                  color: emralsColor(),
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            IconButton(
+              icon: Image.asset("assets/JustElogo.png"),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  '/settings',
+                );
+              },
+            ),
+          ],
         ),
         body: TabBarView(
           children: [
@@ -79,7 +102,7 @@ class _SettingsPage extends State<Settingg> {
                             decoration: BoxDecoration(
                                 color: Colors.red,
                                 image: DecorationImage(
-                                    image: NetworkImage(userPicture),
+                                    image: NetworkImage(_userObject.picture),
                                     fit: BoxFit.cover),
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(75.0)),
@@ -89,7 +112,7 @@ class _SettingsPage extends State<Settingg> {
                                 ])),
                         SizedBox(height: 20.0),
                         Text(
-                          'Tom Cruise',
+                          _userObject.username,
                           style: TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.bold,
@@ -97,12 +120,6 @@ class _SettingsPage extends State<Settingg> {
                               fontFamily: 'Montserrat'),
                         ),
                         SizedBox(height: 12.0),
-                        Text(
-                          'wallet address',
-                          style: TextStyle(
-                              fontSize: 17.0, fontFamily: 'Montserrat'),
-                        ),
-                        SizedBox(height: 25.0),
                         Container(
                             height: 30.0,
                             width: 120.0,
@@ -157,17 +174,22 @@ class _SettingsPage extends State<Settingg> {
                 child: Column(
               children: <Widget>[
                 SizedBox(height: 15.0),
+                Text(
+                  'wallet address',
+                  style: TextStyle(fontSize: 17.0, fontFamily: 'Montserrat'),
+                ),
+                SizedBox(height: 25.0),
                 new GestureDetector(
                   child: Text(
-                    emralsAddress,
+                    _userObject.emralsAddress,
                     style: TextStyle(
-                        fontSize: 20.0,
+                        fontSize: 17.0,
                         color: Colors.black,
                         fontFamily: 'Montserrat'),
                   ),
                   onTap: () {
                     Clipboard.setData(
-                      new ClipboardData(text: emralsAddress),
+                      new ClipboardData(text: _userObject.emralsAddress),
                     );
                     key.currentState.showSnackBar(new SnackBar(
                       content: new Text("Copied to Clipboard"),
@@ -177,7 +199,7 @@ class _SettingsPage extends State<Settingg> {
                 SizedBox(height: 15.0),
                 Image.network(
                   'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=' +
-                      emralsAddress,
+                      _userObject.emralsAddress,
                 )
               ],
             )),

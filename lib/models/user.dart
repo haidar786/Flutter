@@ -6,7 +6,7 @@ class User {
     this._id,
     this._picture,
     this._xp,
-    this._emralsaddress,
+    this._emralsAddress,
   );
 
   User.map(dynamic obj) {
@@ -16,7 +16,7 @@ class User {
     this._picture = obj["picture"];
     this._xp = obj["xp"];
     this._id = obj["id"];
-    this._emralsaddress = obj["emrals_address"];
+    this._emralsAddress = obj["emrals_address"];
   }
 
   double _emrals = 0;
@@ -24,7 +24,7 @@ class User {
   String _picture;
   String _token;
   String _username;
-  String _emralsaddress;
+  String _emralsAddress;
 
   int _xp;
 
@@ -38,7 +38,7 @@ class User {
 
   int get xp => _xp;
 
-  String get emralsaddress => _emralsaddress;
+  String get emralsAddress => _emralsAddress;
 
   double get emrals => _emrals;
 
@@ -50,7 +50,7 @@ class User {
     map["id"] = _id;
     map["xp"] = _xp;
     map["emrals"] = _emrals;
-    map["emralsaddress"] = _emralsaddress;
+    map["emrals_address"] = _emralsAddress;
     return map;
   }
 
@@ -61,6 +61,6 @@ class User {
     this._picture = map["picture"];
     this._xp = map["xp"];
     this._id = map["id"];
-    this._emralsaddress = map["emralsaddress"];
+    this._emralsAddress = map["emrals_address"];
   }
 }

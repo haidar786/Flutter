@@ -9,7 +9,6 @@ class Report {
   final String zoneCity;
   final int views;
   final String timeAgo;
-  final double emrals;
   final String solution;
   final String googleURL;
   final String reportEmralsAmount;
@@ -26,7 +25,6 @@ class Report {
     this.zoneCity,
     this.views,
     this.timeAgo,
-    this.emrals,
     this.solution,
     this.googleURL,
     this.reportEmralsAmount,
@@ -45,7 +43,6 @@ class Report {
       zoneCity: json['zone_city'] as String,
       views: json['views'] as int,
       timeAgo: json['time_ago'] as String,
-      emrals: json['emrals'] as double,
       solution: json['solution'] as String,
       googleURL: json['google_url'] as String,
       reportEmralsAmount: json['report_emrals_amount'] as String,

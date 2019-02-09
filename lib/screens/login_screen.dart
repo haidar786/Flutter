@@ -5,7 +5,6 @@ import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login_screen_presenter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -225,9 +224,6 @@ class LoginScreenState extends State<LoginScreen>
     setState(() => _isLoading = false);
     var db = DatabaseHelper();
     await db.saveUser(user);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('user_picture', user.picture);
-    prefs.setString('user_token', user.token);
     var authStateProvider = AuthStateProvider();
     authStateProvider.notify(AuthState.LOGGED_IN);
   }

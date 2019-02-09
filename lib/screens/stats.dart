@@ -1,3 +1,5 @@
+import 'package:emrals/data/stats_api.dart';
+import 'package:emrals/models/stats_model.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -13,6 +15,8 @@ class Stats extends StatefulWidget {
 class StatsState extends State<Stats> {
   String lastBlockTime = '';
   int blockHeight;
+  StatsModel stats;
+  final StatsApi _statsApi = StatsApi();
 
   @override
   void initState() {
@@ -40,6 +44,9 @@ class StatsState extends State<Stats> {
 
   @override
   Widget build(BuildContext context) {
+    _statsApi.getStats().then((stats) {
+      this.stats = stats;
+    });
     return Theme(
       data: ThemeData(
         brightness: Brightness.dark,
@@ -140,14 +147,14 @@ class StatsState extends State<Stats> {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                          padding: EdgeInsets.symmetric(vertical: 4),
                           decoration: BoxDecoration(
                             color: emralsColor(),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Center(
                             child: Text(
-                              'XXXX Cities',
+                              '${stats != null ? stats.cities : 0} Cities',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -157,14 +164,14 @@ class StatsState extends State<Stats> {
                       SizedBox(width: 8),
                       Expanded(
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8),
+                          padding: EdgeInsets.symmetric(vertical: 4),
                           decoration: BoxDecoration(
                             color: emralsColor(),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Center(
                             child: Text(
-                              'XX Countries',
+                              '${stats != null ? stats.countries : 0} Countries',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -190,7 +197,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                'XX',
+                                '${stats != null ? stats.cleanups : 0}',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -214,7 +221,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                'XX',
+                                '${stats != null ? stats.reports : 0 }',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -238,7 +245,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                'XX',
+                                '${stats != null ? stats.users : 0 }',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -262,7 +269,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                'XX',
+                                '${stats != null ? stats.emrals_won: 0 }',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -286,7 +293,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                'XX',
+                                '${stats != null ? stats.emrals_added : 0 }',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -314,14 +321,14 @@ class StatsState extends State<Stats> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                    padding: EdgeInsets.symmetric(vertical: 4),
                     decoration: BoxDecoration(
                       color: emralsColor(),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Center(
                       child: Text(
-                        'X eCans',
+                        '${stats != null ? stats.e_cans : 0 } eCans',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -336,7 +343,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              'XXX',
+                              '${stats != null ? stats.tosses : 0 }',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -355,7 +362,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              'XXX',
+                              '${stats != null ? stats.scans: 0 }',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -374,7 +381,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              'XXX',
+                              '${stats != null ? stats.barcodes : 0 }',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -418,7 +425,7 @@ class StatsState extends State<Stats> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                    padding: EdgeInsets.symmetric(vertical: 4),
                     decoration: BoxDecoration(
                       color: emralsColor()[1400],
                       borderRadius: BorderRadius.circular(4),
@@ -456,7 +463,7 @@ class StatsState extends State<Stats> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                    padding: EdgeInsets.symmetric(vertical: 4),
                     decoration: BoxDecoration(
                       color: emralsColor()[1400],
                       borderRadius: BorderRadius.circular(4),

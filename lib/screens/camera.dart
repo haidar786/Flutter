@@ -162,7 +162,6 @@ class _CameraAppState extends State<CameraApp> {
           getLocaion();
           upload(File(filePath));
         });
-        _isLoading = false;
       }
     });
   }
@@ -193,11 +192,13 @@ class _CameraAppState extends State<CameraApp> {
 
       var response = await request.send();
       response.stream.transform(utf8.decoder).listen((value) {
-        showInSnackBar(value);
+        _isLoading = false;
+        //showInSnackBar(value);
         Navigator.pushNamed(_ctx, '/home');
       });
     } else {
       showInSnackBar("Please enable GPS");
+      _isLoading = false;
     }
   }
 }

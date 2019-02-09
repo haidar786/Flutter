@@ -16,7 +16,7 @@ class User {
     this._picture = obj["picture"];
     this._xp = obj["xp"];
     this._id = obj["id"];
-    this._id = obj["emrals_address"];
+    this._emralsaddress = obj["emrals_address"];
   }
 
   double _emrals = 0;
@@ -50,7 +50,7 @@ class User {
     map["id"] = _id;
     map["xp"] = _xp;
     map["emrals"] = _emrals;
-    map["emrals_address"] = _emralsaddress;
+    map["emralsaddress"] = _emralsaddress;
     return map;
   }
 
@@ -61,6 +61,6 @@ class User {
     this._picture = map["picture"];
     this._xp = map["xp"];
     this._id = map["id"];
-    this._emralsaddress = map["emrals_address"];
+    this._emralsaddress = map["emralsaddress"];
   }
 }

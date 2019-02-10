@@ -59,7 +59,7 @@ class _ReportList extends State<ReportListWidget> {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         //limit += 50;
-        offset += 50;
+        offset += limit;
         fetchReports(
           offset: offset,
           limit: limit,
@@ -389,7 +389,7 @@ class _ReportList extends State<ReportListWidget> {
     int offset,
     int limit,
   }) async {
-    print('fetching reports' + limit.toString() + offset.toString());
+    print('fetching reports: limit=${limit.toString()}, offset=${offset.toString()}');
     final response = await http
         .get('https://www.emrals.com/api/alerts/?limit=$limit&offset=$offset');
 

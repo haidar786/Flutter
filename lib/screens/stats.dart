@@ -487,38 +487,40 @@ class StatsState extends State<Stats> {
                   Expanded(
                     child: Row(
                       children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              '\$${crex24data != null ? crex24data.last.toStringAsFixed(7) : 0}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 18,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                '\$${crex24data != null ? crex24data.last.toStringAsFixed(3) : 0}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${crex24data != null ? crex24data.percentChange.toStringAsFixed(2) : 0}%',
-                              style: TextStyle(
-                                color: emralsColor(),
-                                fontSize: 14,
+                              Text(
+                                '${crex24data != null ? crex24data.percentChange.toStringAsFixed(2) : 0}%',
+                                style: TextStyle(
+                                  color: emralsColor(),
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'Vol. ${crex24data != null ? crex24data.volume.toStringAsFixed(0) : 0}',
-                              style: TextStyle(
-                                color: emralsColor()[1400],
-                                fontSize: 14,
+                              Text(
+                                'Vol. ${crex24data != null ? crex24data.volume.toStringAsFixed(0) : 0}',
+                                style: TextStyle(
+                                  color: emralsColor()[1400],
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'EMRALS'.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                            )
-                          ],
+                              Text(
+                                'EMRALS'.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         SizedBox(width: 8),
                         Expanded(
@@ -529,22 +531,22 @@ class StatsState extends State<Stats> {
                               _row2NameValueWidget(context,
                                   name: 'High',
                                   value: crex24data != null
-                                      ? crex24data.high.toStringAsFixed(7)
+                                      ? crex24data.high.toStringAsFixed(3)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Low',
                                   value: crex24data != null
-                                      ? crex24data.low.toStringAsFixed(7)
+                                      ? crex24data.low.toStringAsFixed(3)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Bid',
                                   value: crex24data != null
-                                      ? crex24data.bid.toStringAsFixed(7)
+                                      ? crex24data.bid.toStringAsFixed(3)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Ask',
                                   value: crex24data != null
-                                      ? crex24data.ask.toStringAsFixed(7)
+                                      ? crex24data.ask.toStringAsFixed(3)
                                       : '0'),
                             ],
                           ),

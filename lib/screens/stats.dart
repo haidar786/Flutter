@@ -208,7 +208,8 @@ class StatsState extends State<Stats> {
                           ),
                           child: Center(
                             child: Text(
-                              '${stats != null ? formatter.format(stats.cities) : 0} Cities',
+                              //'${stats != null ? formatter.format(stats.cities) : 0} Cities',
+                              '${stats != null ? stats.cities : 0} Cities',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -323,7 +324,8 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? formatter.format(stats.emralsWon) : 0}',
+                                //'${stats != null ? formatter.format(stats.emralsWon) : 0}',
+                                '${stats != null ? stats.emralsWon : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -347,7 +349,8 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? formatter.format(stats.emralsAdded) : 0}',
+                                //'${stats != null ? formatter.format(stats.emralsAdded) : 0}',
+                                '${stats != null ? stats.emralsAdded : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -435,7 +438,8 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${stats != null ? formatter.format(stats.barcodes) : 0}',
+                              //'${stats != null ? formatter.format(stats.barcodes) : 0}',
+                              '${stats != null ? stats.barcodes : 0}',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -561,7 +565,8 @@ class StatsState extends State<Stats> {
                                 ),
                               ),
                               Text(
-                                'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
+                                //'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
+                                'Vol. ${crex24data != null ? crex24data.volume : 0}',
                                 style: TextStyle(
                                   color: emralsColor()[1400],
                                   fontSize: 14,

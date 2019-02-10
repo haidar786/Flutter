@@ -84,28 +84,6 @@ class _ReportList extends State<ReportListWidget> {
     });
   }
 
-  launchMaps(latitude, longitude) async {
-    String googleUrl = 'geo:0,0?q=$latitude,$longitude';
-    String comgoogleUrl = 'comgooglemaps://?q=$latitude,$longitude';
-    String googleiOSUrl = 'googlemaps://?q=$latitude,$longitude';
-    String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
-    if (await canLaunch("comgooglemaps://")) {
-      print('launching com googleUrl' + comgoogleUrl);
-      await launch(comgoogleUrl);
-    } else if (await canLaunch(googleUrl)) {
-      print('launching com googleUrl' + googleUrl);
-      await launch(googleUrl);
-    } else if (await canLaunch(googleiOSUrl)) {
-      print('launching googleiOSUrl url' + googleiOSUrl);
-      await launch(googleiOSUrl);
-    } else if (await canLaunch(appleUrl)) {
-      print('launching appleUrl url' + appleUrl);
-      await launch(appleUrl);
-    } else {
-      throw 'Could not launch url';
-    }
-  }
-
   Future<void> _handleRefresh() {
     return fetchReports(0, 0);
   }
@@ -147,10 +125,7 @@ class _ReportList extends State<ReportListWidget> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                launchMaps(
-                                  reports[index].latitude,
-                                  reports[index].longitude,
-                                );
+                                reports[index].launchMaps();
                               },
                               child: Container(
                                 width: 100.0,

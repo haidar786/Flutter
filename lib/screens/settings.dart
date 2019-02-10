@@ -19,7 +19,6 @@ class _SettingsPage extends State<Settingg> {
   final TextEditingController walletAddressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final formKey = new GlobalKey<FormState>();
-  String barcode = "";
 
   @override
   void initState() {
@@ -34,20 +33,21 @@ class _SettingsPage extends State<Settingg> {
   Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() => this.barcode = barcode);
+      setState(() => walletAddressController.text = barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         setState(() {
-          this.barcode = 'The user did not grant the camera permission!';
+          walletAddressController.text =
+              'The user did not grant the camera permission!';
         });
       } else {
-        setState(() => this.barcode = 'Unknown error: $e');
+        setState(() => walletAddressController.text = 'Unknown error: $e');
       }
     } on FormatException {
-      setState(() => this.barcode =
+      setState(() => walletAddressController.text =
           'null (User returned using the "back"-button before scanning anything. Result)');
     } catch (e) {
-      setState(() => this.barcode = 'Unknown error: $e');
+      setState(() => walletAddressController.text = 'Unknown error: $e');
     }
   }
 

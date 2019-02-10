@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
-import 'package:emrals/styles.dart';
 import 'package:emrals/models/report.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';

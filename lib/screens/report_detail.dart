@@ -217,10 +217,46 @@ class EmralsTipCircleButton extends StatelessWidget {
         print('tapped');
         DatabaseHelper().getUser().then((u) {
           print(u.emrals);
+          print(number);
 
-          if (u.emrals < number) {
-            RestDatasource().tipReport(number, reportID, u.token);
-          } else {}
+          if (u.emrals > number) {
+            print(RestDatasource().tipReport(number, reportID, u.token));
+          } else {
+            showDialog(
+                context: context,
+                builder: (ctx) {
+                  return AlertDialog(
+                    title: Text('Insufficient Balance'),
+                    content: SingleChildScrollView(
+                      child: ListBody(
+                        children: <Widget>[
+                          Text('Deposit Emrals to Tip'),
+                        ],
+                      ),
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Later'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Deposit'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.pushNamed(
+                            context,
+                            '/settings',
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                });
+          }
         });
       },
       child: Container(

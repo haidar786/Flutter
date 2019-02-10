@@ -4,6 +4,7 @@ import 'package:emrals/models/user.dart';
 import 'package:flutter/services.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
+import 'package:barcode_scan/barcode_scan.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -18,14 +19,36 @@ class _SettingsPage extends State<Settingg> {
   final TextEditingController walletAddressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final formKey = new GlobalKey<FormState>();
+  String barcode = "";
 
   @override
   void initState() {
     super.initState();
   }
+
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future scan() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() => this.barcode = barcode);
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        setState(() {
+          this.barcode = 'The user did not grant the camera permission!';
+        });
+      } else {
+        setState(() => this.barcode = 'Unknown error: $e');
+      }
+    } on FormatException {
+      setState(() => this.barcode =
+          'null (User returned using the "back"-button before scanning anything. Result)');
+    } catch (e) {
+      setState(() => this.barcode = 'Unknown error: $e');
+    }
   }
 
   @override
@@ -34,7 +57,6 @@ class _SettingsPage extends State<Settingg> {
       stream: DatabaseHelper().getUser().asStream(),
       builder: (ctx, snapshot) {
         if (snapshot.hasData) {
-
           User _userObject = snapshot.data;
           return DefaultTabController(
             length: 3,
@@ -131,7 +153,7 @@ class _SettingsPage extends State<Settingg> {
                                     child: GestureDetector(
                                       onTap: () {
                                         Navigator.pushNamed(
-                                              context, '/contacts');
+                                            context, '/contacts');
                                       },
                                       child: Center(
                                         child: Text(
@@ -251,7 +273,10 @@ class _SettingsPage extends State<Settingg> {
                                   child: IconButton(
                                     icon: Icon(Icons.nfc),
                                     color: Colors.white,
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      print('scanning');
+                                      scan();
+                                    },
                                   ),
                                 ),
                               )
@@ -266,7 +291,8 @@ class _SettingsPage extends State<Settingg> {
                         SizedBox(height: 10),
                         TextFormField(
                           validator: (s) {
-                            if (double.tryParse(s) != null && double.tryParse(s) > 0) {
+                            if (double.tryParse(s) != null &&
+                                double.tryParse(s) > 0) {
                               return null;
                             } else {
                               return "Please enter a valid amount";
@@ -297,12 +323,12 @@ class _SettingsPage extends State<Settingg> {
                         GestureDetector(
                           onTap: () {
                             if (formKey.currentState.validate()) {
-                              String walletAddress = walletAddressController
-                                  .text;
-                              double amount =
-                                  double.tryParse(amountController.text) ??
-                                      key.currentState.showSnackBar(SnackBar(
-                                          content:
+                              String walletAddress =
+                                  walletAddressController.text;
+                              double amount = double.tryParse(
+                                      amountController.text) ??
+                                  key.currentState.showSnackBar(SnackBar(
+                                      content:
                                           Text("Please enter a valid amount")));
 
                               if (_userObject.emrals >= amount) {

@@ -11,18 +11,18 @@ class StatsModel {
   final int scans;
   final int barcodes;
 
- /*  StatsModel(
-      this.cities,
+  /* StatsModel(
+      {this.cities,
       this.countries,
       this.cleanups,
       this.reports,
       this.users,
-      this.emrals_won,
-      this.emrals_added,
-      this.e_cans,
+      this.emralsWon,
+      this.emralsAdded,
+      this.eCans,
       this.tosses,
       this.scans,
-      this.barcodes); */
+      this.barcodes}); */
 
   StatsModel.fromJson(Map json)
       : eCans = json['eCans'],

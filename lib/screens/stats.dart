@@ -59,8 +59,7 @@ class StatsState extends State<Stats> {
         brightness: Brightness.dark,
       ),
       child: Scaffold(
-        body: ListView(
-          shrinkWrap: true,
+        body: Column(
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -90,29 +89,30 @@ class StatsState extends State<Stats> {
                 ],
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    emralsColor(),
-                    emralsColor()[1400],
-                    emralsColor()[800],
-                    emralsColor()[50],
-                    emralsColor()[1000],
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      emralsColor(),
+                      emralsColor()[1400],
+                      emralsColor()[800],
+                      emralsColor()[50],
+                      emralsColor()[1000],
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
                 ),
-              ),
-              padding: EdgeInsets.only(top: 4),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  _statsRow1(context),
-                  _statsRow2(context),
-                  _statsRow3(context),
-                  _statsRowMedia(context),
-                ],
+                padding: EdgeInsets.only(top: 4),
+                child: ListView(
+                  children: <Widget>[
+                    _statsRow1(context),
+                    _statsRow2(context),
+                    _statsRow3(context),
+                    _statsRowMedia(context),
+                  ],
+                ),
               ),
             ),
             /* Row(
@@ -143,7 +143,7 @@ class StatsState extends State<Stats> {
           Expanded(
             flex: 2,
             child: Container(
-              height: 220,
+              height: 170,
               color: Colors.black,
               padding: EdgeInsets.all(8),
               child: Column(
@@ -197,7 +197,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 'Cleanups',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -205,7 +205,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 '${stats != null ? stats.cleanups : 0}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: emralsColor(),
                                 ),
@@ -221,7 +221,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 'Reports',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -229,7 +229,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 '${stats != null ? stats.reports : 0}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: emralsColor(),
                                 ),
@@ -245,7 +245,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 'Users',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -253,7 +253,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 '${stats != null ? stats.users : 0}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: emralsColor(),
                                 ),
@@ -269,7 +269,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 'Emrals Won',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -277,7 +277,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 '${stats != null ? stats.emralsWon : 0}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: emralsColor(),
                                 ),
@@ -293,7 +293,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 'Emrals Added',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),
@@ -301,7 +301,7 @@ class StatsState extends State<Stats> {
                               child: Text(
                                 '${stats != null ? stats.emralsAdded : 0}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: emralsColor(),
                                 ),
@@ -321,7 +321,7 @@ class StatsState extends State<Stats> {
           Expanded(
             flex: 1,
             child: Container(
-              height: 220,
+              height: 170,
               color: Colors.black,
               padding: EdgeInsets.all(8),
               child: Column(
@@ -351,7 +351,7 @@ class StatsState extends State<Stats> {
                             Text(
                               '${stats != null ? stats.tosses : 0}',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: emralsColor(),
                               ),
@@ -360,7 +360,7 @@ class StatsState extends State<Stats> {
                             Text(
                               'Tosses',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                           ],
@@ -370,7 +370,7 @@ class StatsState extends State<Stats> {
                             Text(
                               '${stats != null ? stats.scans : 0}',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: emralsColor(),
                               ),
@@ -379,7 +379,7 @@ class StatsState extends State<Stats> {
                             Text(
                               'Scans',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                           ],
@@ -389,7 +389,7 @@ class StatsState extends State<Stats> {
                             Text(
                               '${stats != null ? stats.barcodes : 0}',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: emralsColor(),
                               ),
@@ -398,7 +398,7 @@ class StatsState extends State<Stats> {
                             Text(
                               'Barcodes',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                           ],
@@ -487,38 +487,40 @@ class StatsState extends State<Stats> {
                   Expanded(
                     child: Row(
                       children: <Widget>[
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              '\$${crex24data != null ? crex24data.last.toStringAsFixed(7) : 0}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w800,
-                                fontSize: 18,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                '\$${crex24data != null ? crex24data.last.toStringAsFixed(3) : 0}',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${crex24data != null ? crex24data.percentChange.toStringAsFixed(2) : 0}%',
-                              style: TextStyle(
-                                color: emralsColor(),
-                                fontSize: 16,
+                              Text(
+                                '${crex24data != null ? crex24data.percentChange.toStringAsFixed(2) : 0}%',
+                                style: TextStyle(
+                                  color: emralsColor(),
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'Vol. ${crex24data != null ? crex24data.volume.toStringAsFixed(0) : 0}',
-                              style: TextStyle(
-                                color: emralsColor()[1400],
-                                fontSize: 16,
+                              Text(
+                                'Vol. ${crex24data != null ? crex24data.volume.toStringAsFixed(0) : 0}',
+                                style: TextStyle(
+                                  color: emralsColor()[1400],
+                                  fontSize: 14,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'EMRALS'.toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            )
-                          ],
+                              Text(
+                                'EMRALS'.toUpperCase(),
+                                style: TextStyle(
+                                  fontSize: 14,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         SizedBox(width: 8),
                         Expanded(
@@ -529,22 +531,22 @@ class StatsState extends State<Stats> {
                               _row2NameValueWidget(context,
                                   name: 'High',
                                   value: crex24data != null
-                                      ? crex24data.high.toStringAsFixed(7)
+                                      ? crex24data.high.toStringAsFixed(3)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Low',
                                   value: crex24data != null
-                                      ? crex24data.low.toStringAsFixed(7)
+                                      ? crex24data.low.toStringAsFixed(3)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Bid',
                                   value: crex24data != null
-                                      ? crex24data.bid.toStringAsFixed(7)
+                                      ? crex24data.bid.toStringAsFixed(3)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Ask',
                                   value: crex24data != null
-                                      ? crex24data.ask.toStringAsFixed(7)
+                                      ? crex24data.ask.toStringAsFixed(3)
                                       : '0'),
                             ],
                           ),
@@ -574,7 +576,7 @@ class StatsState extends State<Stats> {
           '\$$value',
           style: TextStyle(
             color: emralsColor()[1400],
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -599,13 +601,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Height',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -620,13 +622,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Hashrate',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -641,13 +643,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Difficulty',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -669,13 +671,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Masternodes',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -690,13 +692,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'MN Worth',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -711,13 +713,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Supply',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -739,13 +741,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Connections',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -760,13 +762,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Hosts',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),
@@ -781,13 +783,13 @@ class StatsState extends State<Stats> {
                       Text(
                         'Last BlkTime',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       Text(
                         'XX',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: emralsColor()[200],
                         ),

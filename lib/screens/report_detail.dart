@@ -182,7 +182,6 @@ class TipDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: Colors.white54,
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 12),
         child: Column(

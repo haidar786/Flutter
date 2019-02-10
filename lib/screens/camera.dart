@@ -8,11 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/styles.dart';
+import 'package:emrals/models/report.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'dart:convert';
 
 class CameraApp extends StatefulWidget {
+  final Report report;
+  CameraApp({Key key, this.report}) : super(key: key);
+
   @override
   _CameraAppState createState() => _CameraAppState();
 }
@@ -48,9 +53,7 @@ class _CameraAppState extends State<CameraApp> {
       await controller.initialize();
       try {
         currentLocation = await location.getLocation();
-        print(currentLocation);
       } on PlatformException {
-        print('no location available');
         currentLocation = null;
       }
     } on CameraException catch (e) {
@@ -83,6 +86,11 @@ class _CameraAppState extends State<CameraApp> {
     if (!_isReady) return Container();
     return Scaffold(
       key: _scaffoldKey,
+      appBar: widget.report != null
+          ? AppBar(
+              title: Text('Cleanup Report #' + widget.report.id.toString()),
+            )
+          : null,
       body: Column(
         children: <Widget>[
           Expanded(
@@ -178,6 +186,10 @@ class _CameraAppState extends State<CameraApp> {
       var request = http.MultipartRequest("POST", uri);
       request.fields['longitude'] = currentLocation["longitude"].toString();
       request.fields['latitude'] = currentLocation["latitude"].toString();
+      if (widget.report != null) {
+        request.fields['report_id'] = widget.report.id.toString();
+      }
+
       var multipartFile = http.MultipartFile(
         'file',
         stream,

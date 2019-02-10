@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 class Report {
   final int id;
   final String title;
@@ -48,5 +50,23 @@ class Report {
       reportEmralsAmount: json['report_emrals_amount'] as String,
       solutionEmralsAmount: json['solution_emrals_amount'] as String,
     );
+  }
+
+  launchMaps() async {
+    String googleUrl = 'geo:0,0?q=$latitude,$longitude';
+    String googleiOSUrl = 'googlemaps://?q=$latitude,$longitude';
+    String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
+    if (await canLaunch("geo://")) {
+      print('launching com googleUrl' + googleUrl);
+      await launch(googleUrl);
+    } else if (await canLaunch(googleiOSUrl)) {
+      print('launching apple url' + googleiOSUrl);
+      await launch(googleiOSUrl);
+    } else if (await canLaunch(appleUrl)) {
+      print('launching apple url' + appleUrl);
+      await launch(appleUrl);
+    } else {
+      throw 'Could not launch url';
+    }
   }
 }

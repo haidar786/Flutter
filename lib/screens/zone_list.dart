@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 import 'package:emrals/models/zone.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/styles.dart';
-// import 'package:url_launcher/url_launcher.dart';
 
 class ZoneListWidget extends StatefulWidget {
   @override
@@ -40,28 +39,6 @@ class _ZoneList extends State<ZoneListWidget> {
     _scrollController.dispose();
     super.dispose();
   }
-
-  // launchMaps(latitude, longitude) async {
-  //   String googleUrl = 'geo:0,0?q=$latitude,$longitude';
-  //   String comgoogleUrl = 'comgooglemaps://q?=$latitude,$longitude';
-  //   String googleiOSUrl = 'googlemaps://?q=$latitude,$longitude';
-  //   String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
-  //   if (await canLaunch("comgooglemaps://")) {
-  //     print('launching com googleUrl' + comgoogleUrl);
-  //     await launch(comgoogleUrl);
-  //   } else if (await canLaunch(googleUrl)) {
-  //     print('launching com googleUrl' + googleUrl);
-  //     await launch(googleUrl);
-  //   } else if (await canLaunch(googleiOSUrl)) {
-  //     print('launching googleiOSUrl url' + googleiOSUrl);
-  //     await launch(googleiOSUrl);
-  //   } else if (await canLaunch(appleUrl)) {
-  //     print('launching appleUrl url' + appleUrl);
-  //     await launch(appleUrl);
-  //   } else {
-  //     throw 'Could not launch url';
-  //   }
-  // }
 
   Future<void> _handleRefresh() {
     return fetchZones(0, 0);

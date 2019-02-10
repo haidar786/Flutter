@@ -8,11 +8,20 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Stats extends StatefulWidget {
   @override
   StatsState createState() {
     return StatsState();
+  }
+}
+
+launchURL(url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
 
@@ -163,7 +172,7 @@ class StatsState extends State<Stats> {
                           ),
                           child: Center(
                             child: Text(
-                              '${stats != null ? stats.cities : 0} Cities',
+                              '${stats != null ? formatter.format(stats.cities) : 0} Cities',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -278,7 +287,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emralsWon : 0}',
+                                '${stats != null ? formatter.format(stats.emralsWon) : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -302,7 +311,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emralsAdded : 0}',
+                                '${stats != null ? formatter.format(stats.emralsAdded) : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -390,7 +399,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${stats != null ? stats.barcodes : 0}',
+                              '${stats != null ? formatter.format(stats.barcodes) : 0}',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -451,13 +460,19 @@ class StatsState extends State<Stats> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    'Crex24',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      fontSize: 20,
+                  GestureDetector(
+                    onTap: () {
+                      launchURL(
+                          'https://crex24.com/exchange/EMRALS-BTC?refid=zx68hvlsd2yucxvl7gkw');
+                    },
+                    child: Text(
+                      'Crex24',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 20,
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -825,24 +840,28 @@ class StatsState extends State<Stats> {
             title: '',
             count: '2,598',
             icon: FontAwesomeIcons.twitterSquare,
+            url: 'https://twitter.com/emralsglobal',
           ),
           _mediaWidget(
             context,
             title: '',
             count: '122',
             icon: FontAwesomeIcons.facebook,
+            url: 'https://facebook.com/emrals',
           ),
           _mediaWidget(
             context,
             title: '',
             count: '440',
             icon: FontAwesomeIcons.discord,
+            url: 'https://discord.gg/nUCJrkE',
           ),
           _mediaWidget(
             context,
             title: '',
             count: '51',
             icon: FontAwesomeIcons.instagram,
+            url: 'https://instagram.com/emralsglobal',
           ),
         ],
       ),
@@ -852,36 +871,42 @@ class StatsState extends State<Stats> {
   Widget _mediaWidget(BuildContext context,
       {@required String title,
       @required String count,
+      @required String url,
       @required IconData icon}) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.white),
-        borderRadius: BorderRadius.circular(25),
-        color: Colors.transparent,
-      ),
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-      margin: EdgeInsets.symmetric(horizontal: 2),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            '$count',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: emralsColor()[1200],
+    return GestureDetector(
+      onTap: () {
+        launchURL(url);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.white),
+          borderRadius: BorderRadius.circular(25),
+          color: Colors.transparent,
+        ),
+        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+        margin: EdgeInsets.symmetric(horizontal: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              '$count',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: emralsColor()[1200],
+              ),
+              textAlign: TextAlign.end,
             ),
-            textAlign: TextAlign.end,
-          ),
-          SizedBox(width: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
+            SizedBox(width: 4),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+              ),
             ),
-          ),
-          SizedBox(width: 4),
-          Icon(icon)
-        ],
+            SizedBox(width: 4),
+            Icon(icon)
+          ],
+        ),
       ),
     );
   }

@@ -54,13 +54,16 @@ class _ReportList extends State<ReportListWidget> {
   @override
   void initState() {
     super.initState();
-    fetchReports(0, 0);
+    fetchReports(limit: 50, offset: 0);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         //limit += 50;
         offset += 50;
-        fetchReports(limit, offset);
+        fetchReports(
+          offset: offset,
+          limit: limit,
+        );
       }
     });
   }
@@ -107,7 +110,11 @@ class _ReportList extends State<ReportListWidget> {
   }
 
   Future<void> _handleRefresh() {
-    return fetchReports(0, 0);
+    reports = List<Report>();
+    return fetchReports(
+      limit: limit,
+      offset: 0,
+    );
   }
 
   @override
@@ -378,11 +385,11 @@ class _ReportList extends State<ReportListWidget> {
     );
   }
 
-  fetchReports(
+  fetchReports({
     int offset,
     int limit,
-  ) async {
-    print('fetching reportsss' + limit.toString() + offset.toString());
+  }) async {
+    print('fetching reports' + limit.toString() + offset.toString());
     final response = await http
         .get('https://www.emrals.com/api/alerts/?limit=$limit&offset=$offset');
 

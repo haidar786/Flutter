@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 
 class Stats extends StatefulWidget {
   @override
@@ -21,6 +22,7 @@ class StatsState extends State<Stats> {
   StatsModel stats;
   Crex24Model crex24data;
   final StatsApi _statsApi = StatsApi();
+  final formatter = new NumberFormat("#,###");
 
   @override
   void initState() {
@@ -494,7 +496,7 @@ class StatsState extends State<Stats> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
                               Text(
-                                '\$${crex24data != null ? crex24data.last.toStringAsFixed(3) : 0}',
+                                '\$${crex24data != null ? crex24data.last.toStringAsFixed(5) : 0}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 18,
@@ -508,7 +510,7 @@ class StatsState extends State<Stats> {
                                 ),
                               ),
                               Text(
-                                'Vol. ${crex24data != null ? crex24data.volume.toStringAsFixed(0) : 0}',
+                                'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
                                 style: TextStyle(
                                   color: emralsColor()[1400],
                                   fontSize: 14,
@@ -532,22 +534,22 @@ class StatsState extends State<Stats> {
                               _row2NameValueWidget(context,
                                   name: 'High',
                                   value: crex24data != null
-                                      ? crex24data.high.toStringAsFixed(3)
+                                      ? crex24data.high.toStringAsFixed(5)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Low',
                                   value: crex24data != null
-                                      ? crex24data.low.toStringAsFixed(3)
+                                      ? crex24data.low.toStringAsFixed(5)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Bid',
                                   value: crex24data != null
-                                      ? crex24data.bid.toStringAsFixed(3)
+                                      ? crex24data.bid.toStringAsFixed(5)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Ask',
                                   value: crex24data != null
-                                      ? crex24data.ask.toStringAsFixed(3)
+                                      ? crex24data.ask.toStringAsFixed(5)
                                       : '0'),
                             ],
                           ),

@@ -131,7 +131,7 @@ class ReportDetail extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (ctx) {
-                        return TipDialog(report.id);
+                        return TipDialog(report);
                       });
                 },
                 label: Text(
@@ -176,8 +176,8 @@ class ReportDetail extends StatelessWidget {
 }
 
 class TipDialog extends StatelessWidget {
-  final int reportID;
-  TipDialog(this.reportID);
+  final Report report;
+  TipDialog(this.report);
 
   @override
   Widget build(BuildContext context) {
@@ -197,10 +197,10 @@ class TipDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                EmralsTipCircleButton(10, Colors.purple, reportID),
+                EmralsTipCircleButton(10, Colors.purple, report),
                 EmralsTipCircleButton(
-                    50, Theme.of(context).accentColor, reportID),
-                EmralsTipCircleButton(100, Colors.cyan.shade600, reportID),
+                    50, Theme.of(context).accentColor, report),
+                EmralsTipCircleButton(100, Colors.cyan.shade600, report),
               ],
             )
           ],
@@ -213,9 +213,9 @@ class TipDialog extends StatelessWidget {
 class EmralsTipCircleButton extends StatelessWidget {
   final int number;
   final Color color;
-  final int reportID;
+  final Report report;
 
-  EmralsTipCircleButton(this.number, this.color, this.reportID);
+  EmralsTipCircleButton(this.number, this.color, this.report);
 
   @override
   Widget build(BuildContext context) {
@@ -223,8 +223,11 @@ class EmralsTipCircleButton extends StatelessWidget {
       onTap: () {
         DatabaseHelper().getUser().then((u) {
           if (u.emrals > number) {
-            RestDatasource().tipReport(number, reportID, u.token).then((m) {
+            RestDatasource().tipReport(number, report.id, u.token).then((m) {
               Navigator.of(context).pop();
+              // TODO: make reportEmralsAmount update on the list
+              report.reportEmralsAmount =
+                  (double.parse(report.reportEmralsAmount) + number).toString();
               // TODO: show snackbar instead of dialog
 
               showDialog(

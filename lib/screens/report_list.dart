@@ -13,35 +13,6 @@ class ReportListWidget extends StatefulWidget {
   _ReportList createState() => _ReportList();
 }
 
-class DialogDemoItem extends StatelessWidget {
-  const DialogDemoItem(
-      {Key key, this.icon, this.color, this.text, this.onPressed})
-      : super(key: key);
-
-  final IconData icon;
-  final Color color;
-  final String text;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return SimpleDialogOption(
-      onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Icon(icon, size: 36.0, color: color),
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: Text(text),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _ReportList extends State<ReportListWidget> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -73,19 +44,6 @@ class _ReportList extends State<ReportListWidget> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void showDemoDialog<T>({BuildContext context, Widget child}) {
-    showDialog<T>(
-      context: context,
-      builder: (BuildContext context) => child,
-    ).then<void>((T value) {
-      // The value passed to Navigator.pop() or null.
-      if (value != null) {
-        _scaffoldKey.currentState
-            .showSnackBar(SnackBar(content: Text('You tipped: $value')));
-      }
-    });
   }
 
   Future<void> _handleRefresh() {
@@ -304,56 +262,11 @@ class _ReportList extends State<ReportListWidget> {
                                 color: emralsColor(),
                               ),
                               onPressed: () {
-                                showDemoDialog<String>(
-                                  context: context,
-                                  child: SimpleDialog(
-                                    title: const Text('Select tip amount'),
-                                    children: <Widget>[
-                                      DialogDemoItem(
-                                        icon: Icons.send,
-                                        color: emralsColor(),
-                                        text: 'Tip ' +
-                                            reports[index].posterUsername +
-                                            ' 10 EMRALS',
-                                        onPressed: () {
-                                          Navigator.pop(
-                                            context,
-                                            '10 EMRALS to ' +
-                                                reports[index].posterUsername,
-                                          );
-                                        },
-                                      ),
-                                      DialogDemoItem(
-                                        icon: Icons.send,
-                                        color: emralsColor(),
-                                        text: 'Tip ' +
-                                            reports[index].posterUsername +
-                                            ' 50 EMRALS',
-                                        onPressed: () {
-                                          Navigator.pop(
-                                            context,
-                                            '50 EMRALS to ' +
-                                                reports[index].posterUsername,
-                                          );
-                                        },
-                                      ),
-                                      DialogDemoItem(
-                                        icon: Icons.send,
-                                        text: 'Tip ' +
-                                            reports[index].posterUsername +
-                                            ' 100 EMRALS',
-                                        color: emralsColor(),
-                                        onPressed: () {
-                                          Navigator.pop(
-                                            context,
-                                            '100 EMRALS to ' +
-                                                reports[index].posterUsername,
-                                          );
-                                        },
-                                      )
-                                    ],
-                                  ),
-                                );
+                                showDialog(
+                                    context: context,
+                                    builder: (ctx) {
+                                      return TipDialog(reports[index]);
+                                    });
                               },
                               child: Text("TIP"),
                               shape: StadiumBorder(),
@@ -373,7 +286,8 @@ class _ReportList extends State<ReportListWidget> {
     int offset,
     int limit,
   }) async {
-    print('fetching reports: limit=${limit.toString()}, offset=${offset.toString()}');
+    print(
+        'fetching reports: limit=${limit.toString()}, offset=${offset.toString()}');
     final response = await http
         .get('https://www.emrals.com/api/alerts/?limit=$limit&offset=$offset');
 

@@ -8,11 +8,22 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Stats extends StatefulWidget {
   @override
   StatsState createState() {
     return StatsState();
+  }
+}
+
+launchURL(url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
   }
 }
 
@@ -197,7 +208,7 @@ class StatsState extends State<Stats> {
                           ),
                           child: Center(
                             child: Text(
-                              '${stats != null ? stats.cities : 0} Cities',
+                              '${stats != null ? formatter.format(stats.cities) : 0} Cities',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -312,7 +323,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emralsWon : 0}',
+                                '${stats != null ? formatter.format(stats.emralsWon) : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -336,7 +347,7 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? stats.emralsAdded : 0}',
+                                '${stats != null ? formatter.format(stats.emralsAdded) : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -424,7 +435,7 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${stats != null ? stats.barcodes : 0}',
+                              '${stats != null ? formatter.format(stats.barcodes) : 0}',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -485,13 +496,19 @@ class StatsState extends State<Stats> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text(
-                    'Crex24',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      fontSize: 20,
+                  GestureDetector(
+                    onTap: () {
+                      launchURL(
+                          'https://crex24.com/exchange/EMRALS-BTC?refid=zx68hvlsd2yucxvl7gkw');
+                    },
+                    child: Text(
+                      'Crex24',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 20,
+                      ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -530,7 +547,7 @@ class StatsState extends State<Stats> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: <Widget>[
                               Text(
-                                '\$${crex24data != null ? crex24data.last.toStringAsFixed(3) : 0}',
+                                '\$${crex24data != null ? crex24data.last.toStringAsFixed(5) : 0}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 18,
@@ -544,7 +561,7 @@ class StatsState extends State<Stats> {
                                 ),
                               ),
                               Text(
-                                'Vol. ${crex24data != null ? crex24data.volume.toStringAsFixed(0) : 0}',
+                                'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
                                 style: TextStyle(
                                   color: emralsColor()[1400],
                                   fontSize: 14,
@@ -568,22 +585,22 @@ class StatsState extends State<Stats> {
                               _row2NameValueWidget(context,
                                   name: 'High',
                                   value: crex24data != null
-                                      ? crex24data.high.toStringAsFixed(3)
+                                      ? crex24data.high.toStringAsFixed(5)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Low',
                                   value: crex24data != null
-                                      ? crex24data.low.toStringAsFixed(3)
+                                      ? crex24data.low.toStringAsFixed(5)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Bid',
                                   value: crex24data != null
-                                      ? crex24data.bid.toStringAsFixed(3)
+                                      ? crex24data.bid.toStringAsFixed(5)
                                       : '0'),
                               _row2NameValueWidget(context,
                                   name: 'Ask',
                                   value: crex24data != null
-                                      ? crex24data.ask.toStringAsFixed(3)
+                                      ? crex24data.ask.toStringAsFixed(5)
                                       : '0'),
                             ],
                           ),
@@ -900,12 +917,34 @@ class StatsState extends State<Stats> {
         alignment: WrapAlignment.spaceEvenly,
         runSpacing: 10,
         children: <Widget>[
-          _mediaWidget(context,
-              title: 'follows', count: 'XXXX', icon: Icons.account_circle),
-          _mediaWidget(context,
-              title: 'likes', count: 'XXX', icon: Icons.account_circle),
-          _mediaWidget(context,
-              title: 'members', count: 'XXX', icon: Icons.account_circle),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '2,598',
+            icon: FontAwesomeIcons.twitterSquare,
+            url: 'https://twitter.com/emralsglobal',
+          ),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '122',
+            icon: FontAwesomeIcons.facebook,
+            url: 'https://facebook.com/emrals',
+          ),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '440',
+            icon: FontAwesomeIcons.discord,
+            url: 'https://discord.gg/nUCJrkE',
+          ),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '51',
+            icon: FontAwesomeIcons.instagram,
+            url: 'https://instagram.com/emralsglobal',
+          ),
         ],
       ),
     );
@@ -914,36 +953,42 @@ class StatsState extends State<Stats> {
   Widget _mediaWidget(BuildContext context,
       {@required String title,
       @required String count,
+      @required String url,
       @required IconData icon}) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(width: 1, color: Colors.white),
-        borderRadius: BorderRadius.circular(25),
-        color: Colors.transparent,
-      ),
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-      margin: EdgeInsets.symmetric(horizontal: 2),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text(
-            '$count',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: emralsColor()[1200],
+    return GestureDetector(
+      onTap: () {
+        launchURL(url);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.white),
+          borderRadius: BorderRadius.circular(25),
+          color: Colors.transparent,
+        ),
+        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+        margin: EdgeInsets.symmetric(horizontal: 2),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              '$count',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: emralsColor()[1200],
+              ),
+              textAlign: TextAlign.end,
             ),
-            textAlign: TextAlign.end,
-          ),
-          SizedBox(width: 4),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 12,
+            SizedBox(width: 4),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 12,
+              ),
             ),
-          ),
-          SizedBox(width: 4),
-          Icon(icon)
-        ],
+            SizedBox(width: 4),
+            Icon(icon)
+          ],
+        ),
       ),
     );
   }

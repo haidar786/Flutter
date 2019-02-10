@@ -13,7 +13,7 @@ class Report {
   final String timeAgo;
   final String solution;
   final String googleURL;
-  final String reportEmralsAmount;
+  String reportEmralsAmount;
   final String solutionEmralsAmount;
 
   Report({

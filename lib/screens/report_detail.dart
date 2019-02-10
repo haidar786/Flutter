@@ -3,8 +3,6 @@ import 'package:emrals/data/rest_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:emrals/styles.dart';
 
 class ReportDetail extends StatelessWidget {
   final Report report;
@@ -49,8 +47,7 @@ class ReportDetail extends StatelessWidget {
                         image: NetworkImage(report.googleURL),
                         fit: BoxFit.cover,
                       ),
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(50.0)),
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
                       border: Border.all(
                         color: Colors.blue,
                         width: 2,
@@ -183,7 +180,10 @@ class TipDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Tip Emrals".toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+            Text(
+              "Tip Emrals".toUpperCase(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
             SizedBox(
               height: 10,
             ),
@@ -191,7 +191,8 @@ class TipDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 EmralsTipCircleButton(10, Colors.purple, reportID),
-                EmralsTipCircleButton(50, Theme.of(context).accentColor, reportID),
+                EmralsTipCircleButton(
+                    50, Theme.of(context).accentColor, reportID),
                 EmralsTipCircleButton(100, Colors.cyan.shade600, reportID),
               ],
             )
@@ -215,7 +216,7 @@ class EmralsTipCircleButton extends StatelessWidget {
       onTap: () {
         DatabaseHelper().getUser().then((u) {
           if (u.emrals < number) {
-                RestDatasource().tipReport(number, reportID, u.token);
+            RestDatasource().tipReport(number, reportID, u.token);
           }
         });
       },
@@ -226,8 +227,14 @@ class EmralsTipCircleButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset("assets/JustElogo.png", width: 22,),
-            Text("$number", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),)
+            Image.asset(
+              "assets/JustElogo.png",
+              width: 22,
+            ),
+            Text(
+              "$number",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            )
           ],
         ),
         decoration: BoxDecoration(
@@ -238,4 +245,3 @@ class EmralsTipCircleButton extends StatelessWidget {
     );
   }
 }
-

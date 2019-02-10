@@ -6,7 +6,6 @@ import 'package:emrals/screens/report_detail.dart';
 import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/styles.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override

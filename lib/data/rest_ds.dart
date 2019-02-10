@@ -56,11 +56,17 @@ class RestDatasource {
     };
 
     Map<String, String> headers = {
-      "Authorization": "bearer $token",
+      "Authorization": "token $token",
       "Content-type": "application/json"
     };
 
-    return _netUtil.post(tipURL,
-        headers: headers, body: json.encoder.convert(payload));
+    return _netUtil
+        .post(tipURL, headers: headers, body: json.encoder.convert(payload))
+        .then((dynamic res) {
+      if (res["error"] != null) {
+        throw Exception(res["error"]);
+      }
+      return res;
+    });
   }
 }

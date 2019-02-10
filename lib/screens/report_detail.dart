@@ -214,13 +214,34 @@ class EmralsTipCircleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('tapped');
         DatabaseHelper().getUser().then((u) {
-          print(u.emrals);
-          print(number);
-
           if (u.emrals > number) {
-            print(RestDatasource().tipReport(number, reportID, u.token));
+            RestDatasource().tipReport(number, reportID, u.token).then((m) {
+              Navigator.of(context).pop();
+              // TODO: show snackbar instead of dialog
+
+              showDialog(
+                  context: context,
+                  builder: (ctx) {
+                    return AlertDialog(
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            Text(m['message']),
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('OK'),
+                          onPressed: () {
+                            Navigator.of(ctx).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  });
+            });
           } else {
             showDialog(
                 context: context,
@@ -245,12 +266,8 @@ class EmralsTipCircleButton extends StatelessWidget {
                       FlatButton(
                         child: Text('Deposit'),
                         onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                          Navigator.pushNamed(
-                            context,
-                            '/settings',
-                          );
+                          Navigator.of(context)
+                              .pushReplacementNamed("/settings");
                         },
                       ),
                     ],

@@ -28,6 +28,8 @@ class NetworkUtil {
       final String res = response.body;
       final int statusCode = response.statusCode;
 
+      print(res);
+      print(response);
       if (statusCode < 200 || statusCode > 400 || json == null) {
         throw Exception("Error while fetching data");
       }

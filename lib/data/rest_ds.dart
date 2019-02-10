@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
@@ -8,6 +9,7 @@ class RestDatasource {
   static final baseURL = "https://www.emrals.com/api/";
   static final loginURL = baseURL + "login/";
   static final signupURL = baseURL + "rest-auth/registration/";
+  static final tipURL = baseURL + "tip/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -45,5 +47,19 @@ class RestDatasource {
 
       return User.map(res);
     });
+  }
+
+  Future<dynamic> tipReport(int amount, int reportID, String token) {
+    Map<String, int> payload = {
+      "amount": amount,
+      "report_id": reportID,
+    };
+
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil.post(tipURL, headers: headers, body: json.encoder.convert(payload));
   }
 }

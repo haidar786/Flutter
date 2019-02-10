@@ -6,6 +6,7 @@ import 'package:emrals/screens/report_detail.dart';
 import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/styles.dart';
+import 'package:emrals/screens/camera.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -50,6 +51,7 @@ class _ReportList extends State<ReportListWidget> {
   ScrollController _scrollController = ScrollController();
   List<Report> reports = List();
   bool _progressBarActive = true;
+
   @override
   void initState() {
     super.initState();
@@ -254,7 +256,15 @@ class _ReportList extends State<ReportListWidget> {
                                 borderSide: BorderSide(
                                   color: emralsColor(),
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          CameraApp(report: reports[index]),
+                                    ),
+                                  );
+                                },
                                 child: Text("CLEAN"),
                                 shape: StadiumBorder(),
                               ),
@@ -356,14 +366,13 @@ class _ReportList extends State<ReportListWidget> {
     int offset,
     int limit,
   ) async {
-    print('fetching reportsss' + limit.toString() + offset.toString());
     final response = await http
         .get('https://www.emrals.com/api/alerts/?limit=$limit&offset=$offset');
 
     var data = json.decode(response.body);
     var parsed = data["results"] as List;
     if (!mounted) return;
-    setState(() {
+    this.setState(() {
       reports
           .addAll(parsed.map<Report>((json) => Report.fromJson(json)).toList());
       _progressBarActive = false;

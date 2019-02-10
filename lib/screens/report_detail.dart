@@ -3,6 +3,7 @@ import 'package:emrals/data/rest_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emrals/screens/camera.dart';
 
 class ReportDetail extends StatelessWidget {
   final Report report;
@@ -149,7 +150,14 @@ class ReportDetail extends StatelessWidget {
                   Icons.camera_alt,
                   color: Colors.white,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CameraApp(report: report),
+                    ),
+                  );
+                },
                 label: Text(
                   "Clean",
                   style: TextStyle(color: Colors.white),

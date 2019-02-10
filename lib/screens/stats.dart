@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Stats extends StatefulWidget {
   @override
@@ -817,12 +818,30 @@ class StatsState extends State<Stats> {
         alignment: WrapAlignment.spaceEvenly,
         runSpacing: 10,
         children: <Widget>[
-          _mediaWidget(context,
-              title: 'follows', count: 'XXXX', icon: Icons.account_circle),
-          _mediaWidget(context,
-              title: 'likes', count: 'XXX', icon: Icons.account_circle),
-          _mediaWidget(context,
-              title: 'members', count: 'XXX', icon: Icons.account_circle),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '2,598',
+            icon: FontAwesomeIcons.twitterSquare,
+          ),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '122',
+            icon: FontAwesomeIcons.facebook,
+          ),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '440',
+            icon: FontAwesomeIcons.discord,
+          ),
+          _mediaWidget(
+            context,
+            title: '',
+            count: '51',
+            icon: FontAwesomeIcons.instagram,
+          ),
         ],
       ),
     );

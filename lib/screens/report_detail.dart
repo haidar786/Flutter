@@ -1,3 +1,5 @@
+import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/data/rest_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -131,7 +133,7 @@ class ReportDetail extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (ctx) {
-                        return TipDialog();
+                        return TipDialog(report.id);
                       });
                 },
                 label: Text(
@@ -169,6 +171,9 @@ class ReportDetail extends StatelessWidget {
 }
 
 class TipDialog extends StatelessWidget {
+  final int reportID;
+  TipDialog(this.reportID);
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -185,9 +190,9 @@ class TipDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                EmralsTipCircleButton(10, Colors.purple),
-                EmralsTipCircleButton(50, Theme.of(context).accentColor),
-                EmralsTipCircleButton(100, Colors.cyan.shade600),
+                EmralsTipCircleButton(10, Colors.purple, reportID),
+                EmralsTipCircleButton(50, Theme.of(context).accentColor, reportID),
+                EmralsTipCircleButton(100, Colors.cyan.shade600, reportID),
               ],
             )
           ],
@@ -200,25 +205,36 @@ class TipDialog extends StatelessWidget {
 class EmralsTipCircleButton extends StatelessWidget {
   final int number;
   final Color color;
-  EmralsTipCircleButton(this.number, this.color);
+  final int reportID;
+
+  EmralsTipCircleButton(this.number, this.color, this.reportID);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 77,
-      height: 77,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image.asset("assets/JustElogo.png", width: 22,),
-          Text("$number", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),)
-        ],
+    return GestureDetector(
+      onTap: () {
+        DatabaseHelper().getUser().then((u) {
+          if (u.emrals < number) {
+                RestDatasource().tipReport(number, reportID, u.token);
+          }
+        });
+      },
+      child: Container(
+        width: 77,
+        height: 77,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset("assets/JustElogo.png", width: 22,),
+            Text("$number", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),)
+          ],
+        ),
+        decoration: BoxDecoration(
+            color: Colors.white54,
+            border: Border.all(color: color, width: 2),
+            shape: BoxShape.circle),
       ),
-      decoration: BoxDecoration(
-          color: Colors.white54,
-          border: Border.all(color: color, width: 2),
-          shape: BoxShape.circle),
     );
   }
 }

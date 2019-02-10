@@ -7,6 +7,7 @@ import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/styles.dart';
 import 'package:emrals/screens/camera.dart';
+import 'package:share/share.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -246,8 +247,10 @@ class _ReportList extends State<ReportListWidget> {
                                 borderSide: BorderSide(
                                   color: emralsColor(),
                                 ),
-                                onPressed: () {},
-                                child: Text("FUND"),
+                                onPressed: () {
+                                  Share.share("http://www.emrals.com/reports/");
+                                },
+                                child: Text("SHARE"),
                                 shape: StadiumBorder(),
                               ),
                             ),

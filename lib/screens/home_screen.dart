@@ -74,44 +74,51 @@ class _MyHomePage extends State<MyHomePage> {
         ],
       ),
       body: _children[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            this._selectedIndex = index;
-          });
-        },
-        fixedColor: Colors.red,
-        items: [
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: Icon(
-              Icons.view_stream,
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          brightness: Brightness.dark,
+          canvasColor: Colors.black,
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              this._selectedIndex = index;
+            });
+          },
+          fixedColor: Colors.red,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              backgroundColor: Colors.black,
+              icon: Icon(
+                Icons.view_agenda,
+              ),
+              title: Text('Activity'),
             ),
-            title: Text('Activity'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: Icon(
-              Icons.camera,
+            BottomNavigationBarItem(
+              backgroundColor: Colors.black,
+              icon: Icon(
+                Icons.camera,
+              ),
+              title: Text('Report'),
             ),
-            title: Text('Report'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: Icon(
-              Icons.multiline_chart,
+            BottomNavigationBarItem(
+              backgroundColor: Colors.black,
+              icon: Icon(
+                Icons.multiline_chart,
+              ),
+              title: Text('Stats'),
             ),
-            title: Text('Stats'),
-          ),
-          BottomNavigationBarItem(
-            backgroundColor: Colors.black,
-            icon: Icon(
-              Icons.map,
+            BottomNavigationBarItem(
+              backgroundColor: Colors.black,
+              icon: Icon(
+                Icons.map,
+              ),
+              title: Text('Zones'),
             ),
-            title: Text('Zones'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

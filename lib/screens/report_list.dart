@@ -388,6 +388,7 @@ class _ReportList extends State<ReportListWidget> {
 
     var data = json.decode(response.body);
     var parsed = data["results"] as List;
+    if (!mounted) return;
     setState(() {
       reports
           .addAll(parsed.map<Report>((json) => Report.fromJson(json)).toList());

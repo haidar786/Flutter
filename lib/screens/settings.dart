@@ -253,7 +253,7 @@ class _SettingsPage extends State<Settingg> {
                                     }
                                   },
                                   controller: walletAddressController,
-                                  style: TextStyle(fontSize: 22),
+                                  style: TextStyle(fontSize: 18),
                                   decoration: InputDecoration(
                                     contentPadding: EdgeInsets.all(10),
                                     border: OutlineInputBorder(

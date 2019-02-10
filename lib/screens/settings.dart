@@ -129,10 +129,13 @@ class _SettingsPage extends State<Settingg> {
                                     color: Color.fromRGBO(164, 211, 34, 1),
                                     elevation: 7.0,
                                     child: GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                              context, '/contacts');
+                                      },
                                       child: Center(
                                         child: Text(
-                                          'Edit Name',
+                                          'Invite Contacts',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontFamily: 'Montserrat'),

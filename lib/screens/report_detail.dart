@@ -214,10 +214,13 @@ class EmralsTipCircleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print('tapped');
         DatabaseHelper().getUser().then((u) {
+          print(u.emrals);
+
           if (u.emrals < number) {
             RestDatasource().tipReport(number, reportID, u.token);
-          }
+          } else {}
         });
       },
       child: Container(

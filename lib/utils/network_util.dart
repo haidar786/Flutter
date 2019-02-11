@@ -33,4 +33,15 @@ class NetworkUtil {
       return _decoder.convert(res);
     });
   }
+
+  Future<dynamic> delete(String url, {Map headers, body, encoding}) {
+    return http.delete(url, headers: headers).then((http.Response response) {
+      final String res = response.body;
+      final int statusCode = response.statusCode;
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        throw Exception("Error while fetching data");
+      }
+      return _decoder.convert(res);
+    });
+  }
 }

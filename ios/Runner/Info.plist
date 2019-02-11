@@ -38,6 +38,8 @@
 	<string>This app needs access to the photo library to upload reports you've taken.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open and in the background.</string>
+	<key>io.flutter.embedded_views_preview</key>
+	<string>YES</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

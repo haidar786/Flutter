@@ -83,8 +83,20 @@ class LoginScreenState extends State<LoginScreen>
         Image(image: AssetImage("assets/logo.png")),
         Center(
           child: Text(
-            "rewarding city cleanup",
+            "rewarding cleanup",
             textScaleFactor: 1,
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Center(
+          child: Text(
+            "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
+            textScaleFactor: .9,
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         ),
         SizedBox(

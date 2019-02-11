@@ -5,6 +5,7 @@ import 'package:emrals/screens/signup_screen.dart';
 import 'package:emrals/screens/settings.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/contacts.dart';
+import 'package:emrals/screens/map.dart';
 
 final routes = {
   '/login': (BuildContext context) => LoginScreen(),
@@ -13,5 +14,6 @@ final routes = {
   '/settings': (BuildContext context) => Settingg(),
   '/camera': (BuildContext context) => CameraApp(),
   '/contacts': (BuildContext context) => Contacts(),
+  '/map': (BuildContext context) => MapPage(),
   '/': (BuildContext context) => LoginScreen(),
 };

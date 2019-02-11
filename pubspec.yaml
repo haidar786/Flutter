@@ -1,7 +1,7 @@
 name: emrals
 description: A new Flutter application.
 
-version: 1.0.0+1
+version: 0.2.0
 
 environment:
   sdk: ">=2.1.0-dev.9.4 <3.0.0"
@@ -23,6 +23,12 @@ dependencies:
   intl: ">=0.14.0"
   barcode_scan: ^0.0.3
   font_awesome_flutter: 8.4.0
+  share: 0.6.0+1
+  google_maps_flutter:
+    git:
+     url: git://github.com/flutter/plugins
+     path: packages/google_maps_flutter
+  sentry: any
 
 
 dev_dependencies:

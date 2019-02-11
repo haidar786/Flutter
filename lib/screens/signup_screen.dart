@@ -1,8 +1,3 @@
-// TODO: Show/hide password: https://stackoverflow.com/a/49125284/1762493
-// TODO: Real form validations - https://flutter.io/docs/cookbook/forms/validation
-
-// import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
@@ -152,8 +147,10 @@ class SignupScreenState extends State<SignupScreen>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  obscureText: true,
+                  obscureText: passwordVisible,
                   onSaved: (val) => _password = val,
+                  validator: (val) =>
+                      val.length < 8 ? 'Password must be 8+ characters.' : null,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,
@@ -169,9 +166,7 @@ class SignupScreenState extends State<SignupScreen>
                       ),
                       onPressed: () {
                         setState(() {
-                          passwordVisible
-                              ? passwordVisible = false
-                              : passwordVisible = true;
+                          passwordVisible = !passwordVisible;
                         });
                       },
                     ),

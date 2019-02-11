@@ -50,6 +50,15 @@ class _MyHomePage extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.map, color: emralsColor()),
+          onPressed: () {
+            Navigator.pushNamed(
+              context,
+              '/map',
+            );
+          },
+        ),
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),

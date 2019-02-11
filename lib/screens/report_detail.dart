@@ -13,164 +13,168 @@ class ReportDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(report);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Report Detail"),
-      ),
-      body: ListView(
-        children: <Widget>[
-          Stack(
+    return PageView.builder(
+      itemBuilder: (context, position) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Report Detail"),
+          ),
+          body: ListView(
             children: <Widget>[
-              CachedNetworkImage(
-                imageUrl: report.thumbnail,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.all(8),
-                child: Text(report.title),
-                decoration: BoxDecoration(color: Colors.white70),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: GestureDetector(
-                  onTap: () {
-                    report.launchMaps();
-                    print("Container clicked");
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(right: 10, bottom: 10),
-                    width: 100.0,
-                    height: 100.0,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff7c94b6),
-                      image: DecorationImage(
-                        image: NetworkImage(report.googleURL),
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      border: Border.all(
-                        color: Colors.blue,
-                        width: 2,
+              Stack(
+                children: <Widget>[
+                  CachedNetworkImage(
+                    imageUrl: report.thumbnail,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(8),
+                    child: Text(report.title),
+                    decoration: BoxDecoration(color: Colors.white70),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                      onTap: () {
+                        report.launchMaps();
+                        print("Container clicked");
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10, bottom: 10),
+                        width: 100.0,
+                        height: 100.0,
+                        decoration: BoxDecoration(
+                          color: const Color(0xff7c94b6),
+                          image: DecorationImage(
+                            image: NetworkImage(report.googleURL),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                          border: Border.all(
+                            color: Colors.blue,
+                            width: 2,
+                          ),
+                        ),
                       ),
                     ),
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  Row(children: <Widget>[
+                    Image.asset(
+                      "assets/JustElogo.png",
+                      width: 20,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Text(report.reportEmralsAmount)
+                  ]),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.visibility,
+                        color: Colors.purpleAccent,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(report.views.toString()),
+                    ],
                   ),
-                ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.person,
+                        color: Colors.cyan.shade600,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(report.posterUsername),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.calendar_today,
+                        color: Colors.yellow.shade700,
+                        size: 20,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(report.timeAgo),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  RaisedButton.icon(
+                    icon: Icon(
+                      Icons.add,
+                      color: Theme.of(context).accentColor,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (ctx) {
+                            return TipDialog(report);
+                          });
+                    },
+                    label: Text(
+                      "Tip Emrals",
+                      style: TextStyle(color: Theme.of(context).accentColor),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                      side: BorderSide(
+                          color: Theme.of(context).accentColor, width: 2),
+                    ),
+                    color: Colors.white,
+                  ),
+                  RaisedButton.icon(
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CameraApp(report: report),
+                        ),
+                      );
+                    },
+                    label: Text(
+                      "Clean",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    color: Theme.of(context).accentColor,
+                  ),
+                ],
               )
             ],
           ),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Row(children: <Widget>[
-                Image.asset(
-                  "assets/JustElogo.png",
-                  width: 20,
-                ),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(report.reportEmralsAmount)
-              ]),
-              Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.visibility,
-                    color: Colors.purpleAccent,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(report.views.toString()),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.person,
-                    color: Colors.cyan.shade600,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(report.posterUsername),
-                ],
-              ),
-              Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.calendar_today,
-                    color: Colors.yellow.shade700,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Text(report.timeAgo),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              RaisedButton.icon(
-                icon: Icon(
-                  Icons.add,
-                  color: Theme.of(context).accentColor,
-                ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (ctx) {
-                        return TipDialog(report);
-                      });
-                },
-                label: Text(
-                  "Tip Emrals",
-                  style: TextStyle(color: Theme.of(context).accentColor),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                  side: BorderSide(
-                      color: Theme.of(context).accentColor, width: 2),
-                ),
-                color: Colors.white,
-              ),
-              RaisedButton.icon(
-                icon: Icon(
-                  Icons.camera_alt,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CameraApp(report: report),
-                    ),
-                  );
-                },
-                label: Text(
-                  "Clean",
-                  style: TextStyle(color: Colors.white),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                color: Theme.of(context).accentColor,
-              ),
-            ],
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -225,11 +229,8 @@ class EmralsTipCircleButton extends StatelessWidget {
           if (u.emrals > number) {
             RestDatasource().tipReport(number, report.id, u.token).then((m) {
               Navigator.of(context).pop();
-              // TODO: make reportEmralsAmount update on the list
               report.reportEmralsAmount =
                   (double.parse(report.reportEmralsAmount) + number).toString();
-              // TODO: show snackbar instead of dialog
-
               showDialog(
                   context: context,
                   builder: (ctx) {

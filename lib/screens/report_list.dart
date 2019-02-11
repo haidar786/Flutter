@@ -7,6 +7,8 @@ import 'package:emrals/models/report.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/styles.dart';
 import 'package:emrals/screens/camera.dart';
+import 'package:share/share.dart';
+import 'package:emrals/screens/map.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -89,25 +91,34 @@ class _ReportList extends State<ReportListWidget> {
                                   : reports[index].thumbnail,
                               errorWidget: Icon(Icons.error),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                reports[index].launchMaps();
-                              },
-                              child: Container(
-                                width: 100.0,
-                                height: 100.0,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff7c94b6),
-                                  image: DecorationImage(
-                                    image:
-                                        NetworkImage(reports[index].googleURL),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(50.0)),
-                                  border: Border.all(
-                                    color: emralsColor(),
-                                    width: 2,
+                            Hero(
+                              tag: reports[index].id,
+                              child: GestureDetector(
+                                onTap: () {
+                                  //reports[index].launchMaps();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            MapPage(report: reports[index])),
+                                  );
+                                },
+                                child: Container(
+                                  width: 100.0,
+                                  height: 100.0,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff7c94b6),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          reports[index].googleURL),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(50.0)),
+                                    border: Border.all(
+                                      color: emralsColor(),
+                                      width: 2,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -246,8 +257,10 @@ class _ReportList extends State<ReportListWidget> {
                                 borderSide: BorderSide(
                                   color: emralsColor(),
                                 ),
-                                onPressed: () {},
-                                child: Text("FUND"),
+                                onPressed: () {
+                                  Share.share("http://www.emrals.com/reports/");
+                                },
+                                child: Text("SHARE"),
                                 shape: StadiumBorder(),
                               ),
                             ),

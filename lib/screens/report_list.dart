@@ -92,7 +92,7 @@ class _ReportList extends State<ReportListWidget> {
                               errorWidget: Icon(Icons.error),
                             ),
                             Hero(
-                              tag: 'mapHero',
+                              tag: reports[index].id,
                               child: GestureDetector(
                                 onTap: () {
                                   //reports[index].launchMaps();

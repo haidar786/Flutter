@@ -56,7 +56,7 @@ class _MyAppState extends State<MapPage> {
         title: Text('Emrals Map'),
       ),
       body: Hero(
-        tag: 'mapHero',
+        tag: widget.report != null ? widget.report.id : '',
         child: GoogleMap(
           onMapCreated: _onMapCreated,
           trackCameraPosition: true,

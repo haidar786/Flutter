@@ -5,11 +5,9 @@ import 'package:emrals/models/exchange_crex24_model.dart';
 import 'package:emrals/models/stats_model.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Stats extends StatefulWidget {

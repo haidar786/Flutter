@@ -50,8 +50,23 @@ class _MyAppState extends State<MapPage> {
   void refresh() async {
     final center = await getUserLocation();
 
-    mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
-        target: center == null ? LatLng(0, 0) : center, zoom: 15.0)));
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: center == null ? LatLng(0, 0) : center,
+          zoom: 15.0,
+        ),
+      ),
+    );
+    if (widget.report != null) {
+      mapController.addMarker(
+        MarkerOptions(
+          position: center,
+          infoWindowText: InfoWindowText(
+              widget.report.title, 'Report #' + widget.report.id.toString()),
+        ),
+      );
+    }
   }
 
   @override

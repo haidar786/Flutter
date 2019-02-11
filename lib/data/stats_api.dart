@@ -51,7 +51,7 @@ class StatsApi {
           .then(
         (json) {
           data = Crex24Model.fromJson(json[0]);
-          crex24Worth = json[0]['last'] * /* usdValue * */ 1000;
+          crex24Worth = json[0]['last'] * 1000;
         },
       );
 
@@ -63,7 +63,7 @@ class StatsApi {
         (json) {
           btcData = Crex24Model.fromJson(json[0]);
           usdValue = btcData.last;
-          //crex24Worth = crex24Worth * usdValue;
+          crex24Worth = crex24Worth * usdValue;
         },
       );
 

@@ -805,7 +805,7 @@ class StatsState extends State<Stats> {
                         ),
                       ),
                       Text(
-                        'XX',
+                        lastBlockTime,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

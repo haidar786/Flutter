@@ -147,8 +147,10 @@ class SignupScreenState extends State<SignupScreen>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  obscureText: true,
+                  obscureText: passwordVisible,
                   onSaved: (val) => _password = val,
+                  validator: (val) =>
+                      val.length < 8 ? 'Password must be 8+ characters.' : null,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,
@@ -164,9 +166,7 @@ class SignupScreenState extends State<SignupScreen>
                       ),
                       onPressed: () {
                         setState(() {
-                          passwordVisible
-                              ? passwordVisible = false
-                              : passwordVisible = true;
+                          passwordVisible = !passwordVisible;
                         });
                       },
                     ),

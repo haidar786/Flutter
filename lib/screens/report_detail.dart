@@ -2,17 +2,34 @@ import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
+import 'package:emrals/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/screens/camera.dart';
 
-class ReportDetail extends StatelessWidget {
+class ReportDetail extends StatefulWidget {
   final Report report;
 
   ReportDetail({Key key, @required this.report}) : super(key: key);
 
   @override
+  ReportDetailState createState() {
+    return ReportDetailState();
+  }
+}
+
+class ReportDetailState extends State<ReportDetail> {
+  User user;
+
+  @override
+  void initState() {
+    super.initState();
+    DatabaseHelper().getUser().then((u) {
+      user = u;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(report);
     return PageView.builder(
       itemBuilder: (context, position) {
         return Scaffold(
@@ -24,20 +41,37 @@ class ReportDetail extends StatelessWidget {
               Stack(
                 children: <Widget>[
                   CachedNetworkImage(
-                    imageUrl: report.thumbnail,
+                    imageUrl: widget.report.thumbnail,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(8),
-                    child: Text(report.title),
+                    child: Text(widget.report.title),
                     decoration: BoxDecoration(color: Colors.white70),
                   ),
+                  (user != null &&
+                          widget.report.posterUsername == user.username)
+                      ? Positioned(
+                          bottom: 2,
+                          left: 10,
+                          child: RaisedButton(
+                            onPressed: () {
+                              RestDatasource()
+                                  .deleteReport(widget.report.id, user.token)
+                                  .then((m) {
+                                Navigator.of(context).pop();
+                              });
+                            },
+                            child: Text('delete'),
+                          ),
+                        )
+                      : Container(),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: GestureDetector(
                       onTap: () {
-                        report.launchMaps();
+                        widget.report.launchMaps();
                         print("Container clicked");
                       },
                       child: Container(
@@ -47,7 +81,7 @@ class ReportDetail extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: const Color(0xff7c94b6),
                           image: DecorationImage(
-                            image: NetworkImage(report.googleURL),
+                            image: NetworkImage(widget.report.googleURL),
                             fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -75,7 +109,7 @@ class ReportDetail extends StatelessWidget {
                     SizedBox(
                       width: 5,
                     ),
-                    Text(report.reportEmralsAmount)
+                    Text(widget.report.reportEmralsAmount)
                   ]),
                   Row(
                     children: <Widget>[
@@ -87,7 +121,7 @@ class ReportDetail extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(report.views.toString()),
+                      Text(widget.report.views.toString()),
                     ],
                   ),
                   Row(
@@ -100,7 +134,7 @@ class ReportDetail extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(report.posterUsername),
+                      Text(widget.report.posterUsername),
                     ],
                   ),
                   Row(
@@ -113,7 +147,7 @@ class ReportDetail extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(report.timeAgo),
+                      Text(widget.report.timeAgo),
                     ],
                   ),
                 ],
@@ -133,7 +167,7 @@ class ReportDetail extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (ctx) {
-                            return TipDialog(report);
+                            return TipDialog(widget.report);
                           });
                     },
                     label: Text(
@@ -156,7 +190,8 @@ class ReportDetail extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CameraApp(report: report),
+                          builder: (context) =>
+                              CameraApp(report: widget.report),
                         ),
                       );
                     },

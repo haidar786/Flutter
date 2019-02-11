@@ -11,6 +11,7 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/models/report.dart';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
+import 'package:emrals/styles.dart';
 import 'dart:convert';
 
 class CameraApp extends StatefulWidget {
@@ -179,8 +180,7 @@ class _CameraAppState extends State<CameraApp> {
           http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
       var length = await imageFile.length();
 
-      var uri = Uri.parse('https://www.emrals.com/api/upload/');
-      //var uri = Uri.parse('http://192.168.0.8:8000/api/upload/');
+      var uri = Uri.parse(apiUrl + "upload/");
 
       var request = http.MultipartRequest("POST", uri);
       request.fields['longitude'] = currentLocation["longitude"].toString();
@@ -195,17 +195,37 @@ class _CameraAppState extends State<CameraApp> {
         length,
         filename: basename(imageFile.path),
       );
-
-      Map<String, String> headers = {"Authorization": "bearer " + userToken};
+      print(userToken);
+      Map<String, String> headers = {"Authorization": "token " + userToken};
 
       request.headers.addAll(headers);
       request.files.add(multipartFile);
 
       var response = await request.send();
       response.stream.transform(utf8.decoder).listen((value) {
+        print(value);
         _isLoading = false;
-        //showInSnackBar(value);
-        Navigator.pushNamed(_ctx, '/home');
+        showDialog(
+            context: _ctx,
+            builder: (ctx) {
+              return AlertDialog(
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(value),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Go to Activity'),
+                    onPressed: () {
+                      Navigator.pushNamed(_ctx, '/home');
+                    },
+                  ),
+                ],
+              );
+            });
       });
     } else {
       showInSnackBar("Please enable GPS");

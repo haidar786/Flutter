@@ -50,7 +50,7 @@ class _MyAppState extends State<MapPage> {
   void refresh() async {
     final center = await getUserLocation();
 
-    mapController.animateCamera(
+    mapController.moveCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: center == null ? LatLng(0, 0) : center,

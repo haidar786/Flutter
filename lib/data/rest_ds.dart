@@ -3,13 +3,15 @@ import 'dart:convert';
 
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/styles.dart';
 
 class RestDatasource {
   NetworkUtil _netUtil = NetworkUtil();
-  static final baseURL = "https://www.emrals.com/api/";
+  static final baseURL = apiUrl;
   static final loginURL = baseURL + "login/";
   static final signupURL = baseURL + "rest-auth/registration/";
   static final tipURL = baseURL + "tip/";
+  static final reportURL = baseURL + "alerts/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -62,6 +64,27 @@ class RestDatasource {
 
     return _netUtil
         .post(tipURL, headers: headers, body: json.encoder.convert(payload))
+        .then((dynamic res) {
+      if (res["error"] != null) {
+        throw Exception(res["error"]);
+      }
+      return res;
+    });
+  }
+
+  Future<dynamic> deleteReport(int reportID, String token) {
+    Map<String, int> payload = {
+      "report_id": reportID,
+    };
+
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil
+        .delete(reportURL + "/" + reportID.toString() + "/",
+            headers: headers, body: json.encoder.convert(payload))
         .then((dynamic res) {
       if (res["error"] != null) {
         throw Exception(res["error"]);

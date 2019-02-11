@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+//String apiUrl = 'http://192.168.0.8:8000/api/';
+String apiUrl = 'https://www.emrals.com/api/';
+
 MaterialColor emralsColor() {
   return MaterialColor(0xFF7DB208, {
     50: Color(0xFF089EB2), // aqua

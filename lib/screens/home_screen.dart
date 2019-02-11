@@ -6,7 +6,6 @@ import 'package:emrals/screens/zone_list.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
-import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/stats.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:emrals/models/report.dart';
 
 import 'package:location/location.dart' as LocationManager;
 
 class MapPage extends StatefulWidget {
+  final Report report;
+  MapPage({Key key, this.report}) : super(key: key);
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -27,7 +31,9 @@ class _MyAppState extends State<MapPage> {
       currentLocation = await location.getLocation();
       final lat = currentLocation["latitude"];
       final lng = currentLocation["longitude"];
-      final center = LatLng(lat, lng);
+      final center = widget.report != null
+          ? LatLng(widget.report.latitude, widget.report.longitude)
+          : LatLng(lat, lng);
       return center;
     } on Exception {
       currentLocation = null;
@@ -36,6 +42,7 @@ class _MyAppState extends State<MapPage> {
   }
 
   void refresh() async {
+    if (widget.report != null) {}
     final center = await getUserLocation();
 
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
@@ -48,13 +55,16 @@ class _MyAppState extends State<MapPage> {
       appBar: AppBar(
         title: Text('Emrals Map'),
       ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        options: GoogleMapOptions(
-          trackCameraPosition: true,
-          myLocationEnabled: true,
-          cameraPosition: const CameraPosition(
-            target: LatLng(0.0, 0.0),
+      body: Hero(
+        tag: 'mapHero',
+        child: GoogleMap(
+          onMapCreated: _onMapCreated,
+          options: GoogleMapOptions(
+            trackCameraPosition: true,
+            myLocationEnabled: true,
+            cameraPosition: const CameraPosition(
+              target: LatLng(0.0, 0.0),
+            ),
           ),
         ),
       ),

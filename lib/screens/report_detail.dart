@@ -49,7 +49,8 @@ class ReportDetailState extends State<ReportDetail> {
                     child: Text(widget.report.title),
                     decoration: BoxDecoration(color: Colors.white70),
                   ),
-                  widget.report.posterUsername == user.username
+                  (user != null &&
+                          widget.report.posterUsername == user.username)
                       ? Positioned(
                           bottom: 2,
                           left: 10,

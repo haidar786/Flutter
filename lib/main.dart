@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
+import 'package:rollbar/rollbar.dart';
+
+var rollbar =
+    new Rollbar("POST_SERVER_ITEM_ACCESS_TOKEN", "flutter", "flutter");
+
 //import 'package:flutter/rendering.dart';
 
 void main() {
@@ -9,7 +14,11 @@ void main() {
   //debugPaintPointersEnabled = true;
   //debugPaintBaselinesEnabled = true;
   //debugRepaintRainbowEnabled = true;
-  runApp(EmralsApp());
+  try {
+    runApp(EmralsApp());
+  } catch (error, stackTrace) {
+    rollbar.trace(error, stackTrace);
+  }
 }
 
 class EmralsApp extends StatelessWidget {

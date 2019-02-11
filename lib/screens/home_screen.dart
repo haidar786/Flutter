@@ -6,6 +6,7 @@ import 'package:emrals/screens/zone_list.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
+import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/stats.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
@@ -50,6 +51,15 @@ class _MyHomePage extends State<MyHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.map, color: emralsColor()),
+          onPressed: () {
+            Navigator.pushNamed(
+              context,
+              '/map',
+            );
+          },
+        ),
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),

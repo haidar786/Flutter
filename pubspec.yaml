@@ -24,6 +24,7 @@ dependencies:
   barcode_scan: ^0.0.3
   font_awesome_flutter: 8.4.0
   share: 0.6.0+1
+  google_maps_flutter: ^0.0.3+3
 
 
 dev_dependencies:

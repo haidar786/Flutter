@@ -59,12 +59,10 @@ class _MyAppState extends State<MapPage> {
         tag: 'mapHero',
         child: GoogleMap(
           onMapCreated: _onMapCreated,
-          options: GoogleMapOptions(
-            trackCameraPosition: true,
-            myLocationEnabled: true,
-            cameraPosition: const CameraPosition(
-              target: LatLng(0.0, 0.0),
-            ),
+          trackCameraPosition: true,
+          myLocationEnabled: true,
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(0.0, 0.0),
           ),
         ),
       ),

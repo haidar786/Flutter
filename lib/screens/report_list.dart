@@ -301,8 +301,8 @@ class _ReportList extends State<ReportListWidget> {
   }) async {
     print(
         'fetching reports: limit=${limit.toString()}, offset=${offset.toString()}');
-    final response = await http
-        .get('https://www.emrals.com/api/alerts/?limit=$limit&offset=$offset');
+    final response =
+        await http.get(apiUrl + 'alerts/?limit=$limit&offset=$offset');
 
     var data = json.decode(response.body);
     var parsed = data["results"] as List;

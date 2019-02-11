@@ -3,10 +3,11 @@ import 'dart:convert';
 
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/styles.dart';
 
 class RestDatasource {
   NetworkUtil _netUtil = NetworkUtil();
-  static final baseURL = "https://www.emrals.com/api/";
+  static final baseURL = apiUrl;
   static final loginURL = baseURL + "login/";
   static final signupURL = baseURL + "rest-auth/registration/";
   static final tipURL = baseURL + "tip/";

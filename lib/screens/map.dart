@@ -24,6 +24,12 @@ class _MyAppState extends State<MapPage> {
     refresh();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    refresh();
+  }
+
   Future<LatLng> getUserLocation() async {
     var currentLocation = <String, double>{};
     final location = LocationManager.Location();
@@ -42,7 +48,6 @@ class _MyAppState extends State<MapPage> {
   }
 
   void refresh() async {
-    if (widget.report != null) {}
     final center = await getUserLocation();
 
     mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(

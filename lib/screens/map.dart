@@ -1,12 +1,16 @@
+import 'package:emrals/screens/report_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:emrals/models/report.dart';
-
+import 'package:emrals/styles.dart';
+import 'dart:convert';
 import 'package:location/location.dart' as LocationManager;
+import 'package:http/http.dart' as http;
 
 class MapPage extends StatefulWidget {
   final Report report;
+
   MapPage({Key key, this.report}) : super(key: key);
 
   @override
@@ -19,8 +23,19 @@ class _MyAppState extends State<MapPage> {
   var location = Location();
   var currentLocation = <String, double>{};
 
+  List<Report> reports = [];
+
+  void onMarkerTapped(Marker m) {
+    print(m.options.zIndex);
+    print("asd");
+  }
+
+
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
+    mapController.onMarkerTapped.add((m) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ReportDetail(report: reports[m.options.zIndex.toInt()],)));
+    });
     refresh();
   }
 
@@ -28,6 +43,7 @@ class _MyAppState extends State<MapPage> {
   void initState() {
     super.initState();
     refresh();
+    loadReports();
   }
 
   Future<LatLng> getUserLocation() async {
@@ -49,7 +65,6 @@ class _MyAppState extends State<MapPage> {
 
   void refresh() async {
     final center = await getUserLocation();
-
     mapController.moveCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
@@ -69,8 +84,26 @@ class _MyAppState extends State<MapPage> {
     }
   }
 
+  Future<void> loadReports() async {
+    final http.Response response = await http.get(apiUrl + 'alerts/');
+    var data = json.decode(response.body);
+    var parsed = data["results"] as List;
+    setState(() {
+      reports = parsed.map((d) => Report.fromJson(d)).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    reports.forEach((report) {
+      mapController.addMarker(
+        MarkerOptions(
+          position: LatLng(report.latitude, report.longitude),
+          consumeTapEvents: true,
+          zIndex: reports.indexOf(report).toDouble(),
+        ),
+      );
+    });
     return Scaffold(
       appBar: AppBar(
         title: Text('Emrals Map'),

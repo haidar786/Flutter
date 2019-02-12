@@ -1,13 +1,13 @@
+import 'dart:math';
+
 import 'package:emrals/data/stats_api.dart';
 import 'package:emrals/models/exchange_crex24_model.dart';
 import 'package:emrals/models/stats_model.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
+//import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Stats extends StatefulWidget {
@@ -26,12 +26,18 @@ launchURL(url) async {
 }
 
 class StatsState extends State<Stats> {
-  String lastBlockTime = '';
-  int blockHeight;
+  final StatsApi _statsApi = StatsApi();
+  /* String lastBlockTime = '';
+  int blockHeight; */
   StatsModel stats;
   Crex24Model crex24data;
-  final StatsApi _statsApi = StatsApi();
-  final formatter = new NumberFormat("#,###");
+  int connectionCount;
+  double networkHashRate;
+  double moneySupply;
+  double difficulty;
+  int blockHeight;
+  String lastBlockTime;
+  double mnWorth;
 
   @override
   void initState() {
@@ -39,7 +45,7 @@ class StatsState extends State<Stats> {
     super.initState();
   }
 
-  Future updateStats() async {
+  /* Future updateStats() async {
     final response =
         await http.get('http://explorer.emrals.com/ext/getlasttxs/1/1');
 
@@ -56,16 +62,44 @@ class StatsState extends State<Stats> {
     } else {
       throw Exception('Failed to update');
     }
+  } */
+
+  Future updateStats() async {
+    if (!mounted) return;
+    setState(() {
+      _statsApi.getStats().then((stats) {
+        this.stats = stats;
+      });
+      _statsApi.getCrex24Data().then((data) {
+        this.crex24data = data;
+      });
+      /* 
+      _statsApi.getConnectionCount().then((connectionCount) {
+        this.connectionCount = connectionCount;
+      });
+      _statsApi.getNetworkHashRate().then((hashRate) {
+        this.networkHashRate = hashRate;
+      });
+      _statsApi.getMoneySupply().then((moneySupply) {
+        this.moneySupply = moneySupply;
+      });
+      _statsApi.getDifficulty().then((difficulty) {
+        this.difficulty = difficulty;
+      });
+      _statsApi.getBlockHeight().then((blockHeight) {
+        this.blockHeight = blockHeight;
+      });
+      _statsApi.getLastBlockTime().then((blockTime) {
+        this.lastBlockTime = blockTime;
+      });
+      _statsApi.getMNWorth().then((mnWorth) {
+        this.mnWorth = mnWorth;
+      }); */
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    _statsApi.getStats().then((stats) {
-      this.stats = stats;
-    });
-    _statsApi.getCrex24Data().then((data) {
-      this.crex24data = data;
-    });
     return Theme(
       data: ThemeData(
         brightness: Brightness.dark,
@@ -172,7 +206,8 @@ class StatsState extends State<Stats> {
                           ),
                           child: Center(
                             child: Text(
-                              '${stats != null ? formatter.format(stats.cities) : 0} Cities',
+                              //'${stats != null ? formatter.format(stats.cities) : 0} Cities',
+                              '${stats != null ? stats.cities : 0} Cities',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16),
                             ),
@@ -287,7 +322,8 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? formatter.format(stats.emralsWon) : 0}',
+                                //'${stats != null ? formatter.format(stats.emralsWon) : 0}',
+                                '${stats != null ? stats.emralsWon : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -311,7 +347,8 @@ class StatsState extends State<Stats> {
                             ),
                             Expanded(
                               child: Text(
-                                '${stats != null ? formatter.format(stats.emralsAdded) : 0}',
+                                //'${stats != null ? formatter.format(stats.emralsAdded) : 0}',
+                                '${stats != null ? stats.emralsAdded : 0}',
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -399,7 +436,8 @@ class StatsState extends State<Stats> {
                         Column(
                           children: <Widget>[
                             Text(
-                              '${stats != null ? formatter.format(stats.barcodes) : 0}',
+                              //'${stats != null ? formatter.format(stats.barcodes) : 0}',
+                              '${stats != null ? stats.barcodes : 0}',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -525,7 +563,8 @@ class StatsState extends State<Stats> {
                                 ),
                               ),
                               Text(
-                                'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
+                                //'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
+                                'Vol. ${crex24data != null ? crex24data.volume : 0}',
                                 style: TextStyle(
                                   color: emralsColor()[1400],
                                   fontSize: 14,
@@ -622,14 +661,20 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        'XX',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: emralsColor()[200],
-                        ),
-                        textAlign: TextAlign.end,
+                      FutureBuilder(
+                        future: _statsApi.getBlockHeight(),
+                        initialData: '-',
+                        builder: (context, snapshot) {
+                          return Text(
+                            '${snapshot.data ?? '-'}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: emralsColor()[200],
+                            ),
+                            textAlign: TextAlign.end,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -643,14 +688,25 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        'XX',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: emralsColor()[200],
-                        ),
-                        textAlign: TextAlign.end,
+                      FutureBuilder(
+                        future: _statsApi.getNetworkHashRate(),
+                        initialData: '-',
+                        builder: (context, snapshot) {
+                          String value;
+                          if (snapshot.data != '-') {
+                            value = (snapshot.data / (pow(10, 9)))
+                                .toStringAsFixed(1);
+                          }
+                          return Text(
+                            '${value ?? snapshot.data}GH/S',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: emralsColor()[200],
+                            ),
+                            textAlign: TextAlign.end,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -664,14 +720,19 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        'XX',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: emralsColor()[200],
-                        ),
-                        textAlign: TextAlign.end,
+                      FutureBuilder(
+                        future: _statsApi.getDifficulty(),
+                        builder: (context, snapshot) {
+                          return Text(
+                            '${snapshot.hasData ? snapshot.data.toStringAsFixed(2) : '-'}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: emralsColor()[200],
+                            ),
+                            textAlign: TextAlign.end,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -693,7 +754,7 @@ class StatsState extends State<Stats> {
                         ),
                       ),
                       Text(
-                        'XX',
+                        '--',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -713,14 +774,20 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        'XX',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: emralsColor()[200],
-                        ),
-                        textAlign: TextAlign.end,
+                      FutureBuilder(
+                        future: _statsApi.getMNWorth(),
+                        initialData: '-',
+                        builder: (context, snapshot) {
+                          return Text(
+                            '\$${snapshot.data ?? '-'}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: emralsColor()[200],
+                            ),
+                            textAlign: TextAlign.end,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -734,14 +801,20 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        'XX',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: emralsColor()[200],
-                        ),
-                        textAlign: TextAlign.end,
+                      FutureBuilder(
+                        future: _statsApi.getMoneySupply(),
+                        initialData: '-',
+                        builder: (context, snapshot) {
+                          return Text(
+                            '${snapshot.data != '-' ? snapshot.data.toStringAsFixed(0) : snapshot.data ?? '-'}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: emralsColor()[200],
+                            ),
+                            textAlign: TextAlign.end,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -762,14 +835,20 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        'XX',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: emralsColor()[200],
-                        ),
-                        textAlign: TextAlign.end,
+                      FutureBuilder(
+                        future: _statsApi.getConnectionCount(),
+                        initialData: '-',
+                        builder: (context, snapshot) {
+                          return Text(
+                            '${snapshot.data ?? '-'}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: emralsColor()[200],
+                            ),
+                            textAlign: TextAlign.end,
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -784,7 +863,7 @@ class StatsState extends State<Stats> {
                         ),
                       ),
                       Text(
-                        'XX',
+                        '--',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -804,14 +883,20 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      Text(
-                        lastBlockTime,
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: emralsColor()[200],
-                        ),
-                        textAlign: TextAlign.end,
+                      FutureBuilder(
+                        future: _statsApi.getLastBlockTime(),
+                        initialData: '-',
+                        builder: (context, snapshot) {
+                          return Text(
+                            '${snapshot.data ?? '-'}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: emralsColor()[200],
+                            ),
+                            textAlign: TextAlign.end,
+                          );
+                        },
                       ),
                     ],
                   ),

@@ -1,4 +1,4 @@
-class Crex24Model {
+class StatsExchangeModel {
   final double last;
   final double percentChange;
   final double volume;
@@ -7,7 +7,7 @@ class Crex24Model {
   final double bid;
   final double ask;
 
-  Crex24Model(
+  StatsExchangeModel(
       {this.last,
       this.percentChange,
       this.volume,
@@ -16,7 +16,7 @@ class Crex24Model {
       this.bid,
       this.ask});
 
-  Crex24Model.fromJson(Map json)
+  StatsExchangeModel.fromJson(Map json)
       : last = json['last'],
         percentChange = json['percentChange'],
         volume = json['baseVolume'],

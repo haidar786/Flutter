@@ -12,6 +12,7 @@ class RestDatasource {
   static final signupURL = baseURL + "rest-auth/registration/";
   static final tipURL = baseURL + "tip/";
   static final reportURL = baseURL + "alerts/";
+  static final inviteURL = baseURL + "invite/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -91,5 +92,18 @@ class RestDatasource {
       }
       return res;
     });
+  }
+
+  Future<bool> inviteUser(String email, String token) async{
+    Map<String, String> payload = {
+      "email": email,
+    };
+
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil.post(inviteURL, headers: headers, body: json.encoder.convert(payload)).then((b) => true, onError: (e) => false);
   }
 }

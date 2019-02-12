@@ -7,7 +7,7 @@ import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Stats extends StatefulWidget {
@@ -36,6 +36,7 @@ class StatsState extends State<Stats> {
   int blockHeight;
   String lastBlockTime;
   double mnWorth;
+  NumberFormat formatter = NumberFormat('#,###');
 
   @override
   Widget build(BuildContext context) {
@@ -206,8 +207,7 @@ class StatsState extends State<Stats> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          //'${stats != null ? formatter.format(stats.cities) : 0} Cities',
-                                          '${data.cities} Cities',
+                                          '${formatter.format(data.cities)} Cities',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
@@ -226,7 +226,7 @@ class StatsState extends State<Stats> {
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${data.countries} Countries',
+                                          '${formatter.format(data.countries)} Countries',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
@@ -255,7 +255,7 @@ class StatsState extends State<Stats> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            '${data.cleanups}',
+                                            '${formatter.format(data.cleanups)}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -280,7 +280,7 @@ class StatsState extends State<Stats> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            '${data.reports}',
+                                            '${formatter.format(data.reports)}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -305,7 +305,7 @@ class StatsState extends State<Stats> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            '${data.users}',
+                                            '${formatter.format(data.users)}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -330,8 +330,7 @@ class StatsState extends State<Stats> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            //'${stats != null ? formatter.format(stats.emralsWon) : 0}',
-                                            '${data.emralsWon}',
+                                            '${formatter.format(data.emralsWon)}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -356,8 +355,7 @@ class StatsState extends State<Stats> {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            //'${stats != null ? formatter.format(stats.emralsAdded) : 0}',
-                                            '${data.emralsAdded}',
+                                            '${formatter.format(data.emralsAdded)}',
                                             style: TextStyle(
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold,
@@ -392,7 +390,7 @@ class StatsState extends State<Stats> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    '${data.eCans} eCans',
+                                    '${formatter.format(data.eCans)} eCans',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16,
@@ -408,7 +406,7 @@ class StatsState extends State<Stats> {
                                     Column(
                                       children: <Widget>[
                                         Text(
-                                          '${data.tosses}',
+                                          '${formatter.format(data.tosses)}',
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -427,7 +425,7 @@ class StatsState extends State<Stats> {
                                     Column(
                                       children: <Widget>[
                                         Text(
-                                          '${data.scans}',
+                                          '${formatter.format(data.scans)}',
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -446,8 +444,7 @@ class StatsState extends State<Stats> {
                                     Column(
                                       children: <Widget>[
                                         Text(
-                                          //'${stats != null ? formatter.format(stats.barcodes) : 0}',
-                                          '${data.barcodes}',
+                                          '${formatter.format(data.barcodes)}',
                                           style: TextStyle(
                                             fontSize: 14,
                                             fontWeight: FontWeight.bold,
@@ -747,8 +744,15 @@ class StatsState extends State<Stats> {
                         stream: _statsApi.getBlockHeight(),
                         initialData: '-',
                         builder: (context, snapshot) {
+                          String value;
+                          if (snapshot.hasData &&
+                              snapshot.connectionState !=
+                                  ConnectionState.waiting &&
+                              snapshot.data != '-') {
+                            value = formatter.format(double.parse(snapshot.data));
+                          }
                           return Text(
-                            '${snapshot.data ?? '-'}',
+                            '${value ?? '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -778,8 +782,9 @@ class StatsState extends State<Stats> {
                           if (snapshot.hasData &&
                               snapshot.connectionState !=
                                   ConnectionState.waiting) {
-                            value = (snapshot.data / (pow(10, 9)))
-                                .toStringAsFixed(1);
+                            value = formatter.format(double.parse(
+                                (snapshot.data / (pow(10, 9)))
+                                    .toStringAsFixed(1)));
                           }
                           return Text(
                             '${value ?? '-'}GH/S',
@@ -808,7 +813,7 @@ class StatsState extends State<Stats> {
                         future: _statsApi.getDifficulty(),
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? snapshot.data.toStringAsFixed(2) : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(2))) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -863,7 +868,7 @@ class StatsState extends State<Stats> {
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '\$${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? snapshot.data : '-'}',
+                            '\$${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(snapshot.data) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -890,7 +895,7 @@ class StatsState extends State<Stats> {
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? snapshot.data.toStringAsFixed(0) : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(0))) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -924,7 +929,7 @@ class StatsState extends State<Stats> {
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? snapshot.data : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(snapshot.data) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,

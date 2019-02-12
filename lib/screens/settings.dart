@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
 import 'package:barcode_scan/barcode_scan.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -149,7 +150,11 @@ class _SettingsPage extends State<Settingg> {
                                 elevation: 7.0,
                                 child: GestureDetector(
                                   onTap: () {
-                                    Navigator.pushNamed(context, '/contacts');
+                                    SimplePermissions.requestPermission(Permission.ReadContacts).then((p) {
+                                      if (p == PermissionStatus.authorized) {
+                                        Navigator.pushNamed(context, '/contacts');
+                                      }
+                                    });
                                   },
                                   child: Center(
                                     child: Text(

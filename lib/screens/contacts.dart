@@ -1,11 +1,8 @@
-
-
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
-
-import 'package:permission_handler/permission_handler.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class Contacts extends StatefulWidget {
   @override
@@ -22,34 +19,23 @@ class ContactsState extends State<Contacts> {
           title: Text('Invite Contacts'),
         ),
         body: FutureBuilder(
-          future: PermissionHandler().requestPermissions([PermissionGroup.contacts]),
+          future: ContactsService.getContacts(),
           builder: (ctx, snapshot) {
             if (snapshot.hasData) {
-              print(snapshot.data);
-              return FutureBuilder(
-                future: ContactsService.getContacts(),
-                builder: (ctx, snapshot) {
-                  if (snapshot.hasData) {
-                    List<Contact> contacts = List.from(snapshot.data)
-                      ..sort(
-                        (c1, c2) => c1.displayName.compareTo(c2.displayName),
-                      )..sort((c1, c2) {
-                        if (c1.emails.length < c2.emails.length) {
-                          return 1;
-                        } else if (c1.emails.length > c2.emails.length){
-                          return -1;
-                        } else {
-                          return 0;
-                        }
-                      });
-                    return ContactList(contacts: contacts);
+              List<Contact> contacts = List.from(snapshot.data)
+                ..sort(
+                  (c1, c2) => c1.displayName.compareTo(c2.displayName),
+                )
+                ..sort((c1, c2) {
+                  if (c1.emails.length < c2.emails.length) {
+                    return 1;
+                  } else if (c1.emails.length > c2.emails.length) {
+                    return -1;
                   } else {
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
+                    return 0;
                   }
-                },
-              );
+                });
+              return ContactList(contacts: contacts);
             } else {
               return Center(
                 child: CircularProgressIndicator(),
@@ -108,7 +94,8 @@ class InviteButton extends StatefulWidget {
   _InviteButtonState createState() => _InviteButtonState();
 }
 
-class _InviteButtonState extends State<InviteButton> with AutomaticKeepAliveClientMixin<InviteButton>{
+class _InviteButtonState extends State<InviteButton>
+    with AutomaticKeepAliveClientMixin<InviteButton> {
   InviteButtonStates state = InviteButtonStates.IDLE;
   Widget icon;
 
@@ -120,9 +107,15 @@ class _InviteButtonState extends State<InviteButton> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     if (state == InviteButtonStates.IDLE) {
-      icon = Icon(Icons.add, color: Colors.white,);
+      icon = Icon(
+        Icons.add,
+        color: Colors.white,
+      );
     } else if (state == InviteButtonStates.FAILED) {
-      icon = Icon(Icons.error_outline, color: Colors.white,);
+      icon = Icon(
+        Icons.error_outline,
+        color: Colors.white,
+      );
     } else if (state == InviteButtonStates.LOADING) {
       icon = SizedBox(
         height: 20,
@@ -133,7 +126,10 @@ class _InviteButtonState extends State<InviteButton> with AutomaticKeepAliveClie
         ),
       );
     } else {
-      icon = Icon(Icons.done, color: Colors.white,);
+      icon = Icon(
+        Icons.done,
+        color: Colors.white,
+      );
     }
     return FlatButton.icon(
       padding: EdgeInsets.zero,

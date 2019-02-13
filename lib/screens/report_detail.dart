@@ -5,6 +5,7 @@ import 'package:emrals/models/report.dart';
 import 'package:emrals/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/screens/camera.dart';
+import 'package:emrals/styles.dart';
 
 class ReportDetail extends StatefulWidget {
   final Report report;
@@ -41,7 +42,9 @@ class ReportDetailState extends State<ReportDetail> {
               Stack(
                 children: <Widget>[
                   CachedNetworkImage(
-                    imageUrl: widget.report.thumbnail,
+                    imageUrl: widget.report.solution != ""
+                        ? widget.report.solution
+                        : widget.report.thumbnail,
                     placeholder: AspectRatio(aspectRatio: 1),
                   ),
                   Container(
@@ -50,23 +53,56 @@ class ReportDetailState extends State<ReportDetail> {
                     child: Text(widget.report.title),
                     decoration: BoxDecoration(color: Colors.white70),
                   ),
-                  (user != null &&
-                          widget.report.posterUsername == user.username)
+                  widget.report.solution != ""
                       ? Positioned(
-                          bottom: 2,
+                          bottom: 10,
                           left: 10,
-                          child: RaisedButton(
-                            onPressed: () {
-                              RestDatasource()
-                                  .deleteReport(widget.report.id, user.token)
-                                  .then((m) {
-                                Navigator.of(context).pop();
-                              });
-                            },
-                            child: Text('delete'),
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                "Before",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                height: MediaQuery.of(context).size.width / 3,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff7c94b6),
+                                  image: DecorationImage(
+                                    image:
+                                        NetworkImage(widget.report.thumbnail),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         )
-                      : Container(),
+                      : (user != null &&
+                              widget.report.posterUsername == user.username)
+                          ? Positioned(
+                              bottom: 2,
+                              left: 10,
+                              child: RaisedButton(
+                                onPressed: () {
+                                  RestDatasource()
+                                      .deleteReport(
+                                          widget.report.id, user.token)
+                                      .then((m) {
+                                    Navigator.of(context).pop();
+                                  });
+                                },
+                                child: Text('delete'),
+                              ),
+                            )
+                          : Container(),
                   Positioned(
                     bottom: 0,
                     right: 0,
@@ -87,7 +123,7 @@ class ReportDetailState extends State<ReportDetail> {
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
                           border: Border.all(
-                            color: Colors.blue,
+                            color: emralsColor(),
                             width: 2,
                           ),
                         ),
@@ -182,29 +218,66 @@ class ReportDetailState extends State<ReportDetail> {
                     ),
                     color: Colors.white,
                   ),
-                  RaisedButton.icon(
-                    icon: Icon(
-                      Icons.camera_alt,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              CameraApp(report: widget.report),
+                  widget.report.solution != ''
+                      ? Column(
+                          children: <Widget>[
+                            Row(
+                              children: <Widget>[
+                                Image.asset("assets/trophy.png",
+                                    width: 20,
+                                    height: 20,
+                                    color: emralsColor()[1400]),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "CLEANED",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: emralsColor()),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "${widget.report.solutionEmralsAmount} EMRALS WON!",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: emralsColor()),
+                            ),
+                            Text(
+                              "Congrats ${widget.report.posterUsername}",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: emralsColor()),
+                            ),
+                          ],
+                        )
+                      : RaisedButton.icon(
+                          icon: Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    CameraApp(report: widget.report),
+                              ),
+                            );
+                          },
+                          label: Text(
+                            "Clean",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          color: Theme.of(context).accentColor,
                         ),
-                      );
-                    },
-                    label: Text(
-                      "Clean",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    color: Theme.of(context).accentColor,
-                  ),
                 ],
               )
             ],

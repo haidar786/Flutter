@@ -81,7 +81,7 @@ class _ReportList extends State<ReportListWidget> {
                           );
                         },
                         child: Stack(
-                          alignment: const Alignment(.9, .9),
+                          alignment: const Alignment(1, 1),
                           children: [
                             CachedNetworkImage(
                               placeholder:
@@ -104,6 +104,8 @@ class _ReportList extends State<ReportListWidget> {
                                   );
                                 },
                                 child: Container(
+                                  margin:
+                                      EdgeInsets.only(right: 10, bottom: 10),
                                   width: 100.0,
                                   height: 100.0,
                                   decoration: BoxDecoration(

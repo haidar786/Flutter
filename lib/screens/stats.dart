@@ -638,13 +638,15 @@ class StatsState extends State<Stats> {
                                             Text(
                                               '${data.percentChange.toStringAsFixed(2)}%',
                                               style: TextStyle(
-                                                color: emralsColor(),
+                                                color: data.percentChange > 0
+                                                    ? emralsColor()
+                                                    : Colors.red,
                                                 fontSize: 14,
                                               ),
                                             ),
                                             Text(
                                               //'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
-                                              'Vol. ${data.volume.toStringAsFixed(3)}',
+                                              'Vol. ${formatter.format(data.volume)}',
                                               style: TextStyle(
                                                 color: emralsColor()[1400],
                                                 fontSize: 14,
@@ -749,7 +751,8 @@ class StatsState extends State<Stats> {
                               snapshot.connectionState !=
                                   ConnectionState.waiting &&
                               snapshot.data != '-') {
-                            value = formatter.format(double.parse(snapshot.data));
+                            value =
+                                formatter.format(double.parse(snapshot.data));
                           }
                           return Text(
                             '${value ?? '-'}',
@@ -787,7 +790,7 @@ class StatsState extends State<Stats> {
                                     .toStringAsFixed(1)));
                           }
                           return Text(
-                            '${value ?? '-'}GH/S',
+                            '${value ?? '-'}Gh/s',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -843,7 +846,7 @@ class StatsState extends State<Stats> {
                         ),
                       ),
                       Text(
-                        '--',
+                        '245',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -952,7 +955,7 @@ class StatsState extends State<Stats> {
                         ),
                       ),
                       Text(
-                        '--',
+                        '1,511',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

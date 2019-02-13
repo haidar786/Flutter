@@ -61,7 +61,7 @@ class StatsApi {
     Map newJson = {
       'last': oldJson['last'] * usdValue,
       'percentChange': oldJson['percentChange'],
-      'baseVolume': (oldJson['baseVolume'] * usdValue),
+      'baseVolume': (oldJson['baseVolume']),
       'high': oldJson['high'] * usdValue,
       'low': oldJson['low'] * usdValue,
       'bid': oldJson['bid'] * usdValue,

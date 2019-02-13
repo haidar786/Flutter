@@ -3,6 +3,7 @@ import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
 import 'package:sentry/sentry.dart';
 import 'dart:async';
+//import 'package:onesignal/onesignal.dart'
 
 final SentryClient sentry = new SentryClient(dsn: "SENTRY_DSN");
 

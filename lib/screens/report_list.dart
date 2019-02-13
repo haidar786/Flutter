@@ -214,7 +214,7 @@ class _ReportList extends State<ReportListWidget> {
                             ),
                             Column(
                               children: <Widget>[
-                                Row(
+                                Column(
                                   children: <Widget>[
                                     Icon(
                                       reports[index].solution != ''
@@ -222,9 +222,31 @@ class _ReportList extends State<ReportListWidget> {
                                           : Icons.assessment,
                                       color: emralsColor(),
                                     ),
-                                    Text(reports[index].solution != ''
-                                        ? reports[index].solutionEmralsAmount
-                                        : reports[index].reportEmralsAmount),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Image.asset(
+                                          "assets/greene.png",
+                                          width: 22,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          reports[index].solution != ''
+                                              ? reports[index]
+                                                  .solutionEmralsAmount
+                                              : reports[index]
+                                                  .reportEmralsAmount,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor()),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ],

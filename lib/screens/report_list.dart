@@ -319,7 +319,7 @@ class _ReportList extends State<ReportListWidget> {
                                 showDialog(
                                     context: context,
                                     builder: (ctx) {
-                                      return TipDialog(reports[index]);
+                                      return TipDialog(reports[index], _scaffoldKey);
                                     });
                               },
                               child: Text("TIP"),

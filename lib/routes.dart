@@ -1,3 +1,4 @@
+import 'package:emrals/screens/leaderboard.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/screens/home_screen.dart';
 import 'package:emrals/screens/login_screen.dart';
@@ -13,6 +14,7 @@ final routes = {
   '/home': (BuildContext context) => MyHomePage(),
   '/settings': (BuildContext context) => Settingg(),
   '/camera': (BuildContext context) => CameraApp(),
+  '/leaderboard': (BuildContext context) => LeaderBoard(),
   //'/contacts': (BuildContext context) => Contacts(),
   '/map': (BuildContext context) => MapPage(),
   '/': (BuildContext context) => LoginScreen(),

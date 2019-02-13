@@ -50,7 +50,8 @@ class _ZoneList extends State<ZoneListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    zones.retainWhere((z) => z.city.toLowerCase().contains(searchTerm.toLowerCase()));
+    zones.retainWhere(
+        (z) => z.city.toLowerCase().contains(searchTerm.toLowerCase()));
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       floatingActionButton: FloatingActionButton(
@@ -77,10 +78,14 @@ class _ZoneList extends State<ZoneListWidget> {
                         decoration: InputDecoration(
                           labelText: "Search...",
                           labelStyle: TextStyle(color: Colors.white30),
-                          contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                          border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
-                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white)),
                         ),
                         onChanged: (s) {
                           setState(() {
@@ -153,110 +158,128 @@ class ZoneListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: IntrinsicHeight(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Stack(
-                children: <Widget>[
-                  CachedNetworkImage(
-                    placeholder: Image.asset(
-                      'assets/placeholder.png',
-                      fit: BoxFit.cover,
-                    ),
-                    imageUrl: zone.image,
-                    errorWidget: Icon(Icons.error),
-                  ),
-                  CachedNetworkImage(
-                    height: 30,
-                    imageUrl: zone.flag,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 10),
-                  Text(
-                    zone.city,
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: emralsColor().shade50),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Image.asset("assets/JustElogo.png",
-                          width: 20, height: 20),
-                      SizedBox(width: 5),
-                      Text(
-                        "${zone.emralsAmount} emrals",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.favorite,
-                        color: emralsColor()[1000],
-                        size: 20,
+    return Column(
+      children: <Widget>[
+        InkWell(
+          onTap: () {},
+          child: IntrinsicHeight(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Stack(
+                    children: <Widget>[
+                      CachedNetworkImage(
+                        placeholder: Image.asset(
+                          'assets/placeholder.png',
+                          fit: BoxFit.cover,
+                        ),
+                        imageUrl: zone.image,
+                        errorWidget: Icon(Icons.error),
                       ),
-                      SizedBox(width: 5),
-                      Text(
-                        "${zone.subscriberCount} sponsors",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
+                      CachedNetworkImage(
+                        height: 30,
+                        imageUrl: zone.flag,
+                      ),
                     ],
                   ),
-                  SizedBox(height: 3),
-                  Row(
-                    children: [
-                      Image.asset("assets/trophy.png",
-                          width: 20, height: 20, color: emralsColor()[1400]),
-                      SizedBox(width: 5),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 10),
                       Text(
-                        "${zone.emralsAmount} emrals",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  RaisedButton(
-                      padding: EdgeInsets.zero,
-                      shape: StadiumBorder(),
-                      color: emralsColor()[1000],
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
+                        zone.city,
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: emralsColor().shade50),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        zone.emralsAddress,
+                        style: TextStyle(
+                            fontSize: 8,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey),
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Image.asset("assets/greene.png",
+                              width: 18, height: 18),
+                          SizedBox(width: 5),
+                          Text(
+                            "${zone.emralsAmount} emrals",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 3),
+                      Row(
+                        children: [
                           Icon(
                             Icons.favorite,
-                            color: Colors.white,
+                            color: emralsColor()[1000],
                             size: 20,
                           ),
-                          SizedBox(
-                            width: 5,
-                          ),
+                          SizedBox(width: 5),
                           Text(
-                            "FUND",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                            "${zone.subscriberCount} sponsors",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
                         ],
-                      ))
-                ],
-              ),
-            )
-          ],
+                      ),
+                      SizedBox(height: 3),
+                      Row(
+                        children: [
+                          Image.asset("assets/trophy.png",
+                              width: 20,
+                              height: 20,
+                              color: emralsColor()[1400]),
+                          SizedBox(width: 5),
+                          Text(
+                            "${zone.cleanupCount} cleanups",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      RaisedButton(
+                          padding: EdgeInsets.zero,
+                          shape: StadiumBorder(),
+                          color: emralsColor()[1000],
+                          onPressed: () {},
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.favorite,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "FUND",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
+        Container(
+          height: 10,
+          color: Colors.black,
+        )
+      ],
     );
   }
 }

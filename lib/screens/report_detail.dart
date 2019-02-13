@@ -42,6 +42,7 @@ class ReportDetailState extends State<ReportDetail> {
                 children: <Widget>[
                   CachedNetworkImage(
                     imageUrl: widget.report.thumbnail,
+                    placeholder: AspectRatio(aspectRatio: 1),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,

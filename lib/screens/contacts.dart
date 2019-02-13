@@ -2,7 +2,6 @@ import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
-import 'package:simple_permissions/simple_permissions.dart';
 
 class Contacts extends StatefulWidget {
   @override

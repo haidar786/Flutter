@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:emrals/data/stats_api.dart';
-import 'package:emrals/models/exchange_crex24_model.dart';
+import 'package:emrals/models/stats_exchange_model.dart';
 import 'package:emrals/models/stats_model.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-//import 'package:intl/intl.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Stats extends StatefulWidget {
@@ -26,11 +26,9 @@ launchURL(url) async {
 }
 
 class StatsState extends State<Stats> {
-  final StatsApi _statsApi = StatsApi();
-  /* String lastBlockTime = '';
-  int blockHeight; */
+  StatsApi _statsApi = StatsApi();
   StatsModel stats;
-  Crex24Model crex24data;
+  StatsExchangeModel crex24data;
   int connectionCount;
   double networkHashRate;
   double moneySupply;
@@ -38,65 +36,7 @@ class StatsState extends State<Stats> {
   int blockHeight;
   String lastBlockTime;
   double mnWorth;
-
-  @override
-  void initState() {
-    updateStats();
-    super.initState();
-  }
-
-  /* Future updateStats() async {
-    final response =
-        await http.get('http://explorer.emrals.com/ext/getlasttxs/1/1');
-
-    if (response.statusCode == 200) {
-      var date = new DateTime.fromMillisecondsSinceEpoch(
-          json.decode(response.body)['data'][0]['timestamp'] * 1000);
-      var now = new DateTime.now();
-      Duration difference = now.difference(date);
-      if (!mounted) return;
-      setState(() {
-        this.lastBlockTime = difference.inMinutes.toString() + "m ";
-        this.blockHeight = json.decode(response.body)['data'][0]['blockindex'];
-      });
-    } else {
-      throw Exception('Failed to update');
-    }
-  } */
-
-  Future updateStats() async {
-    if (!mounted) return;
-    setState(() {
-      _statsApi.getStats().then((stats) {
-        this.stats = stats;
-      });
-      _statsApi.getCrex24Data().then((data) {
-        this.crex24data = data;
-      });
-      /* 
-      _statsApi.getConnectionCount().then((connectionCount) {
-        this.connectionCount = connectionCount;
-      });
-      _statsApi.getNetworkHashRate().then((hashRate) {
-        this.networkHashRate = hashRate;
-      });
-      _statsApi.getMoneySupply().then((moneySupply) {
-        this.moneySupply = moneySupply;
-      });
-      _statsApi.getDifficulty().then((difficulty) {
-        this.difficulty = difficulty;
-      });
-      _statsApi.getBlockHeight().then((blockHeight) {
-        this.blockHeight = blockHeight;
-      });
-      _statsApi.getLastBlockTime().then((blockTime) {
-        this.lastBlockTime = blockTime;
-      });
-      _statsApi.getMNWorth().then((mnWorth) {
-        this.mnWorth = mnWorth;
-      }); */
-    });
-  }
+  NumberFormat formatter = NumberFormat('#,###');
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +68,8 @@ class StatsState extends State<Stats> {
                   ),
                   CountDownText(
                     onUpdate: () {
+                      print('Countdown finished');
+                      _statsApi = StatsApi();
                       if (!mounted) return;
                       setState(() {});
                     },
@@ -161,18 +103,6 @@ class StatsState extends State<Stats> {
                 ),
               ),
             ),
-            /* Row(
-              children: <Widget>[
-                Text("Last Block: "),
-                Text(lastBlockTime),
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Text("Block Height: "),
-                Text(blockHeight.toString()),
-              ],
-            ), */
           ],
         ),
       ),
@@ -182,442 +112,591 @@ class StatsState extends State<Stats> {
   Widget _statsRow1(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: Row(
-        children: <Widget>[
-          // Box containing city count, country count, cleanups,
-          // reports, users, emralds won and emralds added
-          Expanded(
-            flex: 2,
-            child: Container(
-              height: 170,
-              color: Colors.black,
-              padding: EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
+      child: FutureBuilder(
+        future: _statsApi.getStats(),
+        builder: (context, snapshot) {
+          StatsModel data = snapshot.data;
+          return AnimatedCrossFade(
+            duration: Duration(milliseconds: 300),
+            crossFadeState: snapshot.connectionState == ConnectionState.done
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            firstChild: Row(
+              children: <Widget>[
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    height: 170,
+                    color: Colors.black,
+                    padding: EdgeInsets.all(8),
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(emralsColor()),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: 170,
+                    color: Colors.black,
+                    padding: EdgeInsets.all(8),
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(emralsColor()),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            secondChild: !snapshot.hasData || snapshot.hasError
+                ? Row(
                     children: <Widget>[
+                      // Box containing city count, country count, cleanups,
+                      // reports, users, emralds won and emralds added
                       Expanded(
+                        flex: 2,
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          decoration: BoxDecoration(
-                            color: emralsColor(),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Center(
-                            child: Text(
-                              //'${stats != null ? formatter.format(stats.cities) : 0} Cities',
-                              '${stats != null ? stats.cities : 0} Cities',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
+                          height: 170,
+                          color: Colors.black,
+                          padding: EdgeInsets.all(8),
+                          child: Icon(
+                            FontAwesomeIcons.exclamationTriangle,
+                            color: emralsColor()[1300],
                           ),
                         ),
                       ),
                       SizedBox(width: 8),
                       Expanded(
+                        flex: 1,
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 4),
-                          decoration: BoxDecoration(
-                            color: emralsColor(),
-                            borderRadius: BorderRadius.circular(4),
+                          height: 170,
+                          color: Colors.black,
+                          padding: EdgeInsets.all(8),
+                          child: Icon(
+                            FontAwesomeIcons.exclamationTriangle,
+                            color: emralsColor()[1300],
                           ),
-                          child: Center(
-                            child: Text(
-                              '${stats != null ? stats.countries : 0} Countries',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
+                        ),
+                      )
+                    ],
+                  )
+                : Row(
+                    children: <Widget>[
+                      // Box containing city count, country count, cleanups,
+                      // reports, users, emralds won and emralds added
+                      Expanded(
+                        flex: 2,
+                        child: Container(
+                          height: 170,
+                          color: Colors.black,
+                          padding: EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: emralsColor(),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${formatter.format(data.cities)} Cities',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 8),
+                                  Expanded(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: emralsColor(),
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${formatter.format(data.countries)} Countries',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Text(
+                                            'Cleanups',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            '${formatter.format(data.cleanups)}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor(),
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Text(
+                                            'Reports',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            '${formatter.format(data.reports)}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor(),
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Text(
+                                            'Users',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            '${formatter.format(data.users)}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor(),
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Text(
+                                            'Emrals Won',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            '${formatter.format(data.emralsWon)}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor(),
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Text(
+                                            'Emrals Added',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            '${formatter.format(data.emralsAdded)}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor(),
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        flex: 1,
+                        child: Container(
+                          height: 170,
+                          color: Colors.black,
+                          padding: EdgeInsets.all(8),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.symmetric(vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: emralsColor(),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${formatter.format(data.eCans)} eCans',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          '${formatter.format(data.tosses)}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: emralsColor(),
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        Text(
+                                          'Tosses',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          '${formatter.format(data.scans)}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: emralsColor(),
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        Text(
+                                          'Scans',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          '${formatter.format(data.barcodes)}',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: emralsColor(),
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                        Text(
+                                          'Barcodes',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Cleanups',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                '${stats != null ? stats.cleanups : 0}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: emralsColor(),
-                                ),
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Reports',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                '${stats != null ? stats.reports : 0}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: emralsColor(),
-                                ),
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Users',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                '${stats != null ? stats.users : 0}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: emralsColor(),
-                                ),
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Emrals Won',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                //'${stats != null ? formatter.format(stats.emralsWon) : 0}',
-                                '${stats != null ? stats.emralsWon : 0}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: emralsColor(),
-                                ),
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Emrals Added',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                //'${stats != null ? formatter.format(stats.emralsAdded) : 0}',
-                                '${stats != null ? stats.emralsAdded : 0}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: emralsColor(),
-                                ),
-                                textAlign: TextAlign.end,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          SizedBox(width: 8),
-          Expanded(
-            flex: 1,
-            child: Container(
-              height: 170,
-              color: Colors.black,
-              padding: EdgeInsets.all(8),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 4),
-                    decoration: BoxDecoration(
-                      color: emralsColor(),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${stats != null ? stats.eCans : 0} eCans',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              '${stats != null ? stats.tosses : 0}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: emralsColor(),
-                              ),
-                              textAlign: TextAlign.end,
-                            ),
-                            Text(
-                              'Tosses',
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              '${stats != null ? stats.scans : 0}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: emralsColor(),
-                              ),
-                              textAlign: TextAlign.end,
-                            ),
-                            Text(
-                              'Scans',
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: <Widget>[
-                            Text(
-                              //'${stats != null ? formatter.format(stats.barcodes) : 0}',
-                              '${stats != null ? stats.barcodes : 0}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: emralsColor(),
-                              ),
-                              textAlign: TextAlign.end,
-                            ),
-                            Text(
-                              'Barcodes',
-                              style: TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
+          );
+        },
       ),
     );
   }
 
   Widget _statsRow2(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      child: Row(
-        children: <Widget>[
-          // Box containing exchanges and the current price information
-          Expanded(
-            flex: 2,
-            child: Container(
-              height: 150,
-              color: Colors.black,
-              padding: EdgeInsets.all(8),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
+        padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+        child: FutureBuilder(
+          future: _statsApi.getCrex24Data(),
+          builder: (context, AsyncSnapshot<StatsExchangeModel> snapshot) {
+            StatsExchangeModel data = snapshot.data;
+            return AnimatedCrossFade(
+              duration: Duration(milliseconds: 300),
+              crossFadeState: snapshot.connectionState == ConnectionState.done
+                  ? CrossFadeState.showSecond
+                  : CrossFadeState.showFirst,
+              firstChild: Row(
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 4),
-                    decoration: BoxDecoration(
-                      color: emralsColor()[1400],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Exchanges',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      height: 150,
+                      color: Colors.black,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(emralsColor()),
                       ),
                     ),
                   ),
-                  SizedBox(height: 8),
-                  GestureDetector(
-                    onTap: () {
-                      launchURL(
-                          'https://crex24.com/exchange/EMRALS-BTC?refid=zx68hvlsd2yucxvl7gkw');
-                    },
-                    child: Text(
-                      'Crex24',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontSize: 20,
+                  SizedBox(width: 8),
+                  Expanded(
+                    flex: 5,
+                    child: Container(
+                      height: 150,
+                      color: Colors.black,
+                      alignment: Alignment.center,
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(emralsColor()),
                       ),
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
-          SizedBox(width: 8),
-          Expanded(
-            flex: 5,
-            child: Container(
-              height: 150,
-              color: Colors.black,
-              padding: EdgeInsets.all(8),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 4),
-                    decoration: BoxDecoration(
-                      color: emralsColor()[1400],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Price',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Row(
+              secondChild: !snapshot.hasData || snapshot.hasError
+                  ? Row(
                       children: <Widget>[
                         Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: <Widget>[
-                              Text(
-                                '\$${crex24data != null ? crex24data.last.toStringAsFixed(5) : 0}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w800,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              Text(
-                                '${crex24data != null ? crex24data.percentChange.toStringAsFixed(2) : 0}%',
-                                style: TextStyle(
-                                  color: emralsColor(),
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                //'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
-                                'Vol. ${crex24data != null ? crex24data.volume : 0}',
-                                style: TextStyle(
-                                  color: emralsColor()[1400],
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                'EMRALS'.toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                ),
-                              )
-                            ],
+                          flex: 2,
+                          child: Container(
+                            height: 150,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(8),
+                            child: Icon(
+                              FontAwesomeIcons.exclamationTriangle,
+                              color: emralsColor()[1300],
+                            ),
                           ),
                         ),
                         SizedBox(width: 8),
                         Expanded(
-                          flex: 1,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: <Widget>[
-                              _row2NameValueWidget(context,
-                                  name: 'High',
-                                  value: crex24data != null
-                                      ? crex24data.high.toStringAsFixed(5)
-                                      : '0'),
-                              _row2NameValueWidget(context,
-                                  name: 'Low',
-                                  value: crex24data != null
-                                      ? crex24data.low.toStringAsFixed(5)
-                                      : '0'),
-                              _row2NameValueWidget(context,
-                                  name: 'Bid',
-                                  value: crex24data != null
-                                      ? crex24data.bid.toStringAsFixed(5)
-                                      : '0'),
-                              _row2NameValueWidget(context,
-                                  name: 'Ask',
-                                  value: crex24data != null
-                                      ? crex24data.ask.toStringAsFixed(5)
-                                      : '0'),
-                            ],
+                          flex: 5,
+                          child: Container(
+                            height: 150,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(8),
+                            child: Icon(
+                              FontAwesomeIcons.exclamationTriangle,
+                              color: emralsColor()[1300],
+                            ),
                           ),
-                        )
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: <Widget>[
+                        // Box containing exchanges and the current price information
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            height: 150,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: emralsColor()[1400],
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Exchanges',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                GestureDetector(
+                                  onTap: () {
+                                    launchURL(
+                                        'https://crex24.com/exchange/EMRALS-BTC?refid=zx68hvlsd2yucxvl7gkw');
+                                  },
+                                  child: Text(
+                                    'Crex24',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        Expanded(
+                          flex: 5,
+                          child: Container(
+                            height: 150,
+                            color: Colors.black,
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  padding: EdgeInsets.symmetric(vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: emralsColor()[1400],
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'Price',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Row(
+                                    children: <Widget>[
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: <Widget>[
+                                            Text(
+                                              '\$${data.last.toStringAsFixed(5)}',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 18,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${data.percentChange.toStringAsFixed(2)}%',
+                                              style: TextStyle(
+                                                color: emralsColor(),
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              //'Vol. ${crex24data != null ? formatter.format(crex24data.volume) : 0}',
+                                              'Vol. ${data.volume.toStringAsFixed(3)}',
+                                              style: TextStyle(
+                                                color: emralsColor()[1400],
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              'EMRALS'.toUpperCase(),
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: <Widget>[
+                                            _row2NameValueWidget(context,
+                                                name: 'High',
+                                                value: data.high
+                                                    .toStringAsFixed(5)),
+                                            _row2NameValueWidget(context,
+                                                name: 'Low',
+                                                value: data.low
+                                                    .toStringAsFixed(5)),
+                                            _row2NameValueWidget(context,
+                                                name: 'Bid',
+                                                value: data.bid
+                                                    .toStringAsFixed(5)),
+                                            _row2NameValueWidget(context,
+                                                name: 'Ask',
+                                                value: data.ask
+                                                    .toStringAsFixed(5)),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+            );
+          },
+        ));
   }
 
   Widget _row2NameValueWidget(BuildContext context,
@@ -661,12 +740,19 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      FutureBuilder(
-                        future: _statsApi.getBlockHeight(),
+                      StreamBuilder(
+                        stream: _statsApi.getBlockHeight(),
                         initialData: '-',
                         builder: (context, snapshot) {
+                          String value;
+                          if (snapshot.hasData &&
+                              snapshot.connectionState !=
+                                  ConnectionState.waiting &&
+                              snapshot.data != '-') {
+                            value = formatter.format(double.parse(snapshot.data));
+                          }
                           return Text(
-                            '${snapshot.data ?? '-'}',
+                            '${value ?? '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -693,12 +779,15 @@ class StatsState extends State<Stats> {
                         initialData: '-',
                         builder: (context, snapshot) {
                           String value;
-                          if (snapshot.data != '-') {
-                            value = (snapshot.data / (pow(10, 9)))
-                                .toStringAsFixed(1);
+                          if (snapshot.hasData &&
+                              snapshot.connectionState !=
+                                  ConnectionState.waiting) {
+                            value = formatter.format(double.parse(
+                                (snapshot.data / (pow(10, 9)))
+                                    .toStringAsFixed(1)));
                           }
                           return Text(
-                            '${value ?? snapshot.data}GH/S',
+                            '${value ?? '-'}GH/S',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -724,7 +813,7 @@ class StatsState extends State<Stats> {
                         future: _statsApi.getDifficulty(),
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData ? snapshot.data.toStringAsFixed(2) : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(2))) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -779,7 +868,7 @@ class StatsState extends State<Stats> {
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '\$${snapshot.data ?? '-'}',
+                            '\$${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(snapshot.data) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -806,7 +895,7 @@ class StatsState extends State<Stats> {
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.data != '-' ? snapshot.data.toStringAsFixed(0) : snapshot.data ?? '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(0))) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -840,7 +929,7 @@ class StatsState extends State<Stats> {
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.data ?? '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(snapshot.data) : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -883,12 +972,12 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      FutureBuilder(
-                        future: _statsApi.getLastBlockTime(),
+                      StreamBuilder(
+                        stream: _statsApi.getLastBlockTime(),
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.data ?? '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? snapshot.data : '-'}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -1006,7 +1095,8 @@ class CountDownText extends StatefulWidget {
 
 class _CountDownTextState extends State<CountDownText> {
   StreamSubscription periodicSub;
-  int countdown = 100;
+  static const int updateInterval = 100; // in seconds
+  int countdown = updateInterval;
 
   @override
   void dispose() {
@@ -1019,11 +1109,11 @@ class _CountDownTextState extends State<CountDownText> {
     periodicSub = periodicSub ??
         Stream.periodic(const Duration(seconds: 1), (v) => v).listen(
           (count) {
-            if (count % 100 == 0) {
+            if (count % updateInterval == 0 && count != 0) {
               widget.onUpdate();
-              countdown = 100;
+              countdown = updateInterval;
             } else {
-              countdown = 100 - (count % 100);
+              countdown = updateInterval - (count % updateInterval);
             }
             if (!mounted) return;
             setState(() {});

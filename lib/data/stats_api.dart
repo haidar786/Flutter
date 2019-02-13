@@ -1,5 +1,7 @@
 //
-import 'package:emrals/models/exchange_crex24_model.dart';
+import 'dart:async';
+
+import 'package:emrals/models/stats_exchange_model.dart';
 import 'package:emrals/models/stats_model.dart';
 import 'package:http/http.dart' show Client;
 import 'dart:convert';
@@ -21,8 +23,6 @@ class StatsApi {
 
   String lastBlockTime;
   int blockHeight;
-  double crex24Worth;
-  Crex24Model crex24Data;
 
   Future<StatsModel> getStats() async {
     print('fetching stats');
@@ -38,47 +38,72 @@ class StatsApi {
     return stats;
   }
 
-  Future<Crex24Model> getCrex24Data({bool force = false}) async {
-    if (crex24Data == null || force) {
-      Crex24Model data;
-      print('fetching Crex24 data');
-      Crex24Model btcData;
-      double usdValue;
-      await _client
-          .get(Uri.parse(_crex24Url))
-          .then((result) => result.body)
-          .then(json.decode)
-          .then(
-        (json) {
-          data = Crex24Model.fromJson(json[0]);
-          crex24Worth = json[0]['last'] * 1000;
-        },
-      );
+  Future<StatsExchangeModel> getCrex24Data() async {
+    // double crex24Worth;
+    // StatsExchangeModel crex24Data;
 
-      await _client
-          .get(Uri.parse(_crex24BtcUrl))
-          .then((result) => result.body)
-          .then(json.decode)
-          .then(
-        (json) {
-          btcData = Crex24Model.fromJson(json[0]);
-          usdValue = btcData.last;
-          crex24Worth = crex24Worth * usdValue;
-        },
-      );
+    // StatsExchangeModel data;
+    print('fetching Crex24 data');
+    // StatsExchangeModel btcData;
+    //double usdValue;
 
-      crex24Data = Crex24Model(
-        ask: data.ask * usdValue,
-        bid: data.bid * usdValue,
-        high: data.high * usdValue,
-        last: data.last * usdValue,
-        low: data.low * usdValue,
-        percentChange: data.percentChange,
-        volume: data.volume,
-      );
-    }
+    List<String> urls = [_crex24BtcUrl, _crex24Url];
 
-    return crex24Data;
+    List<dynamic> mnWorthList = await Future.wait(
+      urls.map(
+        (url) =>
+            _client.get(url).then((result) => result.body).then(json.decode),
+      ),
+    );
+
+    double usdValue = mnWorthList[0][0]['last'];
+    Map oldJson = mnWorthList[1][0];
+    Map newJson = {
+      'last': oldJson['last'] * usdValue,
+      'percentChange': oldJson['percentChange'],
+      'baseVolume': (oldJson['baseVolume'] * usdValue),
+      'high': oldJson['high'] * usdValue,
+      'low': oldJson['low'] * usdValue,
+      'bid': oldJson['bid'] * usdValue,
+      'ask': oldJson['ask'] * usdValue
+    };
+
+    return StatsExchangeModel.fromJson(newJson);
+
+    /* await _client
+        .get(Uri.parse(_crex24Url))
+        .then((result) => result.body)
+        .then(json.decode)
+        .then(
+      (json) {
+        data = StatsExchangeModel.fromJson(json[0]);
+        crex24Worth = json[0]['last'] * 1000;
+      },
+    ).then((_) {});
+
+    await _client
+        .get(Uri.parse(_crex24BtcUrl))
+        .then((result) => result.body)
+        .then(json.decode)
+        .then(
+      (json) {
+        btcData = StatsExchangeModel.fromJson(json[0]);
+        usdValue = btcData.last;
+        crex24Worth = crex24Worth * usdValue;
+      },
+    );
+
+    crex24Data = StatsExchangeModel(
+      ask: data.ask * usdValue,
+      bid: data.bid * usdValue,
+      high: data.high * usdValue,
+      last: data.last * usdValue,
+      low: data.low * usdValue,
+      percentChange: data.percentChange,
+      volume: data.volume,
+    );
+
+    return crex24Data; */
   }
 
   Future<int> getConnectionCount() async {
@@ -131,24 +156,44 @@ class StatsApi {
   }
 
   Future<double> getMNWorth() async {
-    if (this.crex24Worth == null) {
-      getCrex24Data(force: true);
-    }
-    return this.crex24Worth;
+    double mnWorth;
+    List<String> urls = [_crex24Url, _crex24BtcUrl];
+
+    List<double> mnWorthList = await Future.wait(urls.map(
+      (url) => _client
+          .get(url)
+          .then((result) => result.body)
+          .then(json.decode)
+          .then((json) => json[0]['last'] as double),
+    ));
+
+    mnWorth = mnWorthList[0] * mnWorthList[1] * 1000;
+
+    return mnWorth;
   }
 
-  Future<String> getLastBlockTime() async {
+  Stream<String> getLastBlockTime() {
+    StreamController<String> streamController = new StreamController();
+    streamController.add('-');
     if (this.lastBlockTime == null) {
-      _updateStats();
+      _updateStats().then((_) {
+        streamController.add(this.lastBlockTime);
+        streamController.close();
+      });
     }
-    return this.lastBlockTime;
+    return streamController.stream;
   }
 
-  Future<int> getBlockHeight() async {
+  Stream<String> getBlockHeight() {
+    StreamController<String> streamController = new StreamController();
+    streamController.add('-');
     if (this.blockHeight == null) {
-      _updateStats();
+      _updateStats().then((_) {
+        streamController.add('${this.blockHeight}');
+        streamController.close();
+      });
     }
-    return this.blockHeight;
+    return streamController.stream;
   }
 
   Future _updateStats() async {

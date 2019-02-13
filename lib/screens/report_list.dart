@@ -164,35 +164,52 @@ class _ReportList extends State<ReportListWidget> {
                               ),
                             ),
                             Expanded(
-                              child: Container(
-                                child: RichText(
-                                  //textAlign: TextAlign.right,
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15.0,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: reports[index].posterUsername,
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    child: RichText(
+                                      //textAlign: TextAlign.right,
+                                      text: TextSpan(
                                         style: TextStyle(
-                                            color: emralsColor(),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      TextSpan(
-                                        text: reports[index].solution != ''
-                                            ? ' cleans #${reports[index].id} '
-                                            : ' reports #${reports[index].id} ',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black,
+                                          fontSize: 15.0,
                                         ),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                            text: reports[index].posterUsername,
+                                            style: TextStyle(
+                                                color: emralsColor(),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          TextSpan(
+                                            text: reports[index].solution != ''
+                                                ? ' cleans #${reports[index].id} '
+                                                : ' reports #${reports[index].id} ',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: reports[index].title,
+                                          ),
+                                        ],
                                       ),
-                                      TextSpan(
-                                        text: reports[index].title,
+                                    ),
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.calendar_today,
+                                        color: Colors.yellow.shade700,
+                                        size: 20,
                                       ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(reports[index].timeAgo),
                                     ],
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                             Column(

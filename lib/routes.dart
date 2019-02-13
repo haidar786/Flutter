@@ -4,7 +4,7 @@ import 'package:emrals/screens/login_screen.dart';
 import 'package:emrals/screens/signup_screen.dart';
 import 'package:emrals/screens/settings.dart';
 import 'package:emrals/screens/camera.dart';
-import 'package:emrals/screens/contacts.dart';
+//import 'package:emrals/screens/contacts.dart';
 import 'package:emrals/screens/map.dart';
 
 final routes = {
@@ -13,7 +13,7 @@ final routes = {
   '/home': (BuildContext context) => MyHomePage(),
   '/settings': (BuildContext context) => Settingg(),
   '/camera': (BuildContext context) => CameraApp(),
-  '/contacts': (BuildContext context) => Contacts(),
+  //'/contacts': (BuildContext context) => Contacts(),
   '/map': (BuildContext context) => MapPage(),
   '/': (BuildContext context) => LoginScreen(),
 };

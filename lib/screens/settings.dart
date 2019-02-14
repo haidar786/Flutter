@@ -5,7 +5,7 @@ import 'package:emrals/models/user.dart';
 import 'package:flutter/services.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
-import 'package:barcode_scan/barcode_scan.dart';
+//import 'package:barcode_scan/barcode_scan.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -31,26 +31,26 @@ class _SettingsPage extends State<Settingg> {
     super.dispose();
   }
 
-  Future scan() async {
-    try {
-      String barcode = await BarcodeScanner.scan();
-      setState(() => walletAddressController.text = barcode);
-    } on PlatformException catch (e) {
-      if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          walletAddressController.text =
-              'The user did not grant the camera permission!';
-        });
-      } else {
-        setState(() => walletAddressController.text = 'Unknown error: $e');
-      }
-    } on FormatException {
-      setState(() => walletAddressController.text =
-          'null (User returned using the "back"-button before scanning anything. Result)');
-    } catch (e) {
-      setState(() => walletAddressController.text = 'Unknown error: $e');
-    }
-  }
+  // Future scan() async {
+  //   try {
+  //     String barcode = await BarcodeScanner.scan();
+  //     setState(() => walletAddressController.text = barcode);
+  //   } on PlatformException catch (e) {
+  //     if (e.code == BarcodeScanner.CameraAccessDenied) {
+  //       setState(() {
+  //         walletAddressController.text =
+  //             'The user did not grant the camera permission!';
+  //       });
+  //     } else {
+  //       setState(() => walletAddressController.text = 'Unknown error: $e');
+  //     }
+  //   } on FormatException {
+  //     setState(() => walletAddressController.text =
+  //         'null (User returned using the "back"-button before scanning anything. Result)');
+  //   } catch (e) {
+  //     setState(() => walletAddressController.text = 'Unknown error: $e');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

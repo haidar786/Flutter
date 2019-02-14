@@ -31,17 +31,12 @@ class _MyAppState extends State<MapPage> {
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    mapController.onMarkerTapped.add(
-      (m) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) => ReportDetail(
-                  report: reports[m.options.zIndex.toInt(),],
-                ),
-          ),
-        );
-      },
-    );
+    mapController.onMarkerTapped.add((m) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (ctx) => ReportDetail(
+                report: reports[m.options.zIndex.toInt()],
+              )));
+    });
     refresh();
   }
 

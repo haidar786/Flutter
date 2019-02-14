@@ -20,6 +20,7 @@ class ReportDetail extends StatefulWidget {
 
 class ReportDetailState extends State<ReportDetail> {
   User user;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
   void initState() {
@@ -34,6 +35,7 @@ class ReportDetailState extends State<ReportDetail> {
     return PageView.builder(
       itemBuilder: (context, position) {
         return Scaffold(
+          key: scaffoldKey,
           appBar: AppBar(
             title: Text("Report Detail"),
           ),
@@ -204,7 +206,7 @@ class ReportDetailState extends State<ReportDetail> {
                       showDialog(
                           context: context,
                           builder: (ctx) {
-                            return TipDialog(widget.report);
+                            return TipDialog(widget.report, scaffoldKey);
                           });
                     },
                     label: Text(
@@ -290,7 +292,9 @@ class ReportDetailState extends State<ReportDetail> {
 
 class TipDialog extends StatelessWidget {
   final Report report;
-  TipDialog(this.report);
+  final GlobalKey<ScaffoldState> scaffoldKey;
+
+  TipDialog(this.report, this.scaffoldKey);
 
   @override
   Widget build(BuildContext context) {
@@ -310,10 +314,11 @@ class TipDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                EmralsTipCircleButton(10, Colors.purple, report),
+                EmralsTipCircleButton(10, Colors.purple, report, scaffoldKey),
                 EmralsTipCircleButton(
-                    50, Theme.of(context).accentColor, report),
-                EmralsTipCircleButton(100, Colors.cyan.shade600, report),
+                    50, Theme.of(context).accentColor, report, scaffoldKey),
+                EmralsTipCircleButton(
+                    100, Colors.cyan.shade600, report, scaffoldKey),
               ],
             )
           ],
@@ -327,8 +332,9 @@ class EmralsTipCircleButton extends StatelessWidget {
   final int number;
   final Color color;
   final Report report;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  EmralsTipCircleButton(this.number, this.color, this.report);
+  EmralsTipCircleButton(this.number, this.color, this.report, this.scaffoldKey);
 
   @override
   Widget build(BuildContext context) {
@@ -340,59 +346,17 @@ class EmralsTipCircleButton extends StatelessWidget {
               Navigator.of(context).pop();
               report.reportEmralsAmount =
                   (double.parse(report.reportEmralsAmount) + number).toString();
-              showDialog(
-                  context: context,
-                  builder: (ctx) {
-                    return AlertDialog(
-                      content: SingleChildScrollView(
-                        child: ListBody(
-                          children: <Widget>[
-                            Text(m['message']),
-                          ],
-                        ),
-                      ),
-                      actions: <Widget>[
-                        FlatButton(
-                          child: Text('OK'),
-                          onPressed: () {
-                            Navigator.of(ctx).pop();
-                          },
-                        ),
-                      ],
-                    );
-                  });
+              scaffoldKey.currentState
+                  .showSnackBar(SnackBar(content: Text(m['message'])));
             });
           } else {
-            showDialog(
-                context: context,
-                builder: (ctx) {
-                  return AlertDialog(
-                    title: Text('Insufficient Balance'),
-                    content: SingleChildScrollView(
-                      child: ListBody(
-                        children: <Widget>[
-                          Text('Deposit Emrals to Tip'),
-                        ],
-                      ),
-                    ),
-                    actions: <Widget>[
-                      FlatButton(
-                        child: Text('Later'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      FlatButton(
-                        child: Text('Deposit'),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacementNamed("/settings");
-                        },
-                      ),
-                    ],
-                  );
-                });
+            scaffoldKey.currentState.showSnackBar(SnackBar(
+              content: Text("Insufficient ballance"),
+              action: SnackBarAction(
+                  label: "Deposit",
+                  onPressed: () =>
+                      Navigator.of(context).pushReplacementNamed("/settgins")),
+            ));
           }
         });
       },

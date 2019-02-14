@@ -1,3 +1,4 @@
+import 'package:emrals/screens/leaderboard.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
@@ -196,6 +197,9 @@ class _SettingsPage extends State<Settingg> {
                               ),
                             ),
                           ),
+                          FlatButton(onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (ctx) => LeaderBoard(currentUser: _userObject,)));
+                          }, child: Text("Leaderboard")),
                           SizedBox(
                             height: 10,
                           ),

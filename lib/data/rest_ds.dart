@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/styles.dart';
+import 'dart:math';
 
 class RestDatasource {
   NetworkUtil _netUtil = NetworkUtil();
@@ -94,7 +95,7 @@ class RestDatasource {
     });
   }
 
-  Future<bool> inviteUser(String email, String token) async{
+  Future<bool> inviteUser(String email, String token) async {
     Map<String, String> payload = {
       "email": email,
     };
@@ -104,6 +105,26 @@ class RestDatasource {
       "Content-type": "application/json"
     };
 
-    return _netUtil.post(inviteURL, headers: headers, body: json.encoder.convert(payload)).then((b) => true, onError: (e) => false);
+    return _netUtil
+        .post(inviteURL, headers: headers, body: json.encoder.convert(payload))
+        .then((b) => true, onError: (e) => false);
+  }
+
+  // The user is only passed to test that the current user's position is
+  // correct and is highlighted properly.
+  Future<List<User>> getAllUsers(User user) async {
+    _netUtil.post(baseURL + "/leaderboard");
+    await Future.delayed(Duration(seconds: 1));
+    return List.generate(
+        100,
+        (i) => User(
+            "User $i",
+            "",
+            Random().nextInt(1000).toDouble(),
+            0,
+            "https://madeworthy.com/wp-content/uploads/2015/01/gravatar-logo-512.jpg",
+            0,
+            ""))
+      ..add(user);
   }
 }

@@ -27,15 +27,21 @@ class _MyAppState extends State<MapPage> {
 
   void onMarkerTapped(Marker m) {
     print(m.options.zIndex);
-    print("asd");
   }
-
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    mapController.onMarkerTapped.add((m) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (ctx) => ReportDetail(report: reports[m.options.zIndex.toInt()],)));
-    });
+    mapController.onMarkerTapped.add(
+      (m) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => ReportDetail(
+                  report: reports[m.options.zIndex.toInt(),],
+                ),
+          ),
+        );
+      },
+    );
     refresh();
   }
 
@@ -65,14 +71,17 @@ class _MyAppState extends State<MapPage> {
 
   void refresh() async {
     final center = await getUserLocation();
-    mapController.moveCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: center == null ? LatLng(0, 0) : center,
-          zoom: 15.0,
+    if (mapController != null) {
+      mapController.moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: center == null ? LatLng(0, 0) : center,
+            zoom: 15.0,
+          ),
         ),
-      ),
-    );
+      );
+    }
+
     if (widget.report != null) {
       mapController.addMarker(
         MarkerOptions(
@@ -101,6 +110,8 @@ class _MyAppState extends State<MapPage> {
           position: LatLng(report.latitude, report.longitude),
           consumeTapEvents: true,
           zIndex: reports.indexOf(report).toDouble(),
+          infoWindowText:
+              InfoWindowText(report.title, 'Report #' + report.id.toString()),
         ),
       );
     });

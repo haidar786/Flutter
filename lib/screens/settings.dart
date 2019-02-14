@@ -301,7 +301,7 @@ class _SettingsPage extends State<Settingg> {
                                     color: Colors.white,
                                     onPressed: () {
                                       print('scanning');
-                                      scan();
+                                      //scan();
                                     },
                                   ),
                                 ),

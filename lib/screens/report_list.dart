@@ -84,8 +84,7 @@ class _ReportList extends State<ReportListWidget> {
                           alignment: const Alignment(1, 1),
                           children: [
                             CachedNetworkImage(
-                              placeholder:
-                                  Image.asset('assets/placeholder.png'),
+                              placeholder: AspectRatio(aspectRatio: 1),
                               imageUrl: reports[index].solution != ''
                                   ? reports[index].solution
                                   : reports[index].thumbnail,
@@ -319,7 +318,8 @@ class _ReportList extends State<ReportListWidget> {
                                 showDialog(
                                     context: context,
                                     builder: (ctx) {
-                                      return TipDialog(reports[index], _scaffoldKey);
+                                      return TipDialog(
+                                          reports[index], _scaffoldKey);
                                     });
                               },
                               child: Text("TIP"),

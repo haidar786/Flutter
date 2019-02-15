@@ -19,33 +19,12 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
-  //double _emralsAmount = 0;
-  //User _emralsUser;
   final List<Widget> _children = [
     ReportListWidget(),
     CameraApp(),
     Stats(),
     ZoneListWidget(),
   ];
-
-  // @override
-  // initState() {
-  //   super.initState();
-  //   initUser();
-  // }
-
-  // initUser() async {
-  //   //User userObject;
-  //   var db = DatabaseHelper();
-  //   //userObject = await db.getUser();
-  //   globalUser = await db.getUser();
-
-  //   if (!mounted) return;
-  //   setState(() {
-  //     _emralsUser = globalUser;
-  //     //_emralsAmount = userObject.emrals;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

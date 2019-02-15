@@ -182,7 +182,8 @@ class _SettingsPage extends State<Settingg> {
                                 onTap: () {
                                   var db = DatabaseHelper();
                                   db.deleteUsers().then((_) {
-                                    Navigator.pushNamed(context, '/login');
+                                    Navigator.of(context)
+                                        .pushReplacementNamed("/login");
                                   });
                                 },
                                 child: Center(

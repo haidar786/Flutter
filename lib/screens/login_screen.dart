@@ -7,6 +7,7 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login_screen_presenter.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:emrals/globals.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -235,6 +236,7 @@ class LoginScreenState extends State<LoginScreen>
     _showSnackBar("logged in as " + user.username);
     setState(() => _isLoading = false);
     var db = DatabaseHelper();
+    globalUser = user;
     await db.saveUser(user);
     var authStateProvider = AuthStateProvider();
     authStateProvider.notify(AuthState.LOGGED_IN);

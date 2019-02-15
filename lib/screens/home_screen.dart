@@ -44,7 +44,7 @@ class _MyHomePage extends State<MyHomePage> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              formatter.format(globalUser == null ? '' : globalUser.emrals),
+              globalUser == null ? '' : formatter.format(globalUser.emrals),
               style: TextStyle(
                 color: emralsColor(),
                 fontSize: 24.0,

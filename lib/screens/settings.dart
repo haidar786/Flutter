@@ -150,6 +150,8 @@ class _SettingsPage extends State<Settingg> {
                                 elevation: 7.0,
                                 child: GestureDetector(
                                   onTap: () {
+                                    Navigator.pushNamed(context, '/contacts');
+
                                     // SimplePermissions.requestPermission(
                                     //         Permission.ReadContacts)
                                     //     .then((p) {

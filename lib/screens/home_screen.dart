@@ -8,6 +8,7 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/stats.dart';
 import 'package:emrals/styles.dart';
+import 'package:emrals/globals.dart';
 import 'package:intl/intl.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -20,7 +21,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
-  double _emralsAmount = 0;
+  //double _emralsAmount = 0;
+  User _emralsUser;
   final List<Widget> _children = [
     ReportListWidget(),
     CameraApp(),
@@ -35,13 +37,15 @@ class _MyHomePage extends State<MyHomePage> {
   }
 
   initUser() async {
-    User userObject;
+    //User userObject;
     var db = DatabaseHelper();
-    userObject = await db.getUser();
+    //userObject = await db.getUser();
+    globalUser = await db.getUser();
 
     if (!mounted) return;
     setState(() {
-      _emralsAmount = userObject.emrals;
+      _emralsUser = globalUser;
+      //_emralsAmount = userObject.emrals;
     });
   }
 
@@ -63,7 +67,8 @@ class _MyHomePage extends State<MyHomePage> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              formatter.format(_emralsAmount),
+              formatter
+                  .format(_emralsUser.emrals == null ? '' : _emralsUser.emrals),
               style: TextStyle(
                 color: emralsColor(),
                 fontSize: 24.0,

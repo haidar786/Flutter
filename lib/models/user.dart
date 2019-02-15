@@ -42,6 +42,17 @@ class User {
 
   double get emrals => _emrals;
 
+  // set emrals(double emrals) {
+  //   _emrals = emrals;
+  // }
+
+  set emrals(double value) {
+    if (value == null) {
+      throw new ArgumentError();
+    }
+    _emrals = value;
+  }
+
   Map<String, dynamic> toMap() {
     var map = Map<String, dynamic>();
     map["username"] = _username;

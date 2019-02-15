@@ -29,7 +29,7 @@ dependencies:
   sentry: any
   contacts_service: ^0.1.1
   #simple_permissions: ^0.1.9
-  permission_handler: 2.2.0
+  #permission_handler: 2.2.0
   #onesignal: ^1.0.0
 
 dev_dependencies:

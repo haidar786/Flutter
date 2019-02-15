@@ -155,9 +155,8 @@ class _SettingsPage extends State<Settingg> {
                                     //         Permission.ReadContacts)
                                     //     .then((p) {
                                     //   if (p == PermissionStatus.authorized) {
-                                    //     Navigator.pushNamed(
-                                    //         context, '/contacts');
-                                    //   }
+                                    Navigator.pushNamed(context, '/contacts');
+                                    //  }
                                     // });
                                   },
                                   child: Center(

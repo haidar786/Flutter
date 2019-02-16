@@ -24,7 +24,6 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   BuildContext _ctx;
   AnimationController _controller;
   Animation<double> _animation;
-  String emrals_amount = '';
 
   final List<Widget> _children = [
     ReportListWidget(),

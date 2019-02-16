@@ -30,7 +30,7 @@ class _ZoneList extends State<ZoneListWidget> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        //limit += 50;
+        limit = 50;
         offset += 50;
         fetchZones(limit, offset);
       }
@@ -137,7 +137,7 @@ class _ZoneList extends State<ZoneListWidget> {
     int offset,
     int limit,
   ) async {
-    print('fetching reportsss' + limit.toString() + offset.toString());
+    print('fetching zones' + limit.toString() + offset.toString());
     final response = await http
         .get('https://www.emrals.com/api/zones/?limit=$limit&offset=$offset');
 

@@ -22,7 +22,6 @@ class _SettingsPage extends State<Settingg> {
   final TextEditingController walletAddressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final formKey = new GlobalKey<FormState>();
-  String _dataString = '';
 
   @override
   void initState() {
@@ -62,8 +61,6 @@ class _SettingsPage extends State<Settingg> {
       builder: (ctx, snapshot) {
         if (snapshot.hasData) {
           User _userObject = snapshot.data;
-          //_dataString = _userObject.emralsAddress ?? '';
-
           return DefaultTabController(
             length: 3,
             child: Scaffold(
@@ -257,8 +254,8 @@ class _SettingsPage extends State<Settingg> {
                       ),
                       SizedBox(height: 15.0),
                       QrImage(
-                        data: _dataString,
-                        size: 300,
+                        data: _userObject.emralsAddress ?? "",
+                        size: 200.0,
                       ),
                     ],
                   )),

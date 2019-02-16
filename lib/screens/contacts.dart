@@ -21,7 +21,23 @@ class ContactsState extends State<Contacts> {
           future: ContactsService.getContacts(),
           builder: (ctx, snapshot) {
             if (snapshot.hasData) {
-              List<Contact> contacts = List.from(snapshot.data);
+              List<Contact> contacts = List.from(snapshot.data)
+                ..sort(
+                  (c1, c2) {
+                    if (c1.displayName != null && c2.displayName != null) {
+                      return c1.displayName.compareTo(c2.displayName);
+                    }
+                  },
+                )
+                ..sort((c1, c2) {
+                  if (c1.emails.length < c2.emails.length) {
+                    return 1;
+                  } else if (c1.emails.length > c2.emails.length) {
+                    return -1;
+                  } else {
+                    return 0;
+                  }
+                });
               return ContactList(contacts: contacts);
             } else {
               return Center(
@@ -49,7 +65,7 @@ class ContactList extends StatelessWidget {
           leading: CircleAvatar(
             foregroundColor: Colors.white,
             backgroundImage: MemoryImage(contact.avatar),
-            child: Text(contact.displayName != null
+            child: Text(contact.displayName != null && contact.avatar != null
                 ? contact.displayName.substring(0, 1)
                 : ""),
           ),

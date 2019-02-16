@@ -80,6 +80,8 @@ class _MyAppState extends State<MapPage> {
     if (widget.report != null && mapController != null) {
       mapController.addMarker(
         MarkerOptions(
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
           position: center,
           infoWindowText: InfoWindowText(
               widget.report.title, 'Report #' + widget.report.id.toString()),

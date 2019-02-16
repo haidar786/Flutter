@@ -45,14 +45,14 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
     updateEmrals(0);
   }
 
-  void updateEmrals(double newamount) {
+  void updateEmrals(double fromamount) {
     DatabaseHelper().getUser().then((u) {
       if (u != null) {
         user = u;
 
         setState(() {
           _animation = new Tween<double>(
-            begin: 0,
+            begin: fromamount,
             end: u.emrals,
           ).animate(new CurvedAnimation(
             curve: Curves.fastOutSlowIn,

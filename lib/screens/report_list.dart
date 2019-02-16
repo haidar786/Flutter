@@ -364,7 +364,7 @@ class _ReportList extends State<ReportListWidget> {
     this.setState(() {
       DatabaseHelper().getUser().then((u) {
         RestDatasource().updateEmrals(u.token).then((e) {
-          u.emrals = e.emrals;
+          u.emrals = double.parse(e['emrals_amount']);
           DatabaseHelper().updateUser(u);
 
           //update emrals amount in header

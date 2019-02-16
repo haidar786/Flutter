@@ -57,7 +57,7 @@ class RestDatasource {
 
   Future<dynamic> sendEmrals(double amount, String address, String token) {
     Map<String, String> payload = {
-      "amount": amount.toString(),
+      "amount": amount.toStringAsFixed(8),
       "address": address,
     };
 

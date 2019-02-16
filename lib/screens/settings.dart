@@ -256,7 +256,7 @@ class _SettingsPage extends State<Settingg> {
                       SizedBox(height: 15.0),
                       QrImage(
                         data: _userObject.emralsAddress ?? "",
-                        size: 200.0,
+                        size: 300,
                       ),
                     ],
                   )),

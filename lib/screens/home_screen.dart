@@ -18,10 +18,13 @@ class MyHomePage extends StatefulWidget {
   _MyHomePage createState() => _MyHomePage();
 }
 
-class _MyHomePage extends State<MyHomePage> {
+class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
   BuildContext _ctx;
+  AnimationController _controller;
+  Animation<double> _animation;
+  String emrals_amount = '';
 
   final List<Widget> _children = [
     ReportListWidget(),
@@ -35,11 +38,25 @@ class _MyHomePage extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-
+    _controller = new AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    );
+    _animation = _controller;
     DatabaseHelper().getUser().then((u) {
       if (u != null) {
         user = u;
-        setState(() {});
+
+        setState(() {
+          _animation = new Tween<double>(
+            begin: 0,
+            end: u.emrals,
+          ).animate(new CurvedAnimation(
+            curve: Curves.fastOutSlowIn,
+            parent: _controller,
+          ));
+          _controller.forward(from: 0.0);
+        });
       } else {
         Navigator.of(_ctx).pushReplacementNamed("/login");
       }
@@ -64,13 +81,18 @@ class _MyHomePage extends State<MyHomePage> {
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: Text(
-              user == null ? '' : formatter.format(user.emrals),
-              style: TextStyle(
-                color: emralsColor(),
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (BuildContext context, Widget child) {
+                return new Text(
+                  formatter.format(_animation.value),
+                  style: TextStyle(
+                    color: emralsColor(),
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             ),
           ),
           IconButton(

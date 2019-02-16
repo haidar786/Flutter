@@ -368,9 +368,8 @@ class _SettingsPage extends State<Settingg> {
                                     .sendEmrals(amount, walletAddress,
                                         _userObject.token)
                                     .then((m) {
-                                  key.currentState.showSnackBar(SnackBar(
-                                      content: Text(
-                                          "You sent $amount to $walletAddress")));
+                                  key.currentState
+                                      .showSnackBar(SnackBar(content: Text(m)));
                                 });
                               } else {
                                 key.currentState.showSnackBar(SnackBar(

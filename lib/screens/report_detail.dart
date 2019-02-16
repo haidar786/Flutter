@@ -383,7 +383,7 @@ class EmralsTipCircleButton extends StatelessWidget {
               action: SnackBarAction(
                   label: "Deposit",
                   onPressed: () =>
-                      Navigator.of(context).pushReplacementNamed("/settgins")),
+                      Navigator.of(context).pushReplacementNamed("/settings")),
             ));
           }
         });

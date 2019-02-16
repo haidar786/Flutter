@@ -42,6 +42,10 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1500),
     );
     _animation = _controller;
+    updateEmrals(0);
+  }
+
+  void updateEmrals(double newamount) {
     DatabaseHelper().getUser().then((u) {
       if (u != null) {
         user = u;

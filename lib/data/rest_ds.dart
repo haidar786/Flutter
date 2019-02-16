@@ -17,6 +17,7 @@ class RestDatasource {
   static final inviteURL = baseURL + "invite/";
   static final usersURL = baseURL + "users/";
   static final sendURL = baseURL + "send/";
+  static final updateURL = baseURL + "me/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -70,6 +71,17 @@ class RestDatasource {
     return _netUtil
         .post(sendURL, headers: headers, body: json.encoder.convert(payload))
         .then((dynamic res) {
+      return res;
+    });
+  }
+
+  Future<dynamic> updateEmrals(String token) {
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil.get(updateURL, headers).then((dynamic res) {
       return res;
     });
   }

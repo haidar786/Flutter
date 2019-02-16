@@ -10,6 +10,8 @@ import 'package:emrals/screens/camera.dart';
 import 'package:share/share.dart';
 import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/profile.dart';
+import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/data/database_helper.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -360,6 +362,15 @@ class _ReportList extends State<ReportListWidget> {
     var parsed = data["results"] as List;
     if (!mounted) return;
     this.setState(() {
+      DatabaseHelper().getUser().then((u) {
+        RestDatasource().updateEmrals(u.token).then((e) {
+          u.emrals = e.emrals;
+          DatabaseHelper().updateUser(u);
+
+          //update emrals amount in header
+        });
+      });
+
       reports
           .addAll(parsed.map<Report>((json) => Report.fromJson(json)).toList());
       _progressBarActive = false;

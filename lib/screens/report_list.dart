@@ -140,7 +140,8 @@ class _ReportList extends State<ReportListWidget> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Profile(id: "1")),
+                                        builder: (context) => Profile(
+                                            id: reports[index].creator)),
                                   );
                                 },
                                 child: Container(

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/models/user_profile.dart';
 import 'package:emrals/styles.dart';
 import 'dart:math';
 
@@ -56,8 +57,8 @@ class RestDatasource {
   }
 
   Future<dynamic> sendEmrals(double amount, String address, String token) {
-    Map<String, String> payload = {
-      "amount": amount.toStringAsFixed(8),
+    Map<String, dynamic> payload = {
+      "amount": amount,
       "address": address,
     };
 
@@ -133,10 +134,13 @@ class RestDatasource {
         .then((b) => true, onError: (e) => false);
   }
 
-  Future<bool> getUser(String id) async {
-    return _netUtil
-        .get(usersURL + "/" + id + "/")
-        .then((b) => true, onError: (e) => false);
+  Future<UserProfile> getUser(int id) async {
+    return _netUtil.get(usersURL + id.toString() + "/").then((dynamic res) {
+      if (res["error"] != null) {
+        throw Exception(res["error"]);
+      }
+      return UserProfile.map(res);
+    });
   }
 
   // The user is only passed to test that the current user's position is

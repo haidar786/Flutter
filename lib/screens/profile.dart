@@ -1,22 +1,30 @@
 import 'package:emrals/data/rest_ds.dart';
 //import 'package:emrals/models/user.dart';
-//import 'package:emrals/styles.dart';
+import 'package:emrals/models/user_profile.dart';
 import 'package:flutter/material.dart';
 
-class Profile extends StatelessWidget {
-  final String id;
+class Profile extends StatefulWidget {
+  final int id;
 
   Profile({this.id});
 
   @override
+  ProfileState createState() {
+    return ProfileState();
+  }
+}
+
+class ProfileState extends State<Profile> {
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: RestDatasource().getUser(id),
+      future: RestDatasource().getUser(widget.id),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          UserProfile _profileObject = snapshot.data;
           return Scaffold(
             appBar: AppBar(
-              title: Text('Username'),
+              title: Text(_profileObject.username),
             ),
             body: Stack(
               children: <Widget>[
@@ -32,9 +40,9 @@ class Profile extends StatelessWidget {
                         height: 150.0,
                         decoration: BoxDecoration(
                             color: Colors.red,
-                            // image: DecorationImage(
-                            //     image: NetworkImage(_userObject.picture),
-                            //     fit: BoxFit.cover),
+                            image: DecorationImage(
+                                image: NetworkImage(_profileObject.picture),
+                                fit: BoxFit.cover),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(75.0)),
                             boxShadow: [
@@ -42,7 +50,7 @@ class Profile extends StatelessWidget {
                             ])),
                     SizedBox(height: 20.0),
                     Text(
-                      "username",
+                      _profileObject.username,
                       style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -55,8 +63,35 @@ class Profile extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        "30 emrals",
-                        textScaleFactor: .9,
+                        "${_profileObject.earnedCount.isNotEmpty ? _profileObject.earnedCount : 0} emrals won",
+                        textScaleFactor: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        "${_profileObject.addedCount.isNotEmpty ? _profileObject.addedCount : 0} emrals donated",
+                        textScaleFactor: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        "${_profileObject.alertCount > 0 ? _profileObject.alertCount : _profileObject.alertCount} reports posted",
+                        textScaleFactor: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        "${_profileObject.cleanedCount > 0 ? _profileObject.cleanedCount : _profileObject.cleanedCount} reports cleaned",
+                        textScaleFactor: 2,
                         style: TextStyle(
                           color: Colors.white,
                         ),

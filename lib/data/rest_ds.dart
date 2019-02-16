@@ -15,6 +15,7 @@ class RestDatasource {
   static final reportURL = baseURL + "alerts/";
   static final inviteURL = baseURL + "invite/";
   static final usersURL = baseURL + "users/";
+  static final sendURL = baseURL + "send/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -51,6 +52,27 @@ class RestDatasource {
       }
 
       return User.map(res);
+    });
+  }
+
+  Future<dynamic> sendEmrals(double amount, String address, String token) {
+    Map<String, String> payload = {
+      "amount": amount.toString(),
+      "address": address,
+    };
+
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil
+        .post(sendURL, headers: headers, body: json.encoder.convert(payload))
+        .then((dynamic res) {
+      if (res["error"] != null) {
+        throw Exception(res["error"]);
+      }
+      return res;
     });
   }
 

@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:emrals/data/rest_ds.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -363,9 +364,14 @@ class _SettingsPage extends State<Settingg> {
                                           Text("Please enter a valid amount")));
 
                               if (_userObject.emrals >= amount) {
-                                key.currentState.showSnackBar(SnackBar(
-                                    content: Text(
-                                        "You sent $amount to $walletAddress")));
+                                RestDatasource()
+                                    .sendEmrals(amount, walletAddress,
+                                        _userObject.token)
+                                    .then((m) {
+                                  key.currentState.showSnackBar(SnackBar(
+                                      content: Text(
+                                          "You sent $amount to $walletAddress")));
+                                });
                               } else {
                                 key.currentState.showSnackBar(SnackBar(
                                     content: Text(

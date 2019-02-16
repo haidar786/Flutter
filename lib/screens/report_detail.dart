@@ -6,6 +6,7 @@ import 'package:emrals/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/styles.dart';
+import 'package:intl/intl.dart';
 //import 'package:emrals/globals.dart';
 
 class ReportDetail extends StatefulWidget {
@@ -21,13 +22,17 @@ class ReportDetail extends StatefulWidget {
 
 class ReportDetailState extends State<ReportDetail> {
   User user;
+  final formatter = new NumberFormat("#,###");
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     DatabaseHelper().getUser().then((u) {
-      user = u;
+      setState(() {
+        user = u;
+      });
     });
   }
 
@@ -39,6 +44,26 @@ class ReportDetailState extends State<ReportDetail> {
           key: scaffoldKey,
           appBar: AppBar(
             title: Text("Report Detail"),
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  formatter.format(user.emrals),
+                  style: TextStyle(
+                    color: emralsColor(),
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  "assets/JustElogo.png",
+                  width: 32,
+                ),
+              ),
+            ],
           ),
           body: ListView(
             children: <Widget>[

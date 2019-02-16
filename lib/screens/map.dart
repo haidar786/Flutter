@@ -77,7 +77,7 @@ class _MyAppState extends State<MapPage> {
       );
     }
 
-    if (widget.report != null) {
+    if (widget.report != null && mapController != null) {
       mapController.addMarker(
         MarkerOptions(
           position: center,

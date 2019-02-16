@@ -7,6 +7,7 @@ import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -21,6 +22,7 @@ class _SettingsPage extends State<Settingg> {
   final TextEditingController walletAddressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
   final formKey = new GlobalKey<FormState>();
+  String _dataString = '';
 
   @override
   void initState() {
@@ -60,6 +62,8 @@ class _SettingsPage extends State<Settingg> {
       builder: (ctx, snapshot) {
         if (snapshot.hasData) {
           User _userObject = snapshot.data;
+          //_dataString = _userObject.emralsAddress ?? '';
+
           return DefaultTabController(
             length: 3,
             child: Scaffold(
@@ -252,8 +256,10 @@ class _SettingsPage extends State<Settingg> {
                         },
                       ),
                       SizedBox(height: 15.0),
-                      Image.network(
-                          'https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=${_userObject.emralsAddress ?? ""}')
+                      QrImage(
+                        data: _dataString,
+                        size: 300,
+                      ),
                     ],
                   )),
                   Form(

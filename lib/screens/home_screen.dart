@@ -6,8 +6,10 @@ import 'package:emrals/screens/zone_list.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/stats.dart';
 import 'package:emrals/styles.dart';
-import 'package:emrals/globals.dart';
+//import 'package:emrals/globals.dart';
 import 'package:intl/intl.dart';
+import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/models/user.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -25,6 +27,17 @@ class _MyHomePage extends State<MyHomePage> {
     Stats(),
     ZoneListWidget(),
   ];
+
+  User user;
+
+  @override
+  void initState() {
+    super.initState();
+    DatabaseHelper().getUser().then((u) {
+      user = u;
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +57,7 @@ class _MyHomePage extends State<MyHomePage> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
             child: Text(
-              globalUser == null ? '' : formatter.format(globalUser.emrals),
+              user == null ? '' : formatter.format(user.emrals),
               style: TextStyle(
                 color: emralsColor(),
                 fontSize: 24.0,

@@ -40,6 +40,12 @@ class DatabaseHelper {
     return res;
   }
 
+  Future<int> updateUser(User user) async {
+    var dbClient = await db;
+    int res = await dbClient.update("User", user.toMap());
+    return res;
+  }
+
   // Future<int> saveOfflineReport(OfflineReport offlineReport) async {
   //   var dbClient = await db;
   //   int res = await dbClient.insert("OfflineReport", offlineReport.toMap());

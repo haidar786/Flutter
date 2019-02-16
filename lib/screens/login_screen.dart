@@ -7,7 +7,7 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login_screen_presenter.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:emrals/globals.dart';
+//import 'package:emrals/globals.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -111,6 +111,7 @@ class LoginScreenState extends State<LoginScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   onSaved: (val) => _username = val,
+                  key: new Key('username'),
                   validator: (val) {
                     return val.length < 1 ? "Please fill in a username." : null;
                   },
@@ -139,6 +140,7 @@ class LoginScreenState extends State<LoginScreen>
                 child: TextFormField(
                   obscureText: true,
                   onSaved: (val) => _password = val,
+                  key: new Key('password'),
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Password",
@@ -236,7 +238,7 @@ class LoginScreenState extends State<LoginScreen>
     _showSnackBar("logged in as " + user.username);
     setState(() => _isLoading = false);
     var db = DatabaseHelper();
-    globalUser = user;
+    //globalUser = user;
     await db.saveUser(user);
     var authStateProvider = AuthStateProvider();
     authStateProvider.notify(AuthState.LOGGED_IN);

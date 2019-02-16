@@ -6,7 +6,7 @@ import 'package:emrals/models/user.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/styles.dart';
-import 'package:emrals/globals.dart';
+//import 'package:emrals/globals.dart';
 
 class ReportDetail extends StatefulWidget {
   final Report report;
@@ -345,7 +345,8 @@ class EmralsTipCircleButton extends StatelessWidget {
           if (u.emrals > number) {
             RestDatasource().tipReport(number, report.id, u.token).then((m) {
               Navigator.of(context).pop();
-              globalUser.emrals -= number;
+              u.emrals = u.emrals - number;
+              DatabaseHelper().updateUser(u);
               report.reportEmralsAmount =
                   (double.parse(report.reportEmralsAmount) + number).toString();
               scaffoldKey.currentState

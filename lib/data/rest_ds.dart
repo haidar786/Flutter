@@ -70,9 +70,6 @@ class RestDatasource {
     return _netUtil
         .post(sendURL, headers: headers, body: json.encoder.convert(payload))
         .then((dynamic res) {
-      if (res["error"] != null) {
-        throw Exception(res["error"]);
-      }
       return res;
     });
   }

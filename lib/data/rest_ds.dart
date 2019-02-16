@@ -14,6 +14,7 @@ class RestDatasource {
   static final tipURL = baseURL + "tip/";
   static final reportURL = baseURL + "alerts/";
   static final inviteURL = baseURL + "invite/";
+  static final usersURL = baseURL + "users/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -107,6 +108,12 @@ class RestDatasource {
 
     return _netUtil
         .post(inviteURL, headers: headers, body: json.encoder.convert(payload))
+        .then((b) => true, onError: (e) => false);
+  }
+
+  Future<bool> getUser(String id) async {
+    return _netUtil
+        .get(usersURL + "/" + id + "/")
         .then((b) => true, onError: (e) => false);
   }
 

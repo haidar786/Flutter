@@ -22,13 +22,13 @@ class ContactsState extends State<Contacts> {
           builder: (ctx, snapshot) {
             if (snapshot.hasData) {
               List<Contact> contacts = List.from(snapshot.data)
-                ..sort(
-                  (c1, c2) {
-                    if (c1.displayName != null && c2.displayName != null) {
-                      return c1.displayName.compareTo(c2.displayName);
-                    }
-                  },
-                )
+                // ..sort(
+                //   (c1, c2) {
+                //     if (c1.displayName != null && c2.displayName != null) {
+                //       return c1.displayName.compareTo(c2.displayName);
+                //     }
+                //   },
+                // )
                 ..sort((c1, c2) {
                   if (c1.emails.length < c2.emails.length) {
                     return 1;

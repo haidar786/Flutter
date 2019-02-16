@@ -9,6 +9,7 @@ import 'package:emrals/styles.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:share/share.dart';
 import 'package:emrals/screens/map.dart';
+import 'package:emrals/screens/profile.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -134,30 +135,39 @@ class _ReportList extends State<ReportListWidget> {
                           children: <Widget>[
                             Padding(
                               padding: EdgeInsets.all(5),
-                              child: Container(
-                                width: 77,
-                                height: 77,
-                                padding: EdgeInsets.all(1),
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: FractionalOffset.topCenter,
-                                    end: FractionalOffset.bottomCenter,
-                                    stops: [0, 0.5, 1],
-                                    colors: [
-                                      const Color(0xFF7DB208),
-                                      const Color(0xFFFFDC03),
-                                      const Color(0xFFDD26BA),
-                                    ],
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Profile(id: "1")),
+                                  );
+                                },
                                 child: Container(
+                                  width: 77,
+                                  height: 77,
+                                  padding: EdgeInsets.all(1),
                                   decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: FractionalOffset.topCenter,
+                                      end: FractionalOffset.bottomCenter,
+                                      stops: [0, 0.5, 1],
+                                      colors: [
+                                        const Color(0xFF7DB208),
+                                        const Color(0xFFFFDC03),
+                                        const Color(0xFFDD26BA),
+                                      ],
+                                    ),
                                     shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: NetworkImage(
-                                        reports[index].posterAvatar,
+                                  ),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: NetworkImage(
+                                          reports[index].posterAvatar,
+                                        ),
                                       ),
                                     ),
                                   ),

@@ -19,5 +19,4 @@ final routes = {
   '/contacts': (BuildContext context) => Contacts(),
   '/map': (BuildContext context) => MapPage(),
   '/profile': (BuildContext context) => Profile(),
-  '/': (BuildContext context) => LoginScreen(),
 };

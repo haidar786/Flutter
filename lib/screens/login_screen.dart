@@ -62,6 +62,13 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   @override
+  void dispose() {
+    var authStateProvider = new AuthStateProvider();
+    authStateProvider.dispose(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _ctx = context;
     var loginBtn = Container(

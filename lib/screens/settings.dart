@@ -183,7 +183,8 @@ class _SettingsPage extends State<Settingg> {
                                   var db = DatabaseHelper();
                                   db.deleteUsers().then((_) {
                                     Navigator.of(context)
-                                        .pushReplacementNamed("/login");
+                                        .pushNamedAndRemoveUntil("/login",
+                                            ModalRoute.withName("/home"));
                                   });
                                 },
                                 child: Center(

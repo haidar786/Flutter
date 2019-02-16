@@ -101,17 +101,19 @@ class _MyAppState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    reports.forEach((report) {
-      mapController.addMarker(
-        MarkerOptions(
-          position: LatLng(report.latitude, report.longitude),
-          consumeTapEvents: true,
-          zIndex: reports.indexOf(report).toDouble(),
-          infoWindowText:
-              InfoWindowText(report.title, 'Report #' + report.id.toString()),
-        ),
-      );
-    });
+    if (widget.report == null) {
+      reports.forEach((report) {
+        mapController.addMarker(
+          MarkerOptions(
+            position: LatLng(report.latitude, report.longitude),
+            consumeTapEvents: true,
+            zIndex: reports.indexOf(report).toDouble(),
+            infoWindowText:
+                InfoWindowText(report.title, 'Report #' + report.id.toString()),
+          ),
+        );
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Emrals Map'),

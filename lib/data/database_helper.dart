@@ -67,6 +67,6 @@ class DatabaseHelper {
   Future<User> getUser() async {
     var dbClient = await db;
     var res = await dbClient.query("User");
-    return res.isNotEmpty ? User.fromMap(res.first) : [];
+    return res.isNotEmpty ? User.fromMap(res.first) : null;
   }
 }

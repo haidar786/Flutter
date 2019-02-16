@@ -4,6 +4,7 @@ import 'package:emrals/styles.dart';
 import 'package:sentry/sentry.dart';
 import 'dart:async';
 //import 'package:onesignal/onesignal.dart'
+import 'package:emrals/screens/home_screen.dart';
 
 final SentryClient sentry = new SentryClient(dsn: "SENTRY_DSN");
 
@@ -53,6 +54,7 @@ class EmralsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      home: MyHomePage(),
       theme: ThemeData(
         primaryColor: Colors.black,
         primarySwatch: emralsColor(),

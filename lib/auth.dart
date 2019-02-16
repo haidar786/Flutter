@@ -30,10 +30,12 @@ class AuthStateProvider {
     _subscribers.add(listener);
   }
 
+  void unsubscribe(AuthStateListener listener) {
+    _subscribers.remove(listener);
+  }
+
   void dispose(AuthStateListener listener) {
-    for (var l in _subscribers) {
-      if (l == listener) _subscribers.remove(l);
-    }
+    _subscribers.removeWhere((l) => l == listener);
   }
 
   void notify(AuthState state) {

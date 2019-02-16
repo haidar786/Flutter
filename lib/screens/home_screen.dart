@@ -21,6 +21,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> {
   final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
+  BuildContext _ctx;
+
   final List<Widget> _children = [
     ReportListWidget(),
     CameraApp(),
@@ -33,14 +35,20 @@ class _MyHomePage extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
     DatabaseHelper().getUser().then((u) {
-      user = u;
-      setState(() {});
+      if (u != null) {
+        user = u;
+        setState(() {});
+      } else {
+        Navigator.of(_ctx).pushReplacementNamed("/login");
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    _ctx = context;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

@@ -48,9 +48,9 @@ class ContactList extends StatelessWidget {
           title: Text(contact.displayName),
           leading: CircleAvatar(
             foregroundColor: Colors.white,
-            child: Text(
-              contact.displayName.substring(0, 1),
-            ),
+            child: Text(contact.displayName != null
+                ? contact.displayName.substring(0, 1)
+                : ""),
           ),
           subtitle: contact.emails.length != 0
               ? Text(contact.emails.first.value)

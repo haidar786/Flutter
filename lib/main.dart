@@ -17,7 +17,6 @@ bool get isInDebugMode {
 void _handleNotificationReceived(OSNotification notification) {}
 
 void main() async {
-  // OneSignal.shared.init("ONESIGNAL_ANDROID_APP_ID");
   OneSignal.shared.init("ONESIGNAL_ANDROID_APP_ID", iOSSettings: {
     OSiOSSettings.autoPrompt: false,
     OSiOSSettings.inAppLaunchUrl: true,

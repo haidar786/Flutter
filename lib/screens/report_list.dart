@@ -27,6 +27,7 @@ class _ReportList extends State<ReportListWidget> {
   ScrollController _scrollController = ScrollController();
   List<Report> reports = List();
   bool _progressBarActive = true;
+  BuildContext _ctx;
 
   @override
   void initState() {
@@ -61,6 +62,7 @@ class _ReportList extends State<ReportListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _ctx = context;
     return Scaffold(
       key: _scaffoldKey,
       body: _progressBarActive == true
@@ -361,6 +363,9 @@ class _ReportList extends State<ReportListWidget> {
     if (!mounted) return;
     this.setState(() {
       DatabaseHelper().getUser().then((u) {
+        if(u==null){
+          Navigator.of(_ctx).pushReplacementNamed("/login");
+        }
         RestDatasource().updateEmrals(u.token).then((e) {
           u.emrals = double.parse(e['emrals_amount']);
           DatabaseHelper().updateUser(u);

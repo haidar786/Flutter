@@ -2,9 +2,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Portal
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0-rc01'
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.10.2, 0.99.99]'
     }
 
     // Set a resolution strategy on the subprojects buildscript classpath
@@ -15,6 +17,8 @@ buildscript {
         }
     }
 }
+
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 allprojects {
     repositories {

@@ -97,7 +97,6 @@ class _ReportList extends State<ReportListWidget> {
                               tag: reports[index].id,
                               child: GestureDetector(
                                 onTap: () {
-                                  //reports[index].launchMaps();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -311,7 +310,8 @@ class _ReportList extends State<ReportListWidget> {
                                   color: emralsColor(),
                                 ),
                                 onPressed: () {
-                                  Share.share("http://www.emrals.com/reports/");
+                                  Share.share("http://www.emrals.com/alerts/" +
+                                      reports[index].slug);
                                 },
                                 child: Text("SHARE"),
                                 shape: StadiumBorder(),
@@ -353,8 +353,6 @@ class _ReportList extends State<ReportListWidget> {
     int offset,
     int limit,
   }) async {
-    print(
-        'fetching reports: limit=${limit.toString()}, offset=${offset.toString()}');
     final response =
         await http.get(apiUrl + 'alerts/?limit=$limit&offset=$offset');
 

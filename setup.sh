@@ -6,3 +6,5 @@ sed -i -e "s/APP_VERSION_NUMBER/0.2.0/g" lib/screens/login_screen.dart
 sed -i -e "s/BUILD_NUMBER/${BITRISE_BUILD_NUMBER}/g" lib/screens/settings.dart
 sed -i -e "s/APP_VERSION_NUMBER/0.2.0/g" lib/screens/settings.dart
 sed -i -e "s~SENTRY_DSN~${SENTRY_DSN}~g" lib/main.dart
+sed -i -e "s~ONESIGNAL_ANDROID_APP_ID~${ONESIGNAL_ANDROID_APP_ID}~g" lib/main.dart
+

@@ -3,7 +3,7 @@ import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
 import 'package:sentry/sentry.dart';
 import 'dart:async';
-//import 'package:onesignal/onesignal.dart'
+import 'package:onesignal/onesignal.dart';
 import 'package:emrals/screens/home_screen.dart';
 
 final SentryClient sentry = new SentryClient(dsn: "SENTRY_DSN");
@@ -14,7 +14,19 @@ bool get isInDebugMode {
   return inDebugMode;
 }
 
+void _handleNotificationReceived(OSNotification notification) {}
+
 void main() async {
+  // OneSignal.shared.init("ONESIGNAL_ANDROID_APP_ID");
+  OneSignal.shared.init("ONESIGNAL_ANDROID_APP_ID", iOSSettings: {
+    OSiOSSettings.autoPrompt: false,
+    OSiOSSettings.inAppLaunchUrl: true,
+  });
+  OneSignal.shared
+      .setInFocusDisplayType(OSNotificationDisplayType.notification);
+
+  OneSignal.shared.setNotificationReceivedHandler(_handleNotificationReceived);
+
   FlutterError.onError = (FlutterErrorDetails details) async {
     if (isInDebugMode) {
       FlutterError.dumpErrorToConsole(details);
@@ -50,7 +62,14 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
   }
 }
 
-class EmralsApp extends StatelessWidget {
+class EmralsApp extends StatefulWidget {
+  @override
+  EmralsAppState createState() {
+    return EmralsAppState();
+  }
+}
+
+class EmralsAppState extends State<EmralsApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

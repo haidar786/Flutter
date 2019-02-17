@@ -74,3 +74,4 @@ android/app/.project
 android/.settings/org.eclipse.buildship.core.prefs
 android/app/.classpath
 android/app/.settings/org.eclipse.buildship.core.prefs
+android/app/google-services.json

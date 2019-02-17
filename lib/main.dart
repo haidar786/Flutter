@@ -5,6 +5,7 @@ import 'package:sentry/sentry.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:emrals/screens/home_screen.dart';
+import 'dart:io';
 
 final SentryClient sentry = new SentryClient(dsn: "SENTRY_DSN");
 
@@ -17,15 +18,30 @@ bool get isInDebugMode {
 void main() async {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
+  void iOSPermission() {
+    _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _firebaseMessaging.onIosSettingsRegistered
+        .listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+  }
+
+  if (Platform.isIOS) iOSPermission();
+
+  _firebaseMessaging.getToken().then((token) {
+    print(token);
+  });
+
   _firebaseMessaging.configure(
     onMessage: (Map<String, dynamic> message) async {
-      print("onMessage: $message");
-    },
-    onLaunch: (Map<String, dynamic> message) async {
-      print("onLaunch: $message");
+      print('on message $message');
     },
     onResume: (Map<String, dynamic> message) async {
-      print("onResume: $message");
+      print('on resume $message');
+    },
+    onLaunch: (Map<String, dynamic> message) async {
+      print('on launch $message');
     },
   );
 

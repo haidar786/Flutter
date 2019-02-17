@@ -75,3 +75,4 @@ android/.settings/org.eclipse.buildship.core.prefs
 android/app/.classpath
 android/app/.settings/org.eclipse.buildship.core.prefs
 android/app/google-services.json
+ios/Runner/GoogleService-Info.plist

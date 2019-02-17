@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.0-rc01'
+        classpath 'com.google.gms:google-services:4.0.1'
     }
 
     // Set a resolution strategy on the subprojects buildscript classpath

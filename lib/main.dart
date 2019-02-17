@@ -3,7 +3,7 @@ import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
 import 'package:sentry/sentry.dart';
 import 'dart:async';
-//import 'package:onesignal/onesignal.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:emrals/screens/home_screen.dart';
 
 final SentryClient sentry = new SentryClient(dsn: "SENTRY_DSN");
@@ -14,17 +14,20 @@ bool get isInDebugMode {
   return inDebugMode;
 }
 
-// void _handleNotificationReceived(OSNotification notification) {}
-
 void main() async {
-  // OneSignal.shared.init("ONESIGNAL_ANDROID_APP_ID", iOSSettings: {
-  //   OSiOSSettings.autoPrompt: false,
-  //   OSiOSSettings.inAppLaunchUrl: true,uuu
-  // });
-  // OneSignal.shared
-  //     .setInFocusDisplayType(OSNotificationDisplayType.notification);
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
-  // OneSignal.shared.setNotificationReceivedHandler(_handleNotificationReceived);
+  _firebaseMessaging.configure(
+    onMessage: (Map<String, dynamic> message) async {
+      print("onMessage: $message");
+    },
+    onLaunch: (Map<String, dynamic> message) async {
+      print("onLaunch: $message");
+    },
+    onResume: (Map<String, dynamic> message) async {
+      print("onResume: $message");
+    },
+  );
 
   FlutterError.onError = (FlutterErrorDetails details) async {
     if (isInDebugMode) {

@@ -35,7 +35,7 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app needs access to the photo library to upload reports you've taken.</string>
+	<string>This app needs access to the photo library to upload reports you&apos;ve taken.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open and in the background.</string>
 	<key>io.flutter.embedded_views_preview</key>
@@ -60,7 +60,9 @@
 		<string>googlechromes</string>
 		<string>comgooglemaps</string>
 	</array>
+	<key>FirebaseAppDelegateProxyEnabled</key>
+	<false/>
 	<key>NSContactsUsageDescription</key>
-    <string>This app requires contacts access to function properly.</string>
+	<string>This app requires contacts access to function properly.</string>
 </dict>
 </plist>

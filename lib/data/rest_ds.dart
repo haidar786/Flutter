@@ -152,21 +152,11 @@ class RestDatasource {
     });
   }
 
-  // The user is only passed to test that the current user's position is
-  // correct and is highlighted properly.
-  Future<List<User>> getAllUsers(User user) async {
-    _netUtil.post(baseURL + "/leaderboard");
-    await Future.delayed(Duration(seconds: 1));
-    return List.generate(
-        100,
-        (i) => User(
-            "User $i",
-            "",
-            Random().nextInt(1000).toDouble(),
-            0,
-            "https://madeworthy.com/wp-content/uploads/2015/01/gravatar-logo-512.jpg",
-            0,
-            ""))
-      ..add(user);
+  Future<dynamic> getLeaderboardReports() async {
+   return _netUtil.get("https://www.emrals.com/api/leaderboard/reports");
+  }
+
+  Future<dynamic> getLeaderboardCleanups() async {
+    return _netUtil.get("https://www.emrals.com/api/leaderboard/cleanups");
   }
 }

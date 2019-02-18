@@ -5,7 +5,6 @@ import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/models/user_profile.dart';
 import 'package:emrals/styles.dart';
-import 'dart:math';
 
 class RestDatasource {
   NetworkUtil _netUtil = NetworkUtil();

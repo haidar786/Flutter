@@ -2,7 +2,6 @@ import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/profile.dart';
 import 'package:emrals/styles.dart';
-import 'package:emrals/utils/network_util.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/data/rest_ds.dart';
 

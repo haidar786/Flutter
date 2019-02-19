@@ -86,7 +86,6 @@ class _SettingsPage extends State<Settingg> {
                     ),
                   ],
                 ),
-                title: Text('Settings'),
                 actions: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
@@ -115,115 +114,141 @@ class _SettingsPage extends State<Settingg> {
                       ClipPath(
                         child: Container(color: Colors.black38),
                       ),
-                      Center(
+                      SingleChildScrollView(
+                        child: Center(
                           child: Column(
-                        children: <Widget>[
-                          SizedBox(height: 50.0),
-                          Container(
-                              width: 150.0,
-                              height: 150.0,
-                              decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  image: DecorationImage(
-                                      image: NetworkImage(_userObject.picture),
-                                      fit: BoxFit.cover),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(75.0)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 7.0, color: Colors.black)
-                                  ])),
-                          SizedBox(height: 20.0),
-                          Text(
-                            _userObject.username,
-                            style: TextStyle(
-                                fontSize: 30.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(33, 219, 244, 1),
-                                fontFamily: 'Montserrat'),
-                          ),
-                          SizedBox(height: 12.0),
-                          Container(
-                              height: 30.0,
-                              width: 120.0,
-                              child: Material(
-                                borderRadius: BorderRadius.circular(20.0),
-                                shadowColor: Colors.black12,
-                                color: Color.fromRGBO(164, 211, 34, 1),
-                                elevation: 7.0,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    // SimplePermissions.requestPermission(
-                                    //         Permission.ReadContacts)
-                                    //     .then((p) {
-                                    //   if (p == PermissionStatus.authorized) {
-                                    Navigator.pushNamed(context, '/contacts');
-                                    //  }
-                                    // });
-                                  },
-                                  child: Center(
-                                    child: Text(
-                                      'Invite Contacts',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Montserrat'),
+                            children: <Widget>[
+                              SizedBox(height: 50.0),
+                              Container(
+                                  width: 150.0,
+                                  height: 150.0,
+                                  decoration: BoxDecoration(
+                                      color: Colors.red,
+                                      image: DecorationImage(
+                                          image:
+                                              NetworkImage(_userObject.picture),
+                                          fit: BoxFit.cover),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(75.0)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 7.0,
+                                            color: Colors.black)
+                                      ])),
+                              SizedBox(height: 20.0),
+                              Text(
+                                _userObject.username,
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromRGBO(33, 219, 244, 1),
+                                    fontFamily: 'Montserrat'),
+                              ),
+                              SizedBox(height: 12.0),
+                              Container(
+                                  height: 30.0,
+                                  width: 120.0,
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    shadowColor: Colors.black12,
+                                    color: emralsColor(),
+                                    elevation: 7.0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        // SimplePermissions.requestPermission(
+                                        //         Permission.ReadContacts)
+                                        //     .then((p) {
+                                        //   if (p == PermissionStatus.authorized) {
+                                        Navigator.pushNamed(
+                                            context, '/contacts');
+                                        //  }
+                                        // });
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          'Invite Contacts',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Montserrat'),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                              SizedBox(height: 25.0),
+                              Container(
+                                  height: 30.0,
+                                  width: 120.0,
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    shadowColor: Colors.black12,
+                                    color: Color.fromRGBO(164, 211, 34, 1),
+                                    elevation: 7.0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (ctx) => LeaderBoard(
+                                                  currentUser: _userObject,
+                                                ),
+                                          ),
+                                        );
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          'Leaderboard',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Montserrat'),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                              SizedBox(height: 25.0),
+                              Container(
+                                height: 30.0,
+                                width: 120.0,
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  shadowColor: Colors.black12,
+                                  color: Color.fromRGBO(8, 158, 178, 1),
+                                  elevation: 7.0,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      var db = DatabaseHelper();
+                                      db.deleteUsers().then((_) {
+                                        Navigator.of(context)
+                                            .pushNamedAndRemoveUntil("/login",
+                                                ModalRoute.withName("/home"));
+                                      });
+                                    },
+                                    child: Center(
+                                      child: Text(
+                                        'Log out',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Montserrat'),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              )),
-                          SizedBox(height: 25.0),
-                          Container(
-                            height: 30.0,
-                            width: 120.0,
-                            child: Material(
-                              borderRadius: BorderRadius.circular(20.0),
-                              shadowColor: Colors.black12,
-                              color: Color.fromRGBO(8, 158, 178, 1),
-                              elevation: 7.0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  var db = DatabaseHelper();
-                                  db.deleteUsers().then((_) {
-                                    Navigator.of(context)
-                                        .pushNamedAndRemoveUntil("/login",
-                                            ModalRoute.withName("/home"));
-                                  });
-                                },
-                                child: Center(
-                                  child: Text(
-                                    'Log out',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: 'Montserrat'),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Center(
+                                child: Text(
+                                  "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
+                                  textScaleFactor: .9,
+                                  style: TextStyle(
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
-                          FlatButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (ctx) => LeaderBoard(
-                                              currentUser: _userObject,
-                                            )));
-                              },
-                              child: Text("Leaderboard")),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Center(
-                            child: Text(
-                              "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
-                              textScaleFactor: .9,
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ))
+                        ),
+                      ),
                     ],
                   ),
                   Center(

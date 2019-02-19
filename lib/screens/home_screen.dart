@@ -1,15 +1,15 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-import 'package:emrals/screens/report_list.dart';
-import 'package:emrals/screens/zone_list.dart';
-import 'package:emrals/screens/camera.dart';
-import 'package:emrals/screens/stats.dart';
-import 'package:emrals/styles.dart';
-//import 'package:emrals/globals.dart';
-import 'package:intl/intl.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/screens/camera.dart';
+import 'package:emrals/screens/report_list.dart';
+import 'package:emrals/screens/stats.dart';
+import 'package:emrals/screens/zone_list.dart';
+import 'package:emrals/styles.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:emrals/data/rest_ds.dart';
+//import 'package:emrals/globals.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -42,23 +42,23 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1500),
     );
     _animation = _controller;
-    updateEmrals(0);
-  }
-
-  void updateEmrals(double fromamount) {
     DatabaseHelper().getUser().then((u) {
       if (u != null) {
         user = u;
-
         setState(() {
-          _animation = new Tween<double>(
-            begin: fromamount,
-            end: u.emrals,
-          ).animate(new CurvedAnimation(
-            curve: Curves.fastOutSlowIn,
-            parent: _controller,
-          ));
-          _controller.forward(from: 0.0);
+          RestDatasource().updateEmrals(u.token).then((e) {
+            _animation = new Tween<double>(
+              begin: _animation.value,
+              end: double.parse(e['emrals_amount']),
+            ).animate(new CurvedAnimation(
+              curve: Curves.fastOutSlowIn,
+              parent: _controller,
+            ));
+            _controller.forward(from: _animation.value);
+
+            u.emrals = double.parse(e['emrals_amount']);
+            DatabaseHelper().updateUser(u);
+          });
         });
       } else {
         Navigator.of(_ctx).pushReplacementNamed("/login");

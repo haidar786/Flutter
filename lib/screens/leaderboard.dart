@@ -50,7 +50,7 @@ class LeaderboardSubPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String type =
-    leaderboardType == LeaderboardType.REPORTS ? "creator" : "closer";
+        leaderboardType == LeaderboardType.REPORTS ? "creator" : "closer";
     return FutureBuilder(
       future: leaderboardType == LeaderboardType.REPORTS
           ? RestDatasource().getLeaderboardReports()
@@ -63,25 +63,25 @@ class LeaderboardSubPage extends StatelessWidget {
           });
           return Column(
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(color: Colors.black12),
-                child: Builder(builder: (ctx) {
-                  if (users.firstWhere(
-                          (d) => d["${type}__id"] == currentUser.id,
-                      orElse: () => null) != null) {
-                    Map<String, dynamic> userMap = users
-                        .firstWhere((d) => d["${type}__id"] == currentUser.id);
-                    return LeaderBoardListItem(
-                      image: currentUser.picture,
-                      name: currentUser.username,
-                      position: users.indexOf(userMap) + 1,
-                      score: userMap["csount"],
-                    );
-                  } else {
-                    return Container();
-                  }
-                }),
-              ),
+              // Container(
+              //   decoration: BoxDecoration(color: Colors.black12),
+              //   child: Builder(builder: (ctx) {
+              //     if (users.firstWhere(
+              //             (d) => d["${type}__id"] == currentUser.id,
+              //         orElse: () => null) != null) {
+              //       Map<String, dynamic> userMap = users
+              //           .firstWhere((d) => d["${type}__id"] == currentUser.id);
+              //       return LeaderBoardListItem(
+              //         image: currentUser.picture,
+              //         name: currentUser.username,
+              //         position: users.indexOf(userMap) + 1,
+              //         score: userMap["csount"],
+              //       );
+              //     } else {
+              //       return Container();
+              //     }
+              //   }),
+              // ),
               Expanded(
                 child: ListView.builder(
                   itemBuilder: (ctx, index) {
@@ -90,10 +90,9 @@ class LeaderboardSubPage extends StatelessWidget {
                         "https://www.gravatar.com/avatar/b9ce7b4f4ed21593fc1a04f09b5561a2?s=100";
                     if (user["${type}__userprofile__avatar"]
                         .toString()
-                        .isNotEmpty ||
-                        user["${type}__userprofile__avatar"] == null) {
+                        .isNotEmpty) {
                       image =
-                      "https://emfiles.storage.googleapis.com/${user["${type}__userprofile__avatar"]}";
+                          "https://emfiles.storage.googleapis.com/${user["${type}__userprofile__avatar"]}";
                     }
                     return LeaderBoardListItem(
                       position: index + 1,
@@ -128,11 +127,11 @@ class LeaderBoardListItem extends StatelessWidget {
 
   LeaderBoardListItem(
       {this.position,
-        this.image,
-        this.name,
-        this.score,
-        this.userId,
-        this.currentUser = false});
+      this.image,
+      this.name,
+      this.score,
+      this.userId,
+      this.currentUser = false});
 
   @override
   Widget build(BuildContext context) {
@@ -143,8 +142,8 @@ class LeaderBoardListItem extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (ctx) => Profile(
-                    id: userId,
-                  )));
+                        id: userId,
+                      )));
       },
       child: Container(
         color: currentUser ? emralsColor() : Colors.transparent,
@@ -152,10 +151,10 @@ class LeaderBoardListItem extends StatelessWidget {
           children: <Widget>[
             Expanded(
                 child: Text(
-                  "$position",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                )),
+              "$position",
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            )),
             Expanded(
               child: AspectRatio(
                 aspectRatio: 1,

@@ -22,6 +22,7 @@ class _ZoneList extends State<ZoneListWidget> {
   bool _progressBarActive = true;
   String searchTerm = "";
   bool searchActive = false;
+  ZoneSortType sortType = ZoneSortType.RELEVANCE;
 
   @override
   void initState() {
@@ -54,16 +55,36 @@ class _ZoneList extends State<ZoneListWidget> {
         (z) => z.city.toLowerCase().contains(searchTerm.toLowerCase()));
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            searchActive = true;
-          });
-        },
-        child: Icon(
-          Icons.search,
-          color: Colors.white,
-        ),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          FloatingActionButton(
+            child: Icon(Icons.sort, color: Colors.white,),
+            onPressed: (() {
+              showDialog(
+                  context: context,
+                  builder: (ctx) => ZoneSortDialog(
+                        initialSort: sortType,
+                      )).then((d) {
+                        setState(() {
+                          sortType = d;
+                        });
+              });
+            }),
+          ),
+          SizedBox(height:10),
+          FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                searchActive = true;
+              });
+            },
+            child: Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+          ),
+        ],
       ),
       appBar: searchActive
           ? PreferredSize(
@@ -283,3 +304,37 @@ class ZoneListItem extends StatelessWidget {
     );
   }
 }
+
+class ZoneSortDialog extends StatefulWidget {
+  final ZoneSortType initialSort;
+
+  ZoneSortDialog({this.initialSort});
+
+  @override
+  _ZoneSortDialogState createState() => _ZoneSortDialogState();
+}
+
+class _ZoneSortDialogState extends State<ZoneSortDialog> {
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Sort Zones"),
+      content: SingleChildScrollView(
+        child: Column(
+          children: ZoneSortType.values.map((z) {
+            return ListTile(
+              onTap: () {
+                Navigator.pop(context, z);
+              },
+              title: Text(z.toString().split(".")[1]),
+              trailing: widget.initialSort == z ? Icon(Icons.check, color: emralsColor(),) : Container(width: 0, height: 0,),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+}
+
+enum ZoneSortType { RELEVANCE, EMRALS, CLEANUPS, REPORTS, CLOSEST, RECENT }

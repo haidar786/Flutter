@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:emrals/models/report_comment.dart';
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/models/user_profile.dart';
@@ -118,7 +120,7 @@ class RestDatasource {
 
     return _netUtil
         .delete(reportURL + "/" + reportID.toString() + "/",
-            headers: headers, body: json.encoder.convert(payload))
+        headers: headers, body: json.encoder.convert(payload))
         .then((dynamic res) {
       if (res["error"] != null) {
         throw Exception(res["error"]);
@@ -152,10 +154,31 @@ class RestDatasource {
   }
 
   Future<dynamic> getLeaderboardReports() async {
-   return _netUtil.get("https://www.emrals.com/api/leaderboard/reports");
+    return _netUtil.get("https://www.emrals.com/api/leaderboard/reports");
   }
 
   Future<dynamic> getLeaderboardCleanups() async {
     return _netUtil.get("https://www.emrals.com/api/leaderboard/cleanups");
+  }
+
+  Future<List<ReportComment>> getReportComments(int reportid) async {
+    return Future.delayed(Duration(seconds: 1), () {
+
+      return List.generate(20, (i) {
+          return ReportComment(
+            userid: i,
+              userName: "Username",
+              userAvatar: "https://www.gravatar.com/avatar/04ea9dff5b1631bb1bd9065f2c6d5b2f?s=100",
+              comment: "Wow what an amazing report! Ill do this tomorrow",
+              time: DateTime.fromMillisecondsSinceEpoch(DateTime
+                  .now()
+                  .millisecondsSinceEpoch - Random().nextInt(604800000)));
+      });
+    });
+  }
+
+  Future<void> addCommentToReport(int reportid, String comment, User user) {
+    ReportComment newComment = ReportComment(userName: user.username, userAvatar: user.picture, userid: user.id, time: DateTime.now(), comment: comment);
+    return Future.delayed(Duration(seconds: 1));
   }
 }

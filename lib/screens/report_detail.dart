@@ -1,5 +1,8 @@
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/models/report_comment.dart';
+import 'package:emrals/models/user_profile.dart';
+import 'package:emrals/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
 import 'package:emrals/models/user.dart';
@@ -23,8 +26,9 @@ class ReportDetail extends StatefulWidget {
 class ReportDetailState extends State<ReportDetail> {
   User user;
   final formatter = new NumberFormat("#,###");
-
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  final TextEditingController commentEditingController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -307,11 +311,180 @@ class ReportDetailState extends State<ReportDetail> {
                           color: Theme.of(context).accentColor,
                         ),
                 ],
+              ),
+              Divider(),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  "Comments",
+                  style: Theme.of(context).textTheme.title,
+                ),
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.only(left: 12.0, right: 12),
+                child: IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextField(
+                          controller: commentEditingController,
+                          style: TextStyle(fontSize: 18, color: Colors.black87),
+                          decoration: InputDecoration(
+                            hintText: "Add Comment...",
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(0),
+                                borderSide: BorderSide(color: Colors.black54)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          color: emralsColor(),
+                          child: IconButton(
+                            icon: Icon(Icons.send),
+                            color: Colors.white,
+                            onPressed: () async {
+                              await RestDatasource().addCommentToReport(
+                                  widget.report.id,
+                                  commentEditingController.text,
+                                  user);
+                              setState(() {});
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              FutureBuilder(
+                future: RestDatasource().getReportComments(widget.report.id),
+                builder: (ctx, snapshot) {
+                  if (snapshot.hasData) {
+                    List<ReportComment> comments = snapshot.data;
+                    return ListView.separated(
+                      padding: EdgeInsets.all(16),
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (ctx, index) {
+                        ReportComment comment = comments[index];
+                        return ReportCommentListItem(comment: comment);
+                      },
+                      itemCount: comments.length,
+                      shrinkWrap: true,
+                      separatorBuilder: (ctx, index) => Divider(),
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
               )
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class ReportCommentListItem extends StatelessWidget {
+  final ReportComment comment;
+
+  ReportCommentListItem({this.comment});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => Profile(
+                  id: comment.userid,
+                )));
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Image.network(
+            comment.userAvatar,
+            width: 50,
+            height: 50,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    comment.userName,
+                    style: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(fontSize: 17),
+                  ),
+                  SizedBox(height: 5),
+                  Text(comment.comment),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "${DateTime.now().difference(comment.time).inHours} hours ago",
+                        style: TextStyle(fontSize: 12, color: Colors.black54),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                                  title: Text(
+                                      "Are you sure you want to flag this comment?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text("Cancel"),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      },
+                                      child: Text("Yes"),
+                                    ),
+                                  ],
+                                ),
+                          ).then((d) {
+                            if (d??false) {
+                              print("flag comment");
+                            }
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Flag",
+                            style:
+                                TextStyle(fontSize: 10, color: Colors.black54),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -98,6 +98,39 @@ class _ReportList extends State<ReportListWidget> {
                                   : reports[index].thumbnail,
                               errorWidget: Icon(Icons.error),
                             ),
+                            widget.report.solution != ""
+                      ? Positioned(
+                          bottom: 10,
+                          left: 10,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                "Before",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15.0,
+                                ),
+                              ),
+                              Container(
+                                width: MediaQuery.of(context).size.width / 3,
+                                height: MediaQuery.of(context).size.width / 3,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff7c94b6),
+                                  image: DecorationImage(
+                                    image:
+                                        NetworkImage(reports[index].thumbnail),
+                                    fit: BoxFit.cover,
+                                  ),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(),
                             Hero(
                               tag: reports[index].id,
                               child: GestureDetector(

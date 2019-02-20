@@ -12,6 +12,8 @@ import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/profile.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/data/database_helper.dart';
+import 'package:intl/intl.dart';
+import 'package:emrals/state_container.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -19,6 +21,7 @@ class ReportListWidget extends StatefulWidget {
 }
 
 class _ReportList extends State<ReportListWidget> {
+  final formatter = new NumberFormat("#,###");
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -250,11 +253,14 @@ class _ReportList extends State<ReportListWidget> {
                                           width: 5,
                                         ),
                                         Text(
-                                          reports[index].solution != ''
-                                              ? reports[index]
-                                                  .solutionEmralsAmount
-                                              : reports[index]
-                                                  .reportEmralsAmount,
+                                          formatter.format(
+                                            double.parse(
+                                                reports[index].solution != ''
+                                                    ? reports[index]
+                                                        .solutionEmralsAmount
+                                                    : reports[index]
+                                                        .reportEmralsAmount),
+                                          ),
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
@@ -341,10 +347,20 @@ class _ReportList extends State<ReportListWidget> {
                                         context: context,
                                         builder: (ctx) {
                                           return AlertDialog(
-                                            content: Container(child: CircularProgressIndicator(), alignment: Alignment.center, width: 50, height: 50,),
+                                            content: Container(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                              alignment: Alignment.center,
+                                              width: 50,
+                                              height: 50,
+                                            ),
                                           );
                                         });
                                     _handleRefresh().whenComplete(() {
+                                      StateContainer.of(context).updateEmrals(
+                                          StateContainer.of(context)
+                                                  .emralsBalance -
+                                              d);
                                       if (Navigator.canPop(context)) {
                                         Navigator.pop(context);
                                       }
@@ -384,6 +400,7 @@ class _ReportList extends State<ReportListWidget> {
         RestDatasource().updateEmrals(u.token).then((e) {
           u.emrals = double.parse(e['emrals_amount']);
           DatabaseHelper().updateUser(u);
+          StateContainer.of(_ctx).updateEmrals(u.emrals);
 
           //update emrals amount in header
         });

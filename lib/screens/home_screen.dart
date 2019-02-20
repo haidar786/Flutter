@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:emrals/data/rest_ds.dart';
-//import 'package:emrals/globals.dart';
+import 'package:emrals/state_container.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -18,12 +18,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePage createState() => _MyHomePage();
 }
 
-class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
+class _MyHomePage extends State<MyHomePage> {
   final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
   BuildContext _ctx;
-  AnimationController _controller;
-  Animation<double> _animation;
 
   final List<Widget> _children = [
     ReportListWidget(),
@@ -37,26 +35,14 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    _controller = new AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-    _animation = _controller;
+
     DatabaseHelper().getUser().then((u) {
       if (u != null) {
         user = u;
         setState(() {
           RestDatasource().updateEmrals(u.token).then((e) {
-            _animation = new Tween<double>(
-              begin: _animation.value,
-              end: double.parse(e['emrals_amount']),
-            ).animate(new CurvedAnimation(
-              curve: Curves.fastOutSlowIn,
-              parent: _controller,
-            ));
-            _controller.forward(from: _animation.value);
-
-            u.emrals = double.parse(e['emrals_amount']);
+            StateContainer.of(_ctx)
+                .updateEmrals(double.parse(e['emrals_amount']));
             DatabaseHelper().updateUser(u);
           });
         });
@@ -84,19 +70,27 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (BuildContext context, Widget child) {
-                return new Text(
-                  formatter.format(_animation.value),
-                  style: TextStyle(
-                    color: emralsColor(),
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
+            child: Text(
+              formatter.format(StateContainer.of(_ctx).emralsBalance),
+              style: TextStyle(
+                color: emralsColor(),
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            // child: AnimatedBuilder(
+            //   animation: StateContainer.of(_ctx).animation,
+            //   builder: (BuildContext context, Widget child) {
+            //     return new Text(
+            //       formatter.format(StateContainer.of(_ctx).emralsBalance),
+            //       style: TextStyle(
+            //         color: emralsColor(),
+            //         fontSize: 24.0,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     );
+            //   },
+            // ),
           ),
           IconButton(
             icon: Image.asset("assets/JustElogo.png"),

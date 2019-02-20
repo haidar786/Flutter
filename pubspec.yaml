@@ -28,7 +28,7 @@ dependencies:
      path: packages/google_maps_flutter
   sentry: any
   contacts_service: ^0.1.1
-  qr_flutter: ^1.1.6
+  qr: 1.0.1
   #simple_permissions: ^0.1.9
   #permission_handler: 2.2.0
   firebase_messaging: 3.0.1

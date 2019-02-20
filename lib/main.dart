@@ -1,4 +1,3 @@
-import 'package:emrals/data/rest_ds.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
@@ -6,9 +5,15 @@ import 'package:sentry/sentry.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:emrals/screens/home_screen.dart';
+import 'package:emrals/state_container.dart';
 import 'dart:io';
 
-final SentryClient sentry = new SentryClient(dsn: "SENTRY_DSN");
+final SentryClient sentry = new SentryClient(
+  dsn: "SENTRY_DSN",
+  environmentAttributes: const Event(
+    release: 'APP_VERSION_NUMBER (BUILD_NUMBER)',
+  ),
+);
 
 bool get isInDebugMode {
   bool inDebugMode = false;
@@ -55,7 +60,7 @@ void main() async {
   };
 
   runZoned<Future<Null>>(() async {
-    runApp(EmralsApp());
+    runApp(StateContainer(child: EmralsApp()));
   }, onError: (error, stackTrace) async {
     await _reportError(error, stackTrace);
   });

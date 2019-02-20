@@ -108,6 +108,27 @@ class RestDatasource {
     });
   }
 
+  Future<dynamic> tipCleanup(int amount, int reportID, String token) {
+    Map<String, int> payload = {
+      "amount": amount,
+      "cleanup_id": reportID,
+    };
+
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil
+        .post(tipURL, headers: headers, body: json.encoder.convert(payload))
+        .then((dynamic res) {
+      if (res["error"] != null) {
+        throw Exception(res["error"]);
+      }
+      return res;
+    });
+  }
+
   Future<dynamic> deleteReport(int reportID, String token) {
     Map<String, int> payload = {
       "report_id": reportID,
@@ -120,7 +141,7 @@ class RestDatasource {
 
     return _netUtil
         .delete(reportURL + "/" + reportID.toString() + "/",
-        headers: headers, body: json.encoder.convert(payload))
+            headers: headers, body: json.encoder.convert(payload))
         .then((dynamic res) {
       if (res["error"] != null) {
         throw Exception(res["error"]);
@@ -163,22 +184,28 @@ class RestDatasource {
 
   Future<List<ReportComment>> getReportComments(int reportid) async {
     return Future.delayed(Duration(seconds: 1), () {
-
       return List.generate(20, (i) {
-          return ReportComment(
+        return ReportComment(
             userid: i,
-              userName: "Username",
-              userAvatar: "https://www.gravatar.com/avatar/04ea9dff5b1631bb1bd9065f2c6d5b2f?s=100",
-              comment: "Wow what an amazing report! Ill do this tomorrow",
-              time: DateTime.fromMillisecondsSinceEpoch(DateTime
-                  .now()
-                  .millisecondsSinceEpoch - Random().nextInt(604800000)));
+            userName: "Username",
+            userAvatar:
+                "https://www.gravatar.com/avatar/04ea9dff5b1631bb1bd9065f2c6d5b2f?s=100",
+            comment: "Wow what an amazing report! Ill do this tomorrow",
+            time: DateTime.fromMillisecondsSinceEpoch(
+                DateTime.now().millisecondsSinceEpoch -
+                    Random().nextInt(604800000)));
       });
     });
   }
 
   Future<void> addCommentToReport(int reportid, String comment, User user) {
-    ReportComment newComment = ReportComment(userName: user.username, userAvatar: user.picture, userid: user.id, time: DateTime.now(), comment: comment);
+    ReportComment newComment = ReportComment(
+        userName: user.username,
+        userAvatar: user.picture,
+        userid: user.id,
+        time: DateTime.now(),
+        comment: comment);
+    print(newComment);
     return Future.delayed(Duration(seconds: 1));
   }
 }

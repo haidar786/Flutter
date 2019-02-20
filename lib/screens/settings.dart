@@ -7,8 +7,9 @@ import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 //import 'package:simple_permissions/simple_permissions.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:emrals/utils/qr.dart';
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/state_container.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -90,7 +91,8 @@ class _SettingsPage extends State<Settingg> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Text(
-                      formatter.format(_userObject.emrals),
+                      formatter
+                          .format(StateContainer.of(context).emralsBalance),
                       style: TextStyle(
                         color: emralsColor(),
                         fontSize: 24.0,

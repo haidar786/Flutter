@@ -1,7 +1,6 @@
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/models/report_comment.dart';
-import 'package:emrals/models/user_profile.dart';
 import 'package:emrals/screens/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
@@ -10,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
+import 'package:emrals/state_container.dart';
 //import 'package:emrals/globals.dart';
 
 class ReportDetail extends StatefulWidget {
@@ -30,7 +30,6 @@ class ReportDetailState extends State<ReportDetail> {
 
   final TextEditingController commentEditingController =
       TextEditingController();
-
 
   @override
   void initState() {
@@ -54,7 +53,7 @@ class ReportDetailState extends State<ReportDetail> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
                 child: Text(
-                  formatter.format(user.emrals ?? ''),
+                  formatter.format(StateContainer.of(context).emralsBalance),
                   style: TextStyle(
                     color: emralsColor(),
                     fontSize: 24.0,
@@ -180,7 +179,8 @@ class ReportDetailState extends State<ReportDetail> {
                     SizedBox(
                       width: 5,
                     ),
-                    Text(widget.report.reportEmralsAmount)
+                    Text(formatter
+                        .format(double.parse(widget.report.reportEmralsAmount)))
                   ]),
                   Row(
                     children: <Widget>[
@@ -238,21 +238,23 @@ class ReportDetailState extends State<ReportDetail> {
                       showDialog(
                           context: context,
                           builder: (ctx) {
-                            return TipDialog(
-                                widget.report, scaffoldKey);
+                            return TipDialog(widget.report, scaffoldKey);
                           }).then((d) {
                         if (d != null) {
+                          StateContainer.of(context).updateEmrals(
+                              StateContainer.of(context).emralsBalance - d);
                           setState(() {
                             if (widget.report.solution.isEmpty) {
-                              widget.report.reportEmralsAmount =
-                                  (double.parse(widget.report
-                                      .reportEmralsAmount) + d)
-                                      .toString();
+                              widget.report.reportEmralsAmount = (double.parse(
+                                          widget.report.reportEmralsAmount) +
+                                      d)
+                                  .toString();
                             } else {
-                              widget.report.solutionEmralsAmount =
-                                  (double.parse(widget.report
-                                      .solutionEmralsAmount) + d)
-                                      .toString();
+                              widget
+                                  .report.solutionEmralsAmount = (double.parse(
+                                          widget.report.solutionEmralsAmount) +
+                                      d)
+                                  .toString();
                             }
                           });
                         }
@@ -482,7 +484,7 @@ class ReportCommentListItem extends StatelessWidget {
                                   ],
                                 ),
                           ).then((d) {
-                            if (d??false) {
+                            if (d ?? false) {
                               print("flag comment");
                             }
                           });
@@ -560,15 +562,23 @@ class EmralsTipCircleButton extends StatelessWidget {
       onTap: () {
         DatabaseHelper().getUser().then((u) {
           if (u.emrals > number) {
-            RestDatasource().tipReport(number, report.id, u.token).then((m) {
-              Navigator.of(context).pop(number);
-//              u.emrals = u.emrals - number;
-//              DatabaseHelper().updateUser(u);
-//              report.reportEmralsAmount =
-//                  (double.parse(report.reportEmralsAmount) + number).toString();
-//              scaffoldKey.currentState
-//                  .showSnackBar(SnackBar(content: Text(m['message'])));
-            });
+            if (report.solution != null) {
+              RestDatasource().tipCleanup(number, report.id, u.token).then((m) {
+                Navigator.of(context).pop(number);
+                u.emrals = u.emrals - number;
+                DatabaseHelper().updateUser(u);
+                scaffoldKey.currentState
+                    .showSnackBar(SnackBar(content: Text(m['message'])));
+              });
+            } else {
+              RestDatasource().tipReport(number, report.id, u.token).then((m) {
+                Navigator.of(context).pop(number);
+                u.emrals = u.emrals - number;
+                DatabaseHelper().updateUser(u);
+                scaffoldKey.currentState
+                    .showSnackBar(SnackBar(content: Text(m['message'])));
+              });
+            }
           } else {
             scaffoldKey.currentState.showSnackBar(SnackBar(
               content: Text("Insufficient ballance"),

@@ -30,31 +30,31 @@ class StateContainer extends StatefulWidget {
 class StateContainerState extends State<StateContainer>
     with TickerProviderStateMixin {
   double emralsBalance;
-  AnimationController _controller;
-  Animation<double> animation;
+  // AnimationController _controller;
+  // Animation<double> animation;
 
   void updateEmrals(double emrals) {
-    _controller = new AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    );
-    animation = _controller;
+    // _controller = new AnimationController(
+    //   vsync: this,
+    //   duration: const Duration(milliseconds: 1500),
+    // );
+    // animation = _controller;
 
     setState(() {
-      animation = new Tween<double>(
-        begin: emralsBalance,
-        end: emrals,
-      ).animate(new CurvedAnimation(
-        curve: Curves.fastOutSlowIn,
-        parent: _controller,
-      ));
-      if (emralsBalance < emrals) {
-        _controller.forward(from: emralsBalance);
-      } else {
-        _controller.reverse(from: emralsBalance);
-      }
+      // animation = new Tween<double>(
+      //   begin: emralsBalance,
+      //   end: emrals,
+      // ).animate(new CurvedAnimation(
+      //   curve: Curves.fastOutSlowIn,
+      //   parent: _controller,
+      // ));
+      // if (emralsBalance < emrals) {
+      //   _controller.forward(from: emralsBalance);
+      // } else {
+      //   _controller.reverse(from: emralsBalance);
+      // }
 
-      emralsBalance = animation.value;
+      emralsBalance = emrals;
     });
   }
 

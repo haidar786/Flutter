@@ -91,8 +91,8 @@ class _SettingsPage extends State<Settingg> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Text(
-                      formatter
-                          .format(StateContainer.of(context).emralsBalance),
+                      formatter.format(
+                          StateContainer.of(context).emralsBalance ?? 0),
                       style: TextStyle(
                         color: emralsColor(),
                         fontSize: 24.0,

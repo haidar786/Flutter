@@ -742,8 +742,8 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      StreamBuilder(
-                        stream: _statsApi.getBlockHeight(),
+                      FutureBuilder(
+                        future: _statsApi.getBlockHeight(),
                         initialData: '-',
                         builder: (context, snapshot) {
                           String value;
@@ -975,8 +975,8 @@ class StatsState extends State<Stats> {
                           fontSize: 14,
                         ),
                       ),
-                      StreamBuilder(
-                        stream: _statsApi.getLastBlockTime(),
+                      FutureBuilder(
+                        future: _statsApi.getLastBlockTime(),
                         initialData: '-',
                         builder: (context, snapshot) {
                           return Text(

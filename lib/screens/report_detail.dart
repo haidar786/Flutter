@@ -27,8 +27,10 @@ class ReportDetailState extends State<ReportDetail> {
   User user;
   final formatter = new NumberFormat("#,###");
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+
   final TextEditingController commentEditingController =
       TextEditingController();
+
 
   @override
   void initState() {
@@ -236,8 +238,25 @@ class ReportDetailState extends State<ReportDetail> {
                       showDialog(
                           context: context,
                           builder: (ctx) {
-                            return TipDialog(widget.report, scaffoldKey);
+                            return TipDialog(
+                                widget.report, scaffoldKey);
+                          }).then((d) {
+                        if (d != null) {
+                          setState(() {
+                            if (widget.report.solution.isEmpty) {
+                              widget.report.reportEmralsAmount =
+                                  (double.parse(widget.report
+                                      .reportEmralsAmount) + d)
+                                      .toString();
+                            } else {
+                              widget.report.solutionEmralsAmount =
+                                  (double.parse(widget.report
+                                      .solutionEmralsAmount) + d)
+                                      .toString();
+                            }
                           });
+                        }
+                      });
                     },
                     label: Text(
                       "Tip Emrals",
@@ -542,13 +561,13 @@ class EmralsTipCircleButton extends StatelessWidget {
         DatabaseHelper().getUser().then((u) {
           if (u.emrals > number) {
             RestDatasource().tipReport(number, report.id, u.token).then((m) {
-              Navigator.of(context).pop();
-              u.emrals = u.emrals - number;
-              DatabaseHelper().updateUser(u);
-              report.reportEmralsAmount =
-                  (double.parse(report.reportEmralsAmount) + number).toString();
-              scaffoldKey.currentState
-                  .showSnackBar(SnackBar(content: Text(m['message'])));
+              Navigator.of(context).pop(number);
+//              u.emrals = u.emrals - number;
+//              DatabaseHelper().updateUser(u);
+//              report.reportEmralsAmount =
+//                  (double.parse(report.reportEmralsAmount) + number).toString();
+//              scaffoldKey.currentState
+//                  .showSnackBar(SnackBar(content: Text(m['message'])));
             });
           } else {
             scaffoldKey.currentState.showSnackBar(SnackBar(

@@ -16,7 +16,7 @@ class Report {
   final String solution;
   final String googleURL;
   String reportEmralsAmount;
-  final String solutionEmralsAmount;
+  String solutionEmralsAmount;
 
   Report({
     this.id,

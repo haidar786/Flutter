@@ -335,7 +335,22 @@ class _ReportList extends State<ReportListWidget> {
                                     builder: (ctx) {
                                       return TipDialog(
                                           reports[index], _scaffoldKey);
+                                    }).then((d) {
+                                  if (d != null) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (ctx) {
+                                          return AlertDialog(
+                                            content: Container(child: CircularProgressIndicator(), alignment: Alignment.center, width: 50, height: 50,),
+                                          );
+                                        });
+                                    _handleRefresh().whenComplete(() {
+                                      if (Navigator.canPop(context)) {
+                                        Navigator.pop(context);
+                                      }
                                     });
+                                  }
+                                });
                               },
                               child: Text("TIP"),
                               shape: StadiumBorder(),
@@ -363,7 +378,7 @@ class _ReportList extends State<ReportListWidget> {
     if (!mounted) return;
     this.setState(() {
       DatabaseHelper().getUser().then((u) {
-        if(u==null){
+        if (u == null) {
           Navigator.of(_ctx).pushReplacementNamed("/login");
         }
         RestDatasource().updateEmrals(u.token).then((e) {

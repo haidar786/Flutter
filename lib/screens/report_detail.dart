@@ -563,7 +563,7 @@ class EmralsTipCircleButton extends StatelessWidget {
       onTap: () {
         DatabaseHelper().getUser().then((u) {
           if (u.emrals > number) {
-            if (report.solution != null) {
+            if (report.solution != '') {
               RestDatasource().tipCleanup(number, report.id, u.token).then((m) {
                 Navigator.of(context).pop(number);
                 u.emrals = u.emrals - number;

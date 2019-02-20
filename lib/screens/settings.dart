@@ -10,6 +10,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:emrals/utils/qr.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/state_container.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class Settingg extends StatefulWidget {
   const Settingg({Key key}) : super(key: key);
@@ -157,14 +158,14 @@ class _SettingsPage extends State<Settingg> {
                                     elevation: 7.0,
                                     child: GestureDetector(
                                       onTap: () {
-                                        // SimplePermissions.requestPermission(
-                                        //         Permission.ReadContacts)
-                                        //     .then((p) {
-                                        //   if (p == PermissionStatus.authorized) {
+                                        SimplePermissions.requestPermission(
+                                                 Permission.ReadContacts)
+                                             .then((p) {
+                                           if (p == PermissionStatus.authorized) {
                                         Navigator.pushNamed(
                                             context, '/contacts');
-                                        //  }
-                                        // });
+                                          }
+                                         });
                                       },
                                       child: Center(
                                         child: Text(

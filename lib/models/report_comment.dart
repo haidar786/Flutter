@@ -9,9 +9,9 @@ class ReportComment {
       {this.userName, this.comment, this.time, this.userAvatar, this.userid});
 
   ReportComment.fromJSON(Map<String, dynamic> json)
-      : userName = json["user_name"] as String,
+      : userName = json["username"] as String,
         comment = json["comment"] as String,
-        time = json["time"] as DateTime,
-        userAvatar = json["avatar"] as String,
+        time = DateTime.parse(json["submit_date"]),
+        userAvatar = json["user_profile_image_url"] as String,
         userid = json["user_id"] as int;
 }

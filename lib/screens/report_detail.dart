@@ -373,10 +373,12 @@ class ReportDetailState extends State<ReportDetail> {
                             icon: Icon(Icons.send),
                             color: Colors.white,
                             onPressed: () async {
-                              await RestDatasource().addCommentToReport(
+                              RestDatasource().addCommentToReport(
                                   widget.report.id,
                                   commentEditingController.text,
-                                  user);
+                                  user).then((b) {
+                                    print(b);
+                              });
                               setState(() {});
                             },
                           ),
@@ -391,17 +393,26 @@ class ReportDetailState extends State<ReportDetail> {
                 builder: (ctx, snapshot) {
                   if (snapshot.hasData) {
                     List<ReportComment> comments = snapshot.data;
-                    return ListView.separated(
-                      padding: EdgeInsets.all(16),
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (ctx, index) {
-                        ReportComment comment = comments[index];
-                        return ReportCommentListItem(comment: comment);
-                      },
-                      itemCount: comments.length,
-                      shrinkWrap: true,
-                      separatorBuilder: (ctx, index) => Divider(),
-                    );
+                    if (comments.length > 0) {
+                      return ListView.separated(
+                        padding: EdgeInsets.all(16),
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (ctx, index) {
+                          ReportComment comment = comments[index];
+                          return ReportCommentListItem(comment: comment);
+                        },
+                        itemCount: comments.length,
+                        shrinkWrap: true,
+                        separatorBuilder: (ctx, index) => Divider(),
+                      );
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.all(38.0),
+                        child: Center(
+                          child: Text("No comments :(", style: TextStyle(color: Colors.black45),),
+                        ),
+                      );
+                    }
                   } else {
                     return Center(
                       child: CircularProgressIndicator(),

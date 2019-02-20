@@ -41,8 +41,7 @@ class _MyHomePage extends State<MyHomePage> {
         user = u;
         setState(() {
           RestDatasource().updateEmrals(u.token).then((e) {
-            StateContainer.of(_ctx)
-                .updateEmrals(double.parse(e['emrals_amount']));
+            StateContainer.of(_ctx).updateEmrals(double.parse(e['emrals_amount']));
             DatabaseHelper().updateUser(u);
           });
         });

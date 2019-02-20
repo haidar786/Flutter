@@ -182,30 +182,29 @@ class RestDatasource {
     return _netUtil.get("https://www.emrals.com/api/leaderboard/cleanups");
   }
 
-  Future<List<ReportComment>> getReportComments(int reportid) async {
-    return Future.delayed(Duration(seconds: 1), () {
-      return List.generate(20, (i) {
-        return ReportComment(
-            userid: i,
-            userName: "Username",
-            userAvatar:
-                "https://www.gravatar.com/avatar/04ea9dff5b1631bb1bd9065f2c6d5b2f?s=100",
-            comment: "Wow what an amazing report! Ill do this tomorrow",
-            time: DateTime.fromMillisecondsSinceEpoch(
-                DateTime.now().millisecondsSinceEpoch -
-                    Random().nextInt(604800000)));
-      });
-    });
+  Future<dynamic> getReportComments(int reportid)async{
+    Map<String, dynamic> json = await _netUtil.get("https://www.emrals.com/api/alerts/$reportid/");
+    return (json["comments"] as List<dynamic>).map((m) => ReportComment.fromJSON(m)).toList();
   }
 
-  Future<void> addCommentToReport(int reportid, String comment, User user) {
-    ReportComment newComment = ReportComment(
-        userName: user.username,
-        userAvatar: user.picture,
-        userid: user.id,
-        time: DateTime.now(),
-        comment: comment);
-    print(newComment);
-    return Future.delayed(Duration(seconds: 1));
+  Future<dynamic> addCommentToReport(int reportid, String comment, User user) {
+    Map<String, dynamic> payload = {
+      "user_id": user.id,
+      "username": user.username,
+      "user_profile_image_url": user.picture,
+      "content_type": 9,
+      "object_pk": "$reportid",
+      "comment": comment,
+      "submit_date": DateTime.now().toIso8601String(),
+    };
+    Map<String, String> headers = {
+      "Authorization": "token ${user.token}",
+      "Content-type": "application/json"
+    };
+    return _netUtil
+        .post("https://www.emrals.com/api/comments/", headers: headers, body: json.encoder.convert(payload))
+        .then((d) {
+          return d;
+    });
   }
 }

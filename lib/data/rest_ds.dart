@@ -9,15 +9,14 @@ import 'package:emrals/styles.dart';
 
 class RestDatasource {
   NetworkUtil _netUtil = NetworkUtil();
-  static final baseURL = apiUrl;
-  static final loginURL = baseURL + "login/";
-  static final signupURL = baseURL + "rest-auth/registration/";
-  static final tipURL = baseURL + "tip/";
-  static final reportURL = baseURL + "alerts/";
-  static final inviteURL = baseURL + "invite/";
-  static final usersURL = baseURL + "users/";
-  static final sendURL = baseURL + "send/";
-  static final updateURL = baseURL + "me/";
+  static final loginURL = apiUrl + "login/";
+  static final signupURL = apiUrl + "rest-auth/registration/";
+  static final tipURL = apiUrl + "tip/";
+  static final reportURL = apiUrl + "alerts/";
+  static final inviteURL = apiUrl + "invite/";
+  static final usersURL = apiUrl + "users/";
+  static final sendURL = apiUrl + "send/";
+  static final updateURL = apiUrl + "me/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -174,16 +173,16 @@ class RestDatasource {
   }
 
   Future<dynamic> getLeaderboardReports() async {
-    return _netUtil.get("https://www.emrals.com/api/leaderboard/reports");
+    return _netUtil.get(apiUrl + "leaderboard/reports");
   }
 
   Future<dynamic> getLeaderboardCleanups() async {
-    return _netUtil.get("https://www.emrals.com/api/leaderboard/cleanups");
+    return _netUtil.get(apiUrl + "leaderboard/cleanups");
   }
 
   Future<dynamic> getReportComments(int reportid) async {
     Map<String, dynamic> json =
-        await _netUtil.get("https://www.emrals.com/api/alerts/$reportid/");
+        await _netUtil.get(apiUrl + "alerts/$reportid/");
     return (json["comments"] as List<dynamic>)
         .map((m) => ReportComment.fromJSON(m))
         .toList();
@@ -191,8 +190,7 @@ class RestDatasource {
 
   Future<dynamic> addCommentToReport(int reportid, String comment, User user) {
     Map<String, dynamic> payload = {
-      "user_id": user.id,
-      "username": user.username,
+      "user": user.id,
       "user_profile_image_url": user.picture,
       "content_type": 9,
       "site": 1,
@@ -205,10 +203,10 @@ class RestDatasource {
       "Content-type": "application/json"
     };
     return _netUtil
-        .post("https://www.emrals.com/api/comments/",
+        .post(apiUrl + "comments/",
             headers: headers, body: json.encoder.convert(payload))
         .then((d) {
-      return d;
+      return ReportComment.fromJSON(d);
     });
   }
 }

@@ -31,6 +31,8 @@ class ReportDetailState extends State<ReportDetail> {
   final TextEditingController commentEditingController =
       TextEditingController();
 
+  List<ReportComment> reportComments;
+
   @override
   void initState() {
     super.initState();
@@ -373,11 +375,16 @@ class ReportDetailState extends State<ReportDetail> {
                             icon: Icon(Icons.send),
                             color: Colors.white,
                             onPressed: () async {
-                              RestDatasource().addCommentToReport(
-                                  widget.report.id,
-                                  commentEditingController.text,
-                                  user).then((b) {
-                                    print(b);
+                              RestDatasource()
+                                  .addCommentToReport(widget.report.id,
+                                      commentEditingController.text, user)
+                                  .then((b) {
+                                commentEditingController.text = "";
+
+                                reportComments.insert(0, b);
+
+                                scaffoldKey.currentState.showSnackBar(
+                                    SnackBar(content: Text("Comment Posted!")));
                               });
                               setState(() {});
                             },
@@ -392,16 +399,16 @@ class ReportDetailState extends State<ReportDetail> {
                 future: RestDatasource().getReportComments(widget.report.id),
                 builder: (ctx, snapshot) {
                   if (snapshot.hasData) {
-                    List<ReportComment> comments = snapshot.data;
-                    if (comments.length > 0) {
+                    reportComments = snapshot.data;
+                    if (reportComments.length > 0) {
                       return ListView.separated(
                         padding: EdgeInsets.all(16),
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (ctx, index) {
-                          ReportComment comment = comments[index];
+                          ReportComment comment = reportComments[index];
                           return ReportCommentListItem(comment: comment);
                         },
-                        itemCount: comments.length,
+                        itemCount: reportComments.length,
                         shrinkWrap: true,
                         separatorBuilder: (ctx, index) => Divider(),
                       );
@@ -409,7 +416,10 @@ class ReportDetailState extends State<ReportDetail> {
                       return Padding(
                         padding: const EdgeInsets.all(38.0),
                         child: Center(
-                          child: Text("No comments :(", style: TextStyle(color: Colors.black45),),
+                          child: Text(
+                            "No comments :(",
+                            style: TextStyle(color: Colors.black45),
+                          ),
                         ),
                       );
                     }

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 
 class NetworkUtil {
   static NetworkUtil _instance = NetworkUtil.internal();
@@ -15,7 +16,10 @@ class NetworkUtil {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw Exception("Error while fetching data" + res);
+        debugPrint(res);
+        throw Exception("Error while fetching data " +
+            response.statusCode.toString() +
+            res);
       }
       return _decoder.convert(res);
     });
@@ -28,20 +32,26 @@ class NetworkUtil {
       final String res = response.body;
       final int statusCode = response.statusCode;
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw Exception("Error while fetching data" + res);
+        debugPrint(res);
+        throw Exception("Error while fetching data " +
+            response.statusCode.toString() +
+            res);
       }
       return _decoder.convert(res);
     });
   }
 
-  Future<dynamic> delete(String url, {Map headers, body, encoding}) {
+  Future<dynamic> delete(String url, {Map headers}) {
     return http.delete(url, headers: headers).then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw Exception("Error while fetching data" + res);
+        debugPrint(res);
+        throw Exception("Error while fetching data: " +
+            response.statusCode.toString() +
+            res);
       }
-      return _decoder.convert(res);
+      return res;
     });
   }
 }

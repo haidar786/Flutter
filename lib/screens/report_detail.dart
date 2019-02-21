@@ -10,7 +10,6 @@ import 'package:emrals/screens/camera.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
 import 'package:emrals/state_container.dart';
-//import 'package:emrals/globals.dart';
 
 class ReportDetail extends StatefulWidget {
   final Report report;

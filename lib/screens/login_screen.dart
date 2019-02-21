@@ -7,7 +7,6 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login_screen_presenter.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
-//import 'package:emrals/globals.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

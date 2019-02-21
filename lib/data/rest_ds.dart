@@ -128,22 +128,14 @@ class RestDatasource {
   }
 
   Future<dynamic> deleteReport(int reportID, String token) {
-    Map<String, int> payload = {
-      "report_id": reportID,
-    };
-
     Map<String, String> headers = {
       "Authorization": "token $token",
       "Content-type": "application/json"
     };
 
     return _netUtil
-        .delete(reportURL + "/" + reportID.toString() + "/",
-            headers: headers, body: json.encoder.convert(payload))
+        .delete(reportURL + reportID.toString() + "/", headers: headers)
         .then((dynamic res) {
-      if (res["error"] != null) {
-        throw Exception(res["error"]);
-      }
       return res;
     });
   }

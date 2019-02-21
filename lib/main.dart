@@ -1,3 +1,4 @@
+import 'package:emrals/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
@@ -7,6 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:emrals/screens/home_screen.dart';
 import 'package:emrals/state_container.dart';
 import 'dart:io';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 final SentryClient sentry = new SentryClient(
   dsn: "SENTRY_DSN",
@@ -60,7 +63,14 @@ void main() async {
   };
 
   runZoned<Future<Null>>(() async {
-    runApp(StateContainer(child: EmralsApp()));
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (!(preferences.getBool("onboarded") ?? false)) {
+      runApp(StateContainer(child: MaterialApp(
+        home: OnboardScreen(), debugShowCheckedModeBanner: false,)));
+    } else {
+      runApp(StateContainer(child: MaterialApp(
+        home: EmralsApp(), debugShowCheckedModeBanner: false,)));
+    }
   }, onError: (error, stackTrace) async {
     await _reportError(error, stackTrace);
   });

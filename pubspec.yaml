@@ -31,6 +31,7 @@ dependencies:
   qr: 1.0.1
   simple_permissions: ^0.1.9
   firebase_messaging: 3.0.1
+  shared_preferences: ^0.4.3
 
 dev_dependencies:
   flutter_test:

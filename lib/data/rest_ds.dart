@@ -181,9 +181,12 @@ class RestDatasource {
     return _netUtil.get("https://www.emrals.com/api/leaderboard/cleanups");
   }
 
-  Future<dynamic> getReportComments(int reportid)async{
-    Map<String, dynamic> json = await _netUtil.get("https://www.emrals.com/api/alerts/$reportid/");
-    return (json["comments"] as List<dynamic>).map((m) => ReportComment.fromJSON(m)).toList();
+  Future<dynamic> getReportComments(int reportid) async {
+    Map<String, dynamic> json =
+        await _netUtil.get("https://www.emrals.com/api/alerts/$reportid/");
+    return (json["comments"] as List<dynamic>)
+        .map((m) => ReportComment.fromJSON(m))
+        .toList();
   }
 
   Future<dynamic> addCommentToReport(int reportid, String comment, User user) {
@@ -192,6 +195,7 @@ class RestDatasource {
       "username": user.username,
       "user_profile_image_url": user.picture,
       "content_type": 9,
+      "site": 1,
       "object_pk": "$reportid",
       "comment": comment,
       "submit_date": DateTime.now().toIso8601String(),
@@ -201,9 +205,10 @@ class RestDatasource {
       "Content-type": "application/json"
     };
     return _netUtil
-        .post("https://www.emrals.com/api/comments/", headers: headers, body: json.encoder.convert(payload))
+        .post("https://www.emrals.com/api/comments/",
+            headers: headers, body: json.encoder.convert(payload))
         .then((d) {
-          return d;
+      return d;
     });
   }
 }

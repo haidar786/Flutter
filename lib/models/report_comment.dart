@@ -13,5 +13,5 @@ class ReportComment {
         comment = json["comment"] as String,
         time = DateTime.parse(json["submit_date"]),
         userAvatar = json["user_profile_image_url"] as String,
-        userid = json["user_id"] as int;
+        userid = json["user"] as int;
 }

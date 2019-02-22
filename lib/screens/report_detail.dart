@@ -379,13 +379,15 @@ class ReportDetailState extends State<ReportDetail> {
                                       commentEditingController.text, user)
                                   .then((b) {
                                 commentEditingController.text = "";
-
-                                reportComments.insert(0, b);
+                                 setState(() {
+                                 reportComments.insert(0, b);
+                                 });
+                                
 
                                 scaffoldKey.currentState.showSnackBar(
                                     SnackBar(content: Text("Comment Posted!")));
                               });
-                              setState(() {});
+                              
                             },
                           ),
                         ),

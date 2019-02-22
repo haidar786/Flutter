@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:emrals/screens/home_screen.dart';
 import 'package:emrals/state_container.dart';
 import 'dart:io';
+import 'package:flutter/rendering.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +26,12 @@ bool get isInDebugMode {
 }
 
 void main() async {
+  //debugPaintSizeEnabled = true;
+  //debugPaintLayerBordersEnabled = true;
+  //debugPaintPointersEnabled = true;
+  //debugPaintBaselinesEnabled = true;
+  //debugRepaintRainbowEnabled = true;
+
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   void iOSPermission() {
@@ -66,21 +73,11 @@ void main() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (!(preferences.getBool("onboarded") ?? false)) {
       runApp(
-        StateContainer(
-          child: MaterialApp(
-            home: OnboardScreen(),
-            debugShowCheckedModeBanner: false,
-          ),
-        ),
+        StateContainer(child: OnboardScreen()),
       );
     } else {
       runApp(
-        StateContainer(
-          child: MaterialApp(
-            home: EmralsApp(),
-            debugShowCheckedModeBanner: false,
-          ),
-        ),
+        StateContainer(child: EmralsApp()),
       );
     }
   }, onError: (error, stackTrace) async {
@@ -119,6 +116,7 @@ class EmralsAppState extends State<EmralsApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(),
       theme: ThemeData(
         primaryColor: Colors.black,

@@ -13,7 +13,7 @@ import 'package:emrals/state_container.dart';
 
 class ReportDetail extends StatefulWidget {
   final Report report;
-  List reports;
+  final List reports;
 
   ReportDetail({Key key, @required this.report, this.reports})
       : super(key: key);

@@ -79,7 +79,6 @@ class SignupScreenState extends State<SignupScreen>
                 child: TextFormField(
                   autofocus: true,
                   autocorrect: false,
-                  autovalidate: false,
                   onSaved: (val) => _username = val,
                   validator: FieldValidator.validateUsername,
                   decoration: InputDecoration(
@@ -110,7 +109,6 @@ class SignupScreenState extends State<SignupScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   autocorrect: false,
-                  autovalidate: false,
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (val) => _email = val,
                   validator: FieldValidator.validateEmail,
@@ -142,7 +140,6 @@ class SignupScreenState extends State<SignupScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   autocorrect: false,
-                  autovalidate: false,
                   maxLength: 20,
                   obscureText: passwordVisible,
                   onSaved: (val) => _password = val,

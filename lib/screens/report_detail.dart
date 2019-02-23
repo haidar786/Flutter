@@ -31,9 +31,11 @@ class ReportDetailState extends State<ReportDetail> {
       TextEditingController();
 
   List<ReportComment> reportComments;
+  ScrollController _controller;
 
   @override
   void initState() {
+    _controller = ScrollController();
     super.initState();
     DatabaseHelper().getUser().then((u) {
       setState(() {
@@ -63,16 +65,19 @@ class ReportDetailState extends State<ReportDetail> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  "assets/JustElogo.png",
-                  width: 32,
-                ),
+              IconButton(
+                icon: Image.asset("assets/JustElogo.png"),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    '/settings',
+                  );
+                },
               ),
             ],
           ),
           body: ListView(
+            controller: _controller,
             children: <Widget>[
               Stack(
                 children: <Widget>[
@@ -352,6 +357,9 @@ class ReportDetailState extends State<ReportDetail> {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          onTap: () {
+                            _controller.jumpTo(500);
+                          },
                           controller: commentEditingController,
                           style: TextStyle(fontSize: 18, color: Colors.black87),
                           decoration: InputDecoration(
@@ -379,15 +387,13 @@ class ReportDetailState extends State<ReportDetail> {
                                       commentEditingController.text, user)
                                   .then((b) {
                                 commentEditingController.text = "";
-                                 setState(() {
-                                 reportComments.insert(0, b);
-                                 });
-                                
+                                setState(() {
+                                  reportComments.insert(0, b);
+                                });
 
                                 scaffoldKey.currentState.showSnackBar(
                                     SnackBar(content: Text("Comment Posted!")));
                               });
-                              
                             },
                           ),
                         ),

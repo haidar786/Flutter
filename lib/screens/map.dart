@@ -97,24 +97,17 @@ class _MyAppState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, int> markerMap;
-    markerMap = Map();
     if (widget.report == null) {
       reports.forEach((report) {
-        mapController
-            .addMarker(
+        mapController.addMarker(
           MarkerOptions(
             position: LatLng(report.latitude, report.longitude),
             consumeTapEvents: true,
-            zIndex: report.id.toDouble(),
+            zIndex: reports.indexOf(report).toDouble(),
             infoWindowText:
                 InfoWindowText(report.title, 'Report #' + report.id.toString()),
           ),
-        )
-            .then((marker) {
-          markerMap[marker.id] = report.id;
-          return marker;
-        });
+        );
       });
     }
     return Scaffold(

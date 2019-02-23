@@ -66,8 +66,6 @@ class SignupScreenState extends State<SignupScreen>
   Widget build(BuildContext context) {
     _ctx = context;
 
-    FormUtil _formUtil = new FormUtil();
-    
     var signupBtn = Container(
       padding: const EdgeInsets.all(10.0),
       child: RaisedButton(
@@ -210,10 +208,13 @@ class SignupScreenState extends State<SignupScreen>
         InkWell(
           child: Text.rich(
             TextSpan(
-              text: 'By signing up you agree to our', // default text style'By signing up you agree to our \n Terms and Conditions',
+              text:
+                  'By signing up you agree to our', // default text style'By signing up you agree to our \n Terms and Conditions',
               style: TextStyle(color: Colors.white),
               children: <TextSpan>[
-                TextSpan(text: '\nTerms and Conditions ', style: TextStyle(decoration: TextDecoration.underline)),
+                TextSpan(
+                    text: '\nTerms and Conditions ',
+                    style: TextStyle(decoration: TextDecoration.underline)),
               ],
             ),
             textAlign: TextAlign.center,

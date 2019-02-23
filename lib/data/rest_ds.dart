@@ -184,7 +184,6 @@ class RestDatasource {
     Map<String, dynamic> payload = {
       "user": user.id,
       "user_profile_image_url": user.picture,
-      "content_type": 9,
       "site": 1,
       "object_pk": "$reportid",
       "comment": comment,

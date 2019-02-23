@@ -13,8 +13,10 @@ import 'package:emrals/state_container.dart';
 
 class ReportDetail extends StatefulWidget {
   final Report report;
+  List reports;
 
-  ReportDetail({Key key, @required this.report}) : super(key: key);
+  ReportDetail({Key key, @required this.report, this.reports})
+      : super(key: key);
 
   @override
   ReportDetailState createState() {
@@ -136,6 +138,8 @@ class ReportDetailState extends State<ReportDetail> {
                                       .deleteReport(
                                           widget.report.id, user.token)
                                       .then((m) {
+                                    widget.reports.removeWhere(
+                                        (item) => item.id == widget.report.id);
                                     Navigator.of(context).pop();
                                   });
                                 },

@@ -84,8 +84,8 @@ class _ReportList extends State<ReportListWidget> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    ReportDetail(report: reports[index])),
+                                builder: (context) => ReportDetail(
+                                    report: reports[index], reports: reports)),
                           );
                         },
                         child: Stack(

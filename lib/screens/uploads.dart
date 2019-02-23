@@ -1,50 +1,28 @@
-// import 'package:emrals/data/rest_ds.dart';
-// import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
-
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/offline_report.dart';
-//import 'package:contacts_service/contacts_service.dart';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
 class Uploads extends StatefulWidget {
   @override
-  ContactsState createState() {
-    return ContactsState();
+  UploadsState createState() {
+    return UploadsState();
   }
 }
 
-class ContactsState extends State<Uploads> {
+class UploadsState extends State<Uploads> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Uploads'),
+          title: Text('Pending Uploads'),
         ),
         body: FutureBuilder(
           future: DatabaseHelper().getReports(),
           builder: (ctx, snapshot) {
             if (snapshot.hasData) {
               List<OfflineReport> reports = List.from(snapshot.data);
-              // ..sort(
-              //   (c1, c2) {
-              //     if (c1.displayName != null && c2.displayName != null) {
-              //       return c1.displayName.compareTo(c2.displayName);
-              //     }
-              //   },
-              // )
-              // ..sort(
-              //   (c1, c2) {
-              //     if (c1.emails.length < c2.emails.length) {
-              //       return 1;
-              //     } else if (c1.emails.length > c2.emails.length) {
-              //       return -1;
-              //     } else {
-              //       return 0;
-              //     }
-              //   },
-              // );
               return ReportList(reports: reports);
             } else {
               return Center(
@@ -69,37 +47,28 @@ class ReportList extends StatelessWidget {
         File file = new File(report.filename);
         String basename = p.basename(file.path);
 
-        return ListTile(
-          contentPadding: EdgeInsets.all(16),
-          title: Text(basename),
-          leading: Container(
-            width: 40,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: new BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(report.filename),
-                fit: BoxFit.fill,
+        return Column(
+          children: <Widget>[
+            ListTile(
+              contentPadding: EdgeInsets.all(16),
+              leading: Container(
+                width: 40,
+                height: 40,
+                alignment: Alignment.center,
+                decoration: new BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(report.filename),
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
+              title: Text(basename),
+              subtitle: Text(report.latitude.toString() +
+                  ", " +
+                  report.longitude.toString()),
             ),
-          ),
-          // Image(
-          //         image: AssetImage(report.filename),
-          //       ),
-          // leading: CircleAvatar(
-          //   foregroundColor: Colors.white,
-          //   backgroundImage: MemoryImage(contact.avatar),
-          //   child: Text(contact.displayName != null && contact.avatar != null
-          //       ? contact.displayName.substring(0, 1)
-          //       : ""),
-          // ),
-          subtitle: Text(
-              report.latitude.toString() + ", " + report.longitude.toString()),
-          // trailing: contact.emails.length != 0
-          //     ? InviteButton(
-          //         email: contact.emails.first.value,
-          //       )
-          //     : null,
+            LinearProgressIndicator(),
+          ],
         );
       },
       separatorBuilder: (ctx, index) => Divider(

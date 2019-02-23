@@ -25,10 +25,6 @@ class _MyAppState extends State<MapPage> {
 
   List<Report> reports = [];
 
-  void onMarkerTapped(Marker m) {
-    print(m.options.zIndex);
-  }
-
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     mapController.onMarkerTapped.add((m) {
@@ -101,17 +97,24 @@ class _MyAppState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, int> markerMap;
+    markerMap = Map();
     if (widget.report == null) {
       reports.forEach((report) {
-        mapController.addMarker(
+        mapController
+            .addMarker(
           MarkerOptions(
             position: LatLng(report.latitude, report.longitude),
             consumeTapEvents: true,
-            zIndex: reports.indexOf(report).toDouble(),
+            zIndex: report.id.toDouble(),
             infoWindowText:
                 InfoWindowText(report.title, 'Report #' + report.id.toString()),
           ),
-        );
+        )
+            .then((marker) {
+          markerMap[marker.id] = report.id;
+          return marker;
+        });
       });
     }
     return Scaffold(

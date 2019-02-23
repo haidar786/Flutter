@@ -1,3 +1,4 @@
+import 'package:emrals/components/reveal_progress_button.dart';
 import 'package:emrals/utils/field_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
@@ -19,11 +20,11 @@ class SignupScreenState extends State<SignupScreen>
     implements SignupScreenContract, AuthStateListener {
   BuildContext _ctx;
 
-  bool _isLoading = false;
   bool passwordVisible = false;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String _password, _username, _email;
+  int buttonState = 0;
 
   SignupScreenPresenter _presenter;
 
@@ -43,11 +44,13 @@ class SignupScreenState extends State<SignupScreen>
 
   void _submit() {
     final form = formKey.currentState;
-
     if (form.validate()) {
-      setState(() => _isLoading = true);
       form.save();
       _presenter.doSignup(_username, _password, _email);
+    } else {
+      setState(() {
+        buttonState = 0;
+      });
     }
   }
 
@@ -64,23 +67,6 @@ class SignupScreenState extends State<SignupScreen>
   @override
   Widget build(BuildContext context) {
     _ctx = context;
-
-    var signupBtn = Container(
-      padding: const EdgeInsets.all(10.0),
-      child: RaisedButton(
-        color: emralsColor().shade50,
-        disabledColor: emralsColor(),
-        highlightColor: emralsColor().shade500,
-        disabledTextColor: emralsColor().shade500,
-        textColor: Colors.white,
-        onPressed: _submit,
-        child: Text('SIGN UP'),
-        shape: StadiumBorder(
-          side: BorderSide(width: 2.0, color: Colors.white),
-        ),
-      ),
-    );
-
     var signupForm = Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -201,9 +187,20 @@ class SignupScreenState extends State<SignupScreen>
             ],
           ),
         ),
-        Spacer(),
-        _isLoading ? CircularProgressIndicator() : signupBtn,
-        Spacer(),
+        Center(
+            child: RevealProgressButton(
+          startColor: emralsColor().shade50,
+          endColor: Colors.green,
+          name: 'SIGN UP',
+          onPressed: () {
+            print('Signup button pressed');
+            setState(() {
+              buttonState = 1;
+              _submit();
+            });
+          },
+          state: buttonState,
+        )),
         InkWell(
           child: Text.rich(
             TextSpan(
@@ -240,13 +237,14 @@ class SignupScreenState extends State<SignupScreen>
   @override
   void onSignupError(String errorTxt) {
     _showSnackBar(errorTxt);
-    setState(() => _isLoading = false);
+    setState(() {
+      buttonState = 0;
+    });
   }
 
   @override
   void onSignupSuccess(User user) async {
-    _showSnackBar('logged in as' + user.username);
-    setState(() => _isLoading = false);
+    _showSnackBar("logged in as" + user.username);
     var db = DatabaseHelper();
     await db.saveUser(user);
     SharedPreferences prefs = await SharedPreferences.getInstance();

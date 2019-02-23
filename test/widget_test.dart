@@ -43,7 +43,7 @@ void main() {
     return MaterialApp(home: widget);
   }
 
-  testWidgets('empty email and password doesn\'t call sign in',
+  /* testWidgets('empty email and password doesn\'t call sign in',
       (WidgetTester tester) async {
     // builds our widget
     await tester.pumpWidget(buildTestableWidget(LoginScreen()));
@@ -56,5 +56,5 @@ void main() {
 
     // taps the login button
     await tester.tap(loginBtn);
-  });
+  }); */
 }

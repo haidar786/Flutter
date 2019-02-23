@@ -1,5 +1,10 @@
 //import 'dart:ui';
 
+import 'package:emrals/bloc_provider.dart';
+import 'package:emrals/bloc_providers/auth_api.dart';
+import 'package:emrals/blocs/login_bloc.dart';
+import 'package:emrals/components/reveal_progress_button.dart';
+import 'package:emrals/models/auth_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
@@ -9,23 +14,29 @@ import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:emrals/utils/field_validator.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreenBase extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() {
-    return LoginScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider<LoginBloc>(
+      child: LoginScreen(),
+      builder: (_, bloc) => bloc ?? LoginBloc(AuthApi()),
+      onDispose: (_, bloc) => bloc.dispose(),
+    );
   }
 }
 
-class LoginScreenState extends State<LoginScreen>
-    implements LoginScreenContract, AuthStateListener {
-  BuildContext _ctx;
+class LoginScreen extends StatefulWidget {
+  @override
+  LoginScreenState createState() {
+    return new LoginScreenState();
+  }
+}
 
-  bool _isLoading = false;
+class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String _password, _username;
-
-  LoginScreenPresenter _presenter;
+  int buttonState = 0;
 
   launchURL(url) async {
     if (await canLaunch(url)) {
@@ -35,19 +46,18 @@ class LoginScreenState extends State<LoginScreen>
     }
   }
 
-  LoginScreenState() {
-    _presenter = LoginScreenPresenter(this);
-    var authStateProvider = AuthStateProvider();
-    authStateProvider.subscribe(this);
-  }
-
-  void _submit() {
+  void _submit(BuildContext context) {
+    final loginBloc = Provider.of<LoginBloc>(context);
     final form = formKey.currentState;
 
     if (form.validate()) {
-      setState(() => _isLoading = true);
       form.save();
-      _presenter.doLogin(_username, _password);
+      loginBloc.authenticate(username: _username, password: _password);
+      //_presenter.doLogin(_username, _password);
+    } else {
+      setState(() {
+        buttonState = 0;
+      });
     }
   }
 
@@ -56,36 +66,31 @@ class LoginScreenState extends State<LoginScreen>
   }
 
   @override
-  onAuthStateChanged(AuthState state) {
-    if (state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).pushReplacementNamed("/home");
-  }
-
-  @override
-  void dispose() {
-    var authStateProvider = new AuthStateProvider();
-    authStateProvider.dispose(this);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _ctx = context;
-    var loginBtn = Container(
-      padding: const EdgeInsets.all(10.0),
-      child: RaisedButton(
-        color: emralsColor(),
-        disabledColor: emralsColor(),
-        highlightColor: emralsColor().shade500,
-        disabledTextColor: emralsColor().shade500,
-        textColor: Colors.white,
-        onPressed: _submit,
-        child: Text("LOGIN"),
-        shape: StadiumBorder(
-          side: BorderSide(width: 2.0, color: Colors.white),
-        ),
-      ),
-    );
+    //Navigator.of(context).pushReplacementNamed("/home");
+    final loginBloc = Provider.of<LoginBloc>(context);
+
+    loginBloc.authDataStream.listen((AuthData authData) {
+      switch (authData.authState) {
+        case AuthState.LOGGED_IN:
+          {
+            _showSnackBar('Logged in as ${authData.user.username}');
+            Navigator.of(context).pushReplacementNamed("/home");
+          }
+          break;
+        case AuthState.AUTH_ERROR:
+          {
+            _showSnackBar(authData.errorString);
+            setState(() {
+              buttonState = 0;
+            });
+          }
+          break;
+        default:
+          {}
+      }
+    });
+
     var loginForm = Column(
       children: <Widget>[
         Image(image: AssetImage("assets/logo.png")),
@@ -173,11 +178,22 @@ class LoginScreenState extends State<LoginScreen>
             ],
           ),
         ),
-        _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : loginBtn,
+        Center(
+          child: RevealProgressButton(
+            startColor: emralsColor(),
+            endColor: Colors.green,
+            name: 'LOGIN',
+            onPressed: () {
+              if (!mounted) return;
+              setState(() {
+                print('Signup button pressed');
+                buttonState = 1;
+                _submit(context);
+              });
+            },
+            state: buttonState,
+          ),
+        ),
         SizedBox(
           height: 10,
         ),
@@ -237,22 +253,5 @@ class LoginScreenState extends State<LoginScreen>
         ),
       ),
     );
-  }
-
-  @override
-  void onLoginError(String errorTxt) {
-    _showSnackBar(errorTxt);
-    setState(() => _isLoading = false);
-  }
-
-  @override
-  void onLoginSuccess(User user) async {
-    _showSnackBar("logged in as " + user.username);
-    setState(() => _isLoading = false);
-    var db = DatabaseHelper();
-    //globalUser = user;
-    await db.saveUser(user);
-    var authStateProvider = AuthStateProvider();
-    authStateProvider.notify(AuthState.LOGGED_IN);
   }
 }

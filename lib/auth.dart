@@ -1,6 +1,6 @@
 import 'package:emrals/data/database_helper.dart';
 
-enum AuthState { LOGGED_IN, LOGGED_OUT }
+enum AuthState { LOGGED_IN, LOGGED_OUT, AUTH_ERROR }
 
 abstract class AuthStateListener {
   void onAuthStateChanged(AuthState state);

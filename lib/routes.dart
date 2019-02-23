@@ -10,7 +10,7 @@ import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/profile.dart';
 
 final routes = {
-  '/login': (BuildContext context) => LoginScreen(),
+  '/login': (BuildContext context) => LoginScreenBase(),
   '/signup': (BuildContext context) => SignupScreen(),
   '/home': (BuildContext context) => MyHomePage(),
   '/settings': (BuildContext context) => Settingg(),

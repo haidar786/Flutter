@@ -1,4 +1,8 @@
-[![Build Status](https://app.bitrise.io/app/012ca4e62392dade/status.svg?token=4yOnk8UtsMDm3sLwcPYs-Q&branch=master)](https://app.bitrise.io/app/012ca4e62392dade)
+iOS Build Status: [![Build Status](https://app.bitrise.io/app/012ca4e62392dade/status.svg?token=4yOnk8UtsMDm3sLwcPYs-Q)](https://app.bitrise.io/app/012ca4e62392dade)
+
+Android Build Status: [![Build Status](https://app.bitrise.io/app/3924b288464de0f5.svg?token=QPv4ax__CjGQ8DOjBz9X7g)](https://app.bitrise.io/app/3924b288464de0f5)
+
+
 
 # Flutter
 Emrals app in Flutter

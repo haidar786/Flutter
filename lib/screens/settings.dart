@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-//import 'package:simple_permissions/simple_permissions.dart';
 import 'package:emrals/utils/qr.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/state_container.dart';
@@ -159,13 +158,14 @@ class _SettingsPage extends State<Settingg> {
                                     child: GestureDetector(
                                       onTap: () {
                                         SimplePermissions.requestPermission(
-                                                 Permission.ReadContacts)
-                                             .then((p) {
-                                           if (p == PermissionStatus.authorized) {
-                                        Navigator.pushNamed(
-                                            context, '/contacts');
+                                                Permission.ReadContacts)
+                                            .then((p) {
+                                          if (p ==
+                                              PermissionStatus.authorized) {
+                                            Navigator.pushNamed(
+                                                context, '/contacts');
                                           }
-                                         });
+                                        });
                                       },
                                       child: Center(
                                         child: Text(

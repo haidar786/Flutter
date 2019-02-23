@@ -2,7 +2,6 @@ import 'package:emrals/utils/field_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
-import 'package:emrals/utils/form_util.dart';
 import 'package:emrals/models/user.dart' show User;
 import 'package:emrals/screens/signup_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -94,7 +93,7 @@ class SignupScreenState extends State<SignupScreen>
                 child: TextFormField(
                   autofocus: true,
                   autocorrect: false,
-                  autovalidate: true,
+                  autovalidate: false,
                   onSaved: (val) => _username = val,
                   validator: FieldValidator.validateUsername,
                   decoration: InputDecoration(
@@ -125,7 +124,7 @@ class SignupScreenState extends State<SignupScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   autocorrect: false,
-                  autovalidate: true,
+                  autovalidate: false,
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (val) => _email = val,
                   validator: FieldValidator.validateEmail,
@@ -157,7 +156,7 @@ class SignupScreenState extends State<SignupScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   autocorrect: false,
-                  autovalidate: true,
+                  autovalidate: false,
                   maxLength: 20,
                   obscureText: passwordVisible,
                   onSaved: (val) => _password = val,

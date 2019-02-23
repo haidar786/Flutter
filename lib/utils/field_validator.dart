@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class FieldValidator {
-  // Testable class
-
   static const String INVALID_PASSWORD_MESSAGE =
       'Password must be 8+ characters.';
   static const String INVALID_USERNAME_MESSAGE =
@@ -11,12 +9,10 @@ class FieldValidator {
       'Email must contain at least 1 character';
   static const String INVALID_EMAIL_MESSAGE = 'Email is invalid';
 
-  // generic validator
   static String validate({@required String name, @required String value}) {
     return value.isEmpty ? 'Please fill in a $name.' : null;
   }
 
-  // Signup validators
   static String validatePassword(String password) {
     return password.length < 8 ? INVALID_PASSWORD_MESSAGE : null;
   }

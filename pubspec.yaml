@@ -27,7 +27,7 @@ dependencies:
     git:
      url: git://github.com/flutter/plugins
      path: packages/google_maps_flutter
-     ref: plugins-afa2f0877a10c7f9f6898a0107da07d9ce90b670
+     ref: afa2f0877a10c7f9f6898a0107da07d9ce90b670
   sentry: any
   contacts_service: ^0.1.1
   qr: 1.0.1

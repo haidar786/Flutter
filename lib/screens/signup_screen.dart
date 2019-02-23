@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/utils/form_util.dart';
 import 'package:emrals/models/user.dart' show User;
 import 'package:emrals/screens/signup_screen_presenter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,12 +58,15 @@ class SignupScreenState extends State<SignupScreen>
   @override
   onAuthStateChanged(AuthState state) {
     if (state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).pushReplacementNamed("/home");
+      Navigator.of(_ctx).pushReplacementNamed('/home');
   }
 
   @override
   Widget build(BuildContext context) {
     _ctx = context;
+
+    FormUtil _formUtil = new FormUtil();
+    
     var signupBtn = Container(
       padding: const EdgeInsets.all(10.0),
       child: RaisedButton(
@@ -78,6 +82,7 @@ class SignupScreenState extends State<SignupScreen>
         ),
       ),
     );
+
     var signupForm = Column(
       children: <Widget>[
         Form(
@@ -85,14 +90,13 @@ class SignupScreenState extends State<SignupScreen>
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: TextFormField(
+                  autofocus: true,
+                  autocorrect: false,
+                  autovalidate: true,
                   onSaved: (val) => _username = val,
-                  validator: (val) {
-                    return val.length < 1
-                        ? "Username must have atleast 1 chars"
-                        : null;
-                  },
+                  validator: _formUtil.validateName,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.person,
@@ -100,7 +104,10 @@ class SignupScreenState extends State<SignupScreen>
                       semanticLabel: 'username sign up icon',
                     ),
                     filled: true,
-                    labelText: "Username",
+                    labelText: 'Username',
+                    labelStyle: new TextStyle(
+                      background: Paint()..color = Colors.white,
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -117,12 +124,11 @@ class SignupScreenState extends State<SignupScreen>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  autocorrect: false,
+                  autovalidate: true,
+                  keyboardType: TextInputType.emailAddress,
                   onSaved: (val) => _email = val,
-                  validator: (val) {
-                    return val.length < 1
-                        ? "Email must have atleast 1 chars"
-                        : null;
-                  },
+                  validator: _formUtil.validateEmail,
                   decoration: InputDecoration(
                     filled: true,
                     prefixIcon: Icon(
@@ -130,7 +136,10 @@ class SignupScreenState extends State<SignupScreen>
                       size: 17.0,
                       semanticLabel: 'user sign up email icon',
                     ),
-                    labelText: "Email",
+                    labelText: 'Email',
+                    labelStyle: new TextStyle(
+                      background: Paint()..color = Colors.white,
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -147,10 +156,12 @@ class SignupScreenState extends State<SignupScreen>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  autocorrect: false,
+                  autovalidate: true,
+                  maxLength: 20,
                   obscureText: passwordVisible,
                   onSaved: (val) => _password = val,
-                  validator: (val) =>
-                      val.length < 8 ? 'Password must be 8+ characters.' : null,
+                  validator: _formUtil.validatePassword,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,
@@ -171,7 +182,10 @@ class SignupScreenState extends State<SignupScreen>
                       },
                     ),
                     filled: true,
-                    labelText: "Password",
+                    labelText: 'Password',
+                    labelStyle: new TextStyle(
+                      background: Paint()..color = Colors.white,
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -188,12 +202,19 @@ class SignupScreenState extends State<SignupScreen>
             ],
           ),
         ),
+        Spacer(),
         _isLoading ? CircularProgressIndicator() : signupBtn,
+        Spacer(),
         InkWell(
-          child: Text(
-            "By signing up you agree to our Terms and Conditions",
-            style: TextStyle(
-                color: Colors.white, decoration: TextDecoration.underline),
+          child: Text.rich(
+            TextSpan(
+              text: 'By signing up you agree to our', // default text style'By signing up you agree to our \n Terms and Conditions',
+              style: TextStyle(color: Colors.white),
+              children: <TextSpan>[
+                TextSpan(text: '\nTerms and Conditions ', style: TextStyle(decoration: TextDecoration.underline)),
+              ],
+            ),
+            textAlign: TextAlign.center,
           ),
           onTap: () => launchURL('https://www.emrals.com/terms/'),
         ),
@@ -202,7 +223,7 @@ class SignupScreenState extends State<SignupScreen>
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text('Signup')),
+      appBar: AppBar(title: Text('Emrals Signup')),
       key: scaffoldKey,
       body: Container(
         decoration: BoxDecoration(
@@ -211,34 +232,12 @@ class SignupScreenState extends State<SignupScreen>
         child: Center(
           child: Container(
             child: signupForm,
-            height: 300.0,
+            height: 383.0,
             width: 300.0,
           ),
         ),
       ),
     );
-
-    // return Scaffold(
-    //   appBar: AppBar(title: Text('Stack with LayoutBuilder')),
-    //   key: scaffoldKey,
-    //   body: LayoutBuilder(
-    //     builder: (context, constraints) => Stack(
-    //           fit: StackFit.expand,
-    //           children: <Widget>[
-    //             // Material(color: Colors.yellowAccent),
-    //             Positioned(
-    //               top: 10,
-    //               child: signupForm,
-    //             ),
-    //             Positioned(
-    //               top: constraints.maxHeight,
-    //               left: constraints.maxWidth,
-    //               child: Container(),
-    //             ),
-    //           ],
-    //         ),
-    //   ),
-    // );
   }
 
   @override
@@ -249,12 +248,12 @@ class SignupScreenState extends State<SignupScreen>
 
   @override
   void onSignupSuccess(User user) async {
-    _showSnackBar("logged in as" + user.username);
+    _showSnackBar('logged in as' + user.username);
     setState(() => _isLoading = false);
     var db = DatabaseHelper();
     await db.saveUser(user);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('user_picture', user.picture);
-    Navigator.of(_ctx).pushReplacementNamed("/home");
+    Navigator.of(_ctx).pushReplacementNamed('/home');
   }
 }

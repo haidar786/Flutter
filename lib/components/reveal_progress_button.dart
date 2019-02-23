@@ -120,7 +120,9 @@ class __ProgressButtonState extends State<_ProgressButton>
 
   @override
   dispose() {
-    _controller.dispose();
+    if (_controller != null) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 
@@ -176,21 +178,6 @@ class __ProgressButtonState extends State<_ProgressButton>
         });
       });
     _controller.forward();
-
-    /* setState(() {
-      _state = 1;
-    }); */
-
-    /* Timer(Duration(milliseconds: 3300), () {
-      setState(() {
-        _state = 2;
-      });
-    });
-
-    Timer(Duration(milliseconds: 3600), () {
-      _animatingReveal = true;
-      widget.callback();
-    }); */
   }
 
   Widget buildButtonChild({@required String name}) {
@@ -220,12 +207,6 @@ class __ProgressButtonState extends State<_ProgressButton>
       return _isPressed ? 6.0 : 4.0;
     }
   }
-
-  /* void reset() {
-    _width = double.infinity;
-    _animatingReveal = false;
-    widget._state = 0;
-  } */
 }
 
 class _RevealProgressButtonPainter extends CustomPainter {

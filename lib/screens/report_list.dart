@@ -435,14 +435,15 @@ class _ReportList extends State<ReportListWidget> {
       DatabaseHelper().getUser().then((u) {
         if (u == null) {
           Navigator.of(_ctx).pushReplacementNamed("/login");
-        }
-        RestDatasource().updateEmrals(u.token).then((e) {
-          u.emrals = double.parse(e['emrals_amount']);
-          DatabaseHelper().updateUser(u);
-          StateContainer.of(_ctx).updateEmrals(u.emrals);
+        } else {
+          RestDatasource().updateEmrals(u.token).then((e) {
+            u.emrals = double.parse(e['emrals_amount']);
+            DatabaseHelper().updateUser(u);
+            StateContainer.of(_ctx).updateEmrals(u.emrals);
 
-          //update emrals amount in header
-        });
+            //update emrals amount in header
+          });
+        }
       });
 
       reports

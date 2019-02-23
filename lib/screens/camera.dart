@@ -13,6 +13,7 @@ import 'package:path/path.dart';
 import 'package:async/async.dart';
 import 'package:emrals/styles.dart';
 import 'dart:convert';
+import 'package:emrals/models/offline_report.dart';
 
 class CameraApp extends StatefulWidget {
   final Report report;
@@ -189,13 +190,20 @@ class _CameraAppState extends State<CameraApp> {
         request.fields['report_id'] = widget.report.id.toString();
       }
 
+      var report = OfflineReport(
+        imagePath,
+        currentLocation["longitude"],
+        currentLocation["latitude"],
+      );
+
+      DatabaseHelper().saveOfflineReport(report);
+
       var multipartFile = http.MultipartFile(
         'file',
         stream,
         length,
         filename: basename(imageFile.path),
       );
-      print(userToken);
       Map<String, String> headers = {"Authorization": "token " + userToken};
 
       request.headers.addAll(headers);

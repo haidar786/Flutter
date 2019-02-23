@@ -11,6 +11,7 @@ import 'dart:io';
 import 'package:flutter/rendering.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io' show Platform;
 
 final SentryClient sentry = new SentryClient(
   dsn: "SENTRY_DSN",
@@ -73,7 +74,12 @@ void main() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     if (!(preferences.getBool("onboarded") ?? false)) {
       runApp(
-        StateContainer(child: OnboardScreen()),
+        StateContainer(
+          child: MaterialApp(
+            home: OnboardScreen(),
+            debugShowCheckedModeBanner: false,
+          ),
+        ),
       );
     } else {
       runApp(

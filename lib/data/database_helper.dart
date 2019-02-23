@@ -3,6 +3,7 @@ import 'dart:io' as io;
 
 import 'package:path/path.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/models/offline_report.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -30,8 +31,8 @@ class DatabaseHelper {
   void _onCreate(Database db, int version) async {
     await db.execute(
         "CREATE TABLE User(id INTEGER PRIMARY KEY, username TEXT, token TEXT, picture TEXT, xp INTEGER, emrals REAL, emrals_address TEXT)");
-    // await db.execute(
-    //     "CREATE TABLE OfflineReport(id INTEGER PRIMARY KEY, filename TEXT, longitude REAL, latitude REAL)");
+    await db.execute(
+        "CREATE TABLE OfflineReport(filename TEXT, longitude REAL, latitude REAL)");
   }
 
   Future<int> saveUser(User user) async {
@@ -46,11 +47,11 @@ class DatabaseHelper {
     return res;
   }
 
-  // Future<int> saveOfflineReport(OfflineReport offlineReport) async {
-  //   var dbClient = await db;
-  //   int res = await dbClient.insert("OfflineReport", offlineReport.toMap());
-  //   return res;
-  // }
+  Future<int> saveOfflineReport(OfflineReport offlineReport) async {
+    var dbClient = await db;
+    int res = await dbClient.insert("OfflineReport", offlineReport.toMap());
+    return res;
+  }
 
   Future<int> deleteUsers() async {
     var dbClient = await db;

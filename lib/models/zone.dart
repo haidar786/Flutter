@@ -12,6 +12,7 @@ class Zone {
   final String flag;
   final int subscriberCount;
   final int cleanupCount;
+  final int reportCount;
 
   Zone({
     this.id,
@@ -27,6 +28,7 @@ class Zone {
     this.flag,
     this.subscriberCount,
     this.cleanupCount,
+    this.reportCount,
   });
 
   factory Zone.fromJson(Map<String, dynamic> json) {
@@ -44,6 +46,7 @@ class Zone {
       flag: json['flag'] as String,
       subscriberCount: json['subscriber_count'] as int,
       cleanupCount: json['cleanup_count'] as int,
+      reportCount: json['report_count'] as int,
     );
   }
 }

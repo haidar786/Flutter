@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/state_container.dart';
+//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -41,7 +42,8 @@ class _MyHomePage extends State<MyHomePage> {
         user = u;
         setState(() {
           RestDatasource().updateEmrals(u.token).then((e) {
-            StateContainer.of(_ctx).updateEmrals(double.parse(e['emrals_amount']));
+            StateContainer.of(_ctx)
+                .updateEmrals(double.parse(e['emrals_amount']));
             DatabaseHelper().updateUser(u);
           });
         });
@@ -146,6 +148,13 @@ class _MyHomePage extends State<MyHomePage> {
               ),
               title: Text('Zones'),
             ),
+            // BottomNavigationBarItem(
+            //   backgroundColor: Colors.black,
+            //   icon: Icon(
+            //     FontAwesomeIcons.qrcode,
+            //   ),
+            //   title: Text('Scan'),
+            // ),
           ],
         ),
       ),

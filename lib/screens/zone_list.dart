@@ -163,8 +163,8 @@ class _ZoneList extends State<ZoneListWidget> {
     int limit,
   ) async {
     print('fetching zones' + limit.toString() + offset.toString());
-    final response = await http
-        .get('https://www.emrals.com/api/zones/?limit=$limit&offset=$offset');
+    final response =
+        await http.get(apiUrl + 'zones/?limit=$limit&offset=$offset');
 
     var data = json.decode(response.body);
     var parsed = data["results"] as List;
@@ -227,14 +227,6 @@ class ZoneListItem extends StatelessWidget {
                             color: emralsColor().shade50),
                       ),
                       SizedBox(height: 10),
-                      Text(
-                        zone.emralsAddress,
-                        style: TextStyle(
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey),
-                      ),
-                      SizedBox(height: 10),
                       Row(
                         children: [
                           Image.asset("assets/greene.png",
@@ -257,6 +249,21 @@ class ZoneListItem extends StatelessWidget {
                           SizedBox(width: 5),
                           Text(
                             "${zone.subscriberCount} sponsors",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 3),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.camera_alt,
+                            color: emralsColor()[1500],
+                            size: 20,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "${zone.reportCount} reports",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],

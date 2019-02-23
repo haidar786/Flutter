@@ -33,7 +33,7 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Snap a pic of trash",
+                            "Report trash",
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
@@ -41,7 +41,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Submit a report of trash from anywhere around the world",
+                            "Report trash from anywhere in the world",
                             style: TextStyle(color: Colors.black54),
                           )
                         ],
@@ -62,8 +62,8 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Clean it up and snap",
-                            textAlign: TextAlign.right,
+                            "Clean it up",
+                            textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
@@ -71,8 +71,8 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Clean up the trash from a report and post a picture",
-                            textAlign: TextAlign.right,
+                            "Clean it up and post a picture",
+                            textAlign: TextAlign.left,
                             style: TextStyle(color: Colors.black54),
                           )
                         ],
@@ -107,7 +107,7 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Win emrals!",
+                            "Win EMRALS!",
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
@@ -115,7 +115,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "When your cleanup has been verified, you get emrals",
+                            "Win EMRALS when your cleanup is verified",
                             style: TextStyle(color: Colors.black54),
                           )
                         ],

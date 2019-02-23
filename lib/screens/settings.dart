@@ -209,6 +209,30 @@ class _SettingsPage extends State<Settingg> {
                                   )),
                               SizedBox(height: 25.0),
                               Container(
+                                  height: 30.0,
+                                  width: 120.0,
+                                  child: Material(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    shadowColor: Colors.black12,
+                                    color: Color.fromRGBO(164, 211, 34, 1),
+                                    elevation: 7.0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, '/uploads');
+                                      },
+                                      child: Center(
+                                        child: Text(
+                                          'Uploads',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: 'Montserrat'),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                              SizedBox(height: 25.0),
+                              Container(
                                 height: 30.0,
                                 width: 120.0,
                                 child: Material(
@@ -334,7 +358,6 @@ class _SettingsPage extends State<Settingg> {
                                     icon: Icon(Icons.nfc),
                                     color: Colors.white,
                                     onPressed: () {
-                                      print('scanning');
                                       scan();
                                     },
                                   ),

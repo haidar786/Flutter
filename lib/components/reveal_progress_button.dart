@@ -112,12 +112,6 @@ class __ProgressButtonState extends State<_ProgressButton>
   GlobalKey _globalKey = GlobalKey();
   AnimationController _controller;
 
-  /* @override
-  void deactivate() {
-    reset();
-    super.deactivate();
-  } */
-
   @override
   dispose() {
     if (_controller != null) {
@@ -228,7 +222,6 @@ class _RevealProgressButtonPainter extends CustomPainter {
     // because I know the exact widget position
     var finalRadius = sqrt(pow(_screenSize.width / 2, 2) +
         pow(_screenSize.height - 32.0 - 48.0, 2));
-    print(finalRadius);
     var radius = 24.0 + finalRadius * _fraction;
 
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), radius, paint);

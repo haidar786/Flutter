@@ -39,14 +39,13 @@ void main() async {
     _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered
-        .listen((IosNotificationSettings settings) {
-      print("Settings registered: $settings");
-    });
+        .listen((IosNotificationSettings settings) {});
   }
 
   if (Platform.isIOS) iOSPermission();
 
   _firebaseMessaging.getToken().then((token) {
+    // TODO: send token to server to store user
     print(token);
   });
 
@@ -92,23 +91,15 @@ void main() async {
 }
 
 Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
-  print('Caught error: $error');
-
   if (isInDebugMode) {
     print(stackTrace);
     return;
   }
 
-  final SentryResponse response = await sentry.captureException(
+  sentry.captureException(
     exception: error,
     stackTrace: stackTrace,
   );
-
-  if (response.isSuccessful) {
-    print('Success! Event ID: ${response.eventId}');
-  } else {
-    print('Failed to report to Sentry.io: ${response.error}');
-  }
 }
 
 class EmralsApp extends StatefulWidget {

@@ -8,6 +8,7 @@ import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/contacts.dart';
 import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/profile.dart';
+import 'package:emrals/screens/uploads.dart';
 
 final routes = {
   '/login': (BuildContext context) => LoginScreenBase(),
@@ -19,4 +20,5 @@ final routes = {
   '/contacts': (BuildContext context) => Contacts(),
   '/map': (BuildContext context) => MapPage(),
   '/profile': (BuildContext context) => Profile(),
+  '/uploads': (BuildContext context) => Uploads(),
 };

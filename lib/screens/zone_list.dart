@@ -162,7 +162,6 @@ class _ZoneList extends State<ZoneListWidget> {
     int offset,
     int limit,
   ) async {
-    print('fetching zones' + limit.toString() + offset.toString());
     final response =
         await http.get(apiUrl + 'zones/?limit=$limit&offset=$offset');
 

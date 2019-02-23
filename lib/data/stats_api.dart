@@ -25,7 +25,6 @@ class StatsApi {
   int blockHeight;
 
   Future<StatsModel> getStats() async {
-    print('fetching stats');
     StatsModel stats;
     await _client
         .get(Uri.parse(_statsUrl))
@@ -39,8 +38,6 @@ class StatsApi {
   }
 
   Future<StatsExchangeModel> getCrex24Data() async {
-    print('fetching Crex24 data');
-
     List<String> urls = [_crex24BtcUrl, _crex24Url];
 
     List<dynamic> mnWorthList = await Future.wait(
@@ -66,7 +63,6 @@ class StatsApi {
   }
 
   Future<int> getConnectionCount() async {
-    print('fetching connection count');
     int connectionCount;
     final response = await _client.get(_connectionCountUrl);
 
@@ -79,7 +75,6 @@ class StatsApi {
   }
 
   Future<double> getNetworkHashRate() async {
-    print('fetching network hash rate');
     double hashRate;
     final response = await _client.get(_networkHashRateUrl);
     if (response.statusCode == 200) {
@@ -91,7 +86,6 @@ class StatsApi {
   }
 
   Future<double> getMoneySupply() async {
-    print('fetching money supply');
     double moneySupply;
     final response = await _client.get(_moneySupplyUrl);
     if (response.statusCode == 200) {
@@ -103,7 +97,6 @@ class StatsApi {
   }
 
   Future<double> getDifficulty() async {
-    print('fetching difficulty supply');
     double difficulty;
     final response = await _client.get(_difficultyUrl);
     if (response.statusCode == 200) {

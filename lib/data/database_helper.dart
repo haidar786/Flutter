@@ -70,4 +70,12 @@ class DatabaseHelper {
     var res = await dbClient.query("User");
     return res.isNotEmpty ? User.fromMap(res.first) : null;
   }
+
+  getReports() async {
+    var dbClient = await db;
+    var res = await dbClient.query("OfflineReport");
+    List<OfflineReport> list =
+        res.isNotEmpty ? res.map((c) => OfflineReport.fromMap(c)).toList() : [];
+    return list;
+  }
 }

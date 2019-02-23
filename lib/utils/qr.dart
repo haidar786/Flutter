@@ -24,10 +24,6 @@ class QrPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (size.shortestSide == 0) {
-      print(
-          "[QR] WARN: width or height is zero. You should set a 'size' value or nest this painter in a Widget that defines a non-zero size");
-    }
     final squareSize = size.shortestSide / _qr.moduleCount;
     for (int x = 0; x < _qr.moduleCount; x++) {
       for (int y = 0; y < _qr.moduleCount; y++) {

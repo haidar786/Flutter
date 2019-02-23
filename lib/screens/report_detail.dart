@@ -149,7 +149,6 @@ class ReportDetailState extends State<ReportDetail> {
                     child: GestureDetector(
                       onTap: () {
                         widget.report.launchMaps();
-                        print("Container clicked");
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 10, bottom: 10),
@@ -514,6 +513,7 @@ class ReportCommentListItem extends StatelessWidget {
                                 ),
                           ).then((d) {
                             if (d ?? false) {
+                              // TODO: integrate flag comment
                               print("flag comment");
                             }
                           });

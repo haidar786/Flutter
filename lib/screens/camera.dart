@@ -211,7 +211,6 @@ class _CameraAppState extends State<CameraApp> {
 
       var response = await request.send();
       response.stream.transform(utf8.decoder).listen((value) {
-        print(value);
         _isLoading = false;
         showDialog(
             context: _ctx,

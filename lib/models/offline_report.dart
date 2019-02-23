@@ -28,4 +28,10 @@ class OfflineReport {
     map["longitude"] = longitude;
     return map;
   }
+
+  OfflineReport.fromMap(Map<String, dynamic> map) {
+    this._filename = map["filename"];
+    this._latitude = map["latitude"];
+    this._longitude = map["longitude"];
+  }
 }

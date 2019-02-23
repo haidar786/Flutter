@@ -68,7 +68,6 @@ class StatsState extends State<Stats> {
                   ),
                   CountDownText(
                     onUpdate: () {
-                      print('Countdown finished');
                       _statsApi = StatsApi();
                       if (!mounted) return;
                       setState(() {});

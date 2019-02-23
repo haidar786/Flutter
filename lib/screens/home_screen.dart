@@ -36,21 +36,22 @@ class _MyHomePage extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-
-    DatabaseHelper().getUser().then((u) {
-      if (u != null) {
-        user = u;
-        setState(() {
-          RestDatasource().updateEmrals(u.token).then((e) {
-            StateContainer.of(_ctx)
-                .updateEmrals(double.parse(e['emrals_amount']));
-            DatabaseHelper().updateUser(u);
+    if (mounted) {
+      DatabaseHelper().getUser().then((u) {
+        if (u != null) {
+          user = u;
+          setState(() {
+            RestDatasource().updateEmrals(u.token).then((e) {
+              StateContainer.of(_ctx)
+                  .updateEmrals(double.parse(e['emrals_amount']));
+              DatabaseHelper().updateUser(u);
+            });
           });
-        });
-      } else {
-        Navigator.of(_ctx).pushReplacementNamed("/login");
-      }
-    });
+        } else {
+          Navigator.of(_ctx).pushReplacementNamed("/login");
+        }
+      });
+    }
   }
 
   @override

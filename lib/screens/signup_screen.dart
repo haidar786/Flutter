@@ -190,7 +190,6 @@ class SignupScreenState extends State<SignupScreen>
           endColor: Colors.green,
           name: 'SIGN UP',
           onPressed: () {
-            print('Signup button pressed');
             setState(() {
               buttonState = 1;
               _submit();

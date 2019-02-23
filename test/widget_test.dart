@@ -1,5 +1,5 @@
-import 'package:emrals/screens/login_screen.dart';
-import 'package:flutter/material.dart';
+// import 'package:emrals/screens/login_screen.dart';
+// import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 class AuthMock {
@@ -39,9 +39,9 @@ class AuthMock {
 }
 
 void main() {
-  Widget buildTestableWidget(Widget widget) {
-    return MaterialApp(home: widget);
-  }
+  // Widget buildTestableWidget(Widget widget) {
+  //   return MaterialApp(home: widget);
+  // }
 
   /* testWidgets('empty email and password doesn\'t call sign in',
       (WidgetTester tester) async {

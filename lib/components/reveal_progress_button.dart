@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -54,7 +53,9 @@ class _RevealProgressButtonState extends State<RevealProgressButton>
 
   @override
   dispose() {
-    _controller.dispose();
+    if (_controller != null) {
+      _controller.dispose();
+    }
     super.dispose();
   }
 

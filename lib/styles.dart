@@ -20,5 +20,6 @@ MaterialColor emralsColor() {
     1200: Color(0xFFF05959), // pink
     1300: Color(0xFFF42D2D), // red
     1400: Color(0xFFFFDC03), // yellow
+    1500: Color(0xFFFD7155), // orange
   });
 }

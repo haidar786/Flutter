@@ -7,9 +7,6 @@ import 'package:emrals/components/reveal_progress_button.dart';
 import 'package:emrals/models/auth_result_model.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
-import 'package:emrals/data/database_helper.dart';
-import 'package:emrals/models/user.dart';
-import 'package:emrals/screens/login_screen_presenter.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:emrals/utils/field_validator.dart';
@@ -53,7 +50,6 @@ class LoginScreenState extends State<LoginScreen> {
     if (form.validate()) {
       form.save();
       loginBloc.authenticate(username: _username, password: _password);
-      //_presenter.doLogin(_username, _password);
     } else {
       setState(() {
         buttonState = 0;
@@ -67,7 +63,6 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //Navigator.of(context).pushReplacementNamed("/home");
     final loginBloc = Provider.of<LoginBloc>(context);
 
     loginBloc.authDataStream.listen((AuthData authData) {
@@ -186,7 +181,6 @@ class LoginScreenState extends State<LoginScreen> {
             onPressed: () {
               if (!mounted) return;
               setState(() {
-                print('Signup button pressed');
                 buttonState = 1;
                 _submit(context);
               });

@@ -7,6 +7,7 @@ import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/login_screen_presenter.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:emrals/utils/field_validator.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -118,9 +119,8 @@ class LoginScreenState extends State<LoginScreen>
                 child: TextFormField(
                   onSaved: (val) => _username = val,
                   key: new Key('username'),
-                  validator: (val) {
-                    return val.length < 1 ? "Please fill in a username." : null;
-                  },
+                  validator: (val) =>
+                      FieldValidator.validate(name: 'username', value: val),
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Username",
@@ -146,6 +146,8 @@ class LoginScreenState extends State<LoginScreen>
                 child: TextFormField(
                   obscureText: true,
                   onSaved: (val) => _password = val,
+                  validator: (val) =>
+                      FieldValidator.validate(name: 'password', value: val),
                   key: new Key('password'),
                   decoration: InputDecoration(
                     filled: true,
@@ -171,7 +173,11 @@ class LoginScreenState extends State<LoginScreen>
             ],
           ),
         ),
-        _isLoading ? CircularProgressIndicator() : loginBtn,
+        _isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : loginBtn,
         SizedBox(
           height: 10,
         ),

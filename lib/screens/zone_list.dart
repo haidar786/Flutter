@@ -46,6 +46,7 @@ class _ZoneList extends State<ZoneListWidget> {
 
   Future<void> _handleRefresh() {
     _progressBarActive = true;
+    zones = List<Zone>();
     return fetchZones(0, 0);
   }
 
@@ -59,20 +60,23 @@ class _ZoneList extends State<ZoneListWidget> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           FloatingActionButton(
-            child: Icon(Icons.sort, color: Colors.white,),
+            child: Icon(
+              Icons.sort,
+              color: Colors.white,
+            ),
             onPressed: (() {
               showDialog(
                   context: context,
                   builder: (ctx) => ZoneSortDialog(
                         initialSort: sortType,
                       )).then((d) {
-                        setState(() {
-                          sortType = d;
-                        });
+                setState(() {
+                  sortType = d;
+                });
               });
             }),
           ),
-          SizedBox(height:10),
+          SizedBox(height: 10),
           FloatingActionButton(
             onPressed: () {
               setState(() {
@@ -189,14 +193,19 @@ class ZoneListItem extends StatelessWidget {
                 Expanded(
                   child: Stack(
                     children: <Widget>[
-                      CachedNetworkImage(
-                        placeholder: Image.asset(
-                          'assets/placeholder.png',
-                          fit: BoxFit.cover,
-                        ),
-                        imageUrl: zone.image,
-                        errorWidget: Icon(Icons.error),
-                      ),
+                      zone.image != null
+                          ? CachedNetworkImage(
+                              placeholder: Image.asset(
+                                'assets/placeholder.png',
+                                fit: BoxFit.cover,
+                              ),
+                              imageUrl: zone.image,
+                              errorWidget: Icon(Icons.error),
+                            )
+                          : Container(
+                              alignment: Alignment.center,
+                              child: Text('No Image'),
+                            ),
                       CachedNetworkImage(
                         height: 30,
                         imageUrl: zone.flag,
@@ -315,7 +324,6 @@ class ZoneSortDialog extends StatefulWidget {
 }
 
 class _ZoneSortDialogState extends State<ZoneSortDialog> {
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -328,7 +336,15 @@ class _ZoneSortDialogState extends State<ZoneSortDialog> {
                 Navigator.pop(context, z);
               },
               title: Text(z.toString().split(".")[1]),
-              trailing: widget.initialSort == z ? Icon(Icons.check, color: emralsColor(),) : Container(width: 0, height: 0,),
+              trailing: widget.initialSort == z
+                  ? Icon(
+                      Icons.check,
+                      color: emralsColor(),
+                    )
+                  : Container(
+                      width: 0,
+                      height: 0,
+                    ),
             );
           }).toList(),
         ),

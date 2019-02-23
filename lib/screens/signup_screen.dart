@@ -1,3 +1,4 @@
+import 'package:emrals/utils/field_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
@@ -84,6 +85,7 @@ class SignupScreenState extends State<SignupScreen>
     );
 
     var signupForm = Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Form(
           key: formKey,
@@ -96,7 +98,7 @@ class SignupScreenState extends State<SignupScreen>
                   autocorrect: false,
                   autovalidate: true,
                   onSaved: (val) => _username = val,
-                  validator: _formUtil.validateName,
+                  validator: FieldValidator.validateUsername,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.person,
@@ -128,7 +130,7 @@ class SignupScreenState extends State<SignupScreen>
                   autovalidate: true,
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (val) => _email = val,
-                  validator: _formUtil.validateEmail,
+                  validator: FieldValidator.validateEmail,
                   decoration: InputDecoration(
                     filled: true,
                     prefixIcon: Icon(
@@ -161,7 +163,7 @@ class SignupScreenState extends State<SignupScreen>
                   maxLength: 20,
                   obscureText: passwordVisible,
                   onSaved: (val) => _password = val,
-                  validator: _formUtil.validatePassword,
+                  validator: FieldValidator.validatePassword,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,
@@ -219,22 +221,17 @@ class SignupScreenState extends State<SignupScreen>
           onTap: () => launchURL('https://www.emrals.com/terms/'),
         ),
       ],
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+      //crossAxisAlignment: CrossAxisAlignment.stretch,
     );
 
     return Scaffold(
       appBar: AppBar(title: Text('Emrals Signup')),
       key: scaffoldKey,
-      body: Container(
-        decoration: BoxDecoration(
-          color: emralsColor().shade50,
-        ),
-        child: Center(
-          child: Container(
-            child: signupForm,
-            height: 383.0,
-            width: 300.0,
-          ),
+      backgroundColor: emralsColor().shade50,
+      body: Center(
+        child: Container(
+          width: 300,
+          child: signupForm,
         ),
       ),
     );

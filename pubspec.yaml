@@ -32,6 +32,7 @@ dependencies:
   simple_permissions: ^0.1.9
   firebase_messaging: 3.0.1
   shared_preferences: ^0.4.3
+  test: ^1.5.1
 
 dev_dependencies:
   flutter_test:

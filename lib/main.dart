@@ -70,21 +70,26 @@ void main() async {
   };
 
   runZoned<Future<Null>>(() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    if (!(preferences.getBool("onboarded") ?? false)) {
-      runApp(
-        StateContainer(
-          child: MaterialApp(
-            home: OnboardScreen(),
-            debugShowCheckedModeBanner: false,
-          ),
-        ),
-      );
-    } else {
-      runApp(
-        StateContainer(child: EmralsApp()),
-      );
-    }
+    //SharedPreferences preferences = await SharedPreferences.getInstance();
+    // if (!(preferences.getBool("onboarded") ?? false)) {
+    //   // runApp(
+    //   //   StateContainer(
+    //   //     child: MaterialApp(
+    //   //       home: OnboardScreen(),
+    //   //       debugShowCheckedModeBanner: false,
+    //   //     ),
+    //   //   ),
+    //   // );
+    //   runApp(
+    //     StateContainer(
+    //       child: OnboardScreen(),
+    //     ),
+    //   );
+    // } else {
+    runApp(
+      StateContainer(child: EmralsApp()),
+    );
+    //}
   }, onError: (error, stackTrace) async {
     await _reportError(error, stackTrace);
   });

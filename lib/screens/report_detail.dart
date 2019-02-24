@@ -10,6 +10,7 @@ import 'package:emrals/screens/camera.dart';
 import 'package:emrals/styles.dart';
 import 'package:intl/intl.dart';
 import 'package:emrals/state_container.dart';
+import 'package:share/share.dart';
 
 class ReportDetail extends StatefulWidget {
   final Report report;
@@ -239,47 +240,83 @@ class ReportDetailState extends State<ReportDetail> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  RaisedButton.icon(
-                    icon: Icon(
-                      Icons.add,
-                      color: Theme.of(context).accentColor,
+                  IntrinsicWidth(
+                    child: Column(
+                      children: <Widget>[
+                        RaisedButton.icon(
+                          icon: Icon(
+                            Icons.add,
+                            color: Theme.of(context).accentColor,
+                          ),
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (ctx) {
+                                  return TipDialog(widget.report, scaffoldKey);
+                                }).then((d) {
+                              if (d != null) {
+                                StateContainer.of(context).updateEmrals(
+                                    StateContainer.of(context).emralsBalance -
+                                        d);
+                                setState(() {
+                                  if (widget.report.solution.isEmpty) {
+                                    widget.report.reportEmralsAmount =
+                                        (double.parse(widget.report
+                                                    .reportEmralsAmount) +
+                                                d)
+                                            .toString();
+                                  } else {
+                                    widget.report.solutionEmralsAmount =
+                                        (double.parse(widget.report
+                                                    .solutionEmralsAmount) +
+                                                d)
+                                            .toString();
+                                  }
+                                });
+                              }
+                            });
+                          },
+                          label: Text(
+                            "Tip Emrals",
+                            style:
+                                TextStyle(color: Theme.of(context).accentColor),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                            side: BorderSide(
+                                color: Theme.of(context).accentColor, width: 2),
+                          ),
+                          color: Colors.white,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: RaisedButton.icon(
+                                icon: Icon(
+                                  Icons.share,
+                                  color: emralsColor(),
+                                ),
+                                onPressed: () {
+                                  Share.share(
+                                      "http://www.emrals.com/alerts/${widget.report.slug}");
+                                },
+                                label: Text(
+                                  "Share",
+                                  style: TextStyle(color: emralsColor()),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(100),
+                                  side: BorderSide(
+                                      color: Theme.of(context).accentColor,
+                                      width: 2),
+                                ),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (ctx) {
-                            return TipDialog(widget.report, scaffoldKey);
-                          }).then((d) {
-                        if (d != null) {
-                          StateContainer.of(context).updateEmrals(
-                              StateContainer.of(context).emralsBalance - d);
-                          setState(() {
-                            if (widget.report.solution.isEmpty) {
-                              widget.report.reportEmralsAmount = (double.parse(
-                                          widget.report.reportEmralsAmount) +
-                                      d)
-                                  .toString();
-                            } else {
-                              widget
-                                  .report.solutionEmralsAmount = (double.parse(
-                                          widget.report.solutionEmralsAmount) +
-                                      d)
-                                  .toString();
-                            }
-                          });
-                        }
-                      });
-                    },
-                    label: Text(
-                      "Tip Emrals",
-                      style: TextStyle(color: Theme.of(context).accentColor),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                      side: BorderSide(
-                          color: Theme.of(context).accentColor, width: 2),
-                    ),
-                    color: Colors.white,
                   ),
                   widget.report.solution != ''
                       ? Column(

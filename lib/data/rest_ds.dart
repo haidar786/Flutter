@@ -180,6 +180,20 @@ class RestDatasource {
         .toList();
   }
 
+  Future<dynamic> flagComment(int commentid, String token) async {
+    Map<String, String> payload = {
+      "id": commentid.toString(),
+    };
+
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil.post(apiUrl + "flag_comment/",
+        headers: headers, body: json.encoder.convert(payload));
+  }
+
   Future<dynamic> addCommentToReport(int reportid, String comment, User user) {
     Map<String, dynamic> payload = {
       "user": user.id,

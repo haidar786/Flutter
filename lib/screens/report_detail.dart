@@ -517,7 +517,14 @@ class ReportCommentListItem extends StatelessWidget {
                                 ),
                           ).then((d) {
                             if (d ?? false) {
-                              // TODO: integrate flag comment
+                              DatabaseHelper().getUser().then((u) {
+                                RestDatasource()
+                                    .flagComment(comment.id, u.token)
+                                    .then((m) {
+                                  final snackBar = SnackBar(content: Text(m));
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                                });
+                              });
                               print("flag comment");
                             }
                           });

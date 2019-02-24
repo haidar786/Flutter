@@ -192,11 +192,9 @@ class _CameraAppState extends State<CameraApp> {
 
       var report = OfflineReport(
         imagePath,
-        currentLocation["longitude"],
         currentLocation["latitude"],
+        currentLocation["longitude"],
       );
-
-      DatabaseHelper().saveOfflineReport(report);
 
       var multipartFile = http.MultipartFile(
         'file',
@@ -209,31 +207,36 @@ class _CameraAppState extends State<CameraApp> {
       request.headers.addAll(headers);
       request.files.add(multipartFile);
 
-      var response = await request.send();
-      response.stream.transform(utf8.decoder).listen((value) {
-        _isLoading = false;
-        showDialog(
-            context: _ctx,
-            builder: (ctx) {
-              return AlertDialog(
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Text(value),
-                    ],
+      try {
+        var response = await request.send();
+        response.stream.transform(utf8.decoder).listen((value) {
+          _isLoading = false;
+          showDialog(
+              context: _ctx,
+              builder: (ctx) {
+                return AlertDialog(
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text(value),
+                      ],
+                    ),
                   ),
-                ),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Go to Activity'),
-                    onPressed: () {
-                      Navigator.pushNamed(_ctx, '/home');
-                    },
-                  ),
-                ],
-              );
-            });
-      });
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text('Go to Activity'),
+                      onPressed: () {
+                        Navigator.pushNamed(_ctx, '/home');
+                      },
+                    ),
+                  ],
+                );
+              });
+        });
+      } catch (e) {
+        DatabaseHelper().saveOfflineReport(report);
+        Navigator.pushNamed(_ctx, '/uploads');
+      }
     } else {
       showInSnackBar("Please enable GPS");
       _isLoading = false;

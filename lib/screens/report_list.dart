@@ -15,6 +15,12 @@ import 'package:emrals/data/database_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:emrals/state_container.dart';
 
+import 'dart:async';
+import 'dart:io';
+import 'package:emrals/models/user.dart';
+import 'package:path/path.dart';
+import 'package:async/async.dart';
+
 class ReportListWidget extends StatefulWidget {
   @override
   _ReportList createState() => _ReportList();
@@ -425,30 +431,77 @@ class _ReportList extends State<ReportListWidget> {
     int offset,
     int limit,
   }) async {
-    final response =
-        await http.get(apiUrl + 'alerts/?limit=$limit&offset=$offset');
+    try {
+      final response =
+          await http.get(apiUrl + 'alerts/?limit=$limit&offset=$offset');
 
-    var data = json.decode(response.body);
-    var parsed = data["results"] as List;
-    if (!mounted) return;
-    this.setState(() {
-      DatabaseHelper().getUser().then((u) {
-        if (u == null) {
-          Navigator.of(_ctx).pushReplacementNamed("/login");
-        } else {
-          RestDatasource().updateEmrals(u.token).then((e) {
-            u.emrals = double.parse(e['emrals_amount']);
-            DatabaseHelper().updateUser(u);
-            StateContainer.of(_ctx).updateEmrals(u.emrals);
+      var data = json.decode(response.body);
+      var parsed = data["results"] as List;
 
-            //update emrals amount in header
-          });
-        }
+      if (!mounted) return;
+      this.setState(() {
+        DatabaseHelper().getUser().then((u) {
+          if (u == null) {
+            Navigator.of(_ctx).pushReplacementNamed("/login");
+          } else {
+            RestDatasource().updateEmrals(u.token).then((e) {
+              u.emrals = double.parse(e['emrals_amount']);
+              DatabaseHelper().updateUser(u);
+              StateContainer.of(_ctx).updateEmrals(u.emrals);
+
+              DatabaseHelper().getReports().then((m) {
+                m.forEach((report) {
+                  upload(report.filename, report.longitude, report.latitude, u);
+                });
+              });
+
+              //update emrals amount in header
+            });
+          }
+        });
+
+        reports.addAll(
+            parsed.map<Report>((json) => Report.fromJson(json)).toList());
+        _progressBarActive = false;
       });
-
-      reports
-          .addAll(parsed.map<Report>((json) => Report.fromJson(json)).toList());
+    } catch (e) {
+      final snackBar = SnackBar(content: Text('Offline Mode'));
+      Scaffold.of(_ctx).showSnackBar(snackBar);
       _progressBarActive = false;
+    }
+  }
+
+  upload(String filename, double longitude, double latitude, User user) async {
+    File imageFile = File(filename);
+
+    var stream = http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
+    var length = await imageFile.length();
+
+    var uri = Uri.parse(apiUrl + "upload/");
+
+    var request = http.MultipartRequest("POST", uri);
+    request.fields['longitude'] = longitude.toString();
+    request.fields['latitude'] = latitude.toString();
+
+    var multipartFile = http.MultipartFile(
+      'file',
+      stream,
+      length,
+      filename: basename(imageFile.path),
+    );
+    Map<String, String> headers = {"Authorization": "token " + user.token};
+
+    request.headers.addAll(headers);
+    request.files.add(multipartFile);
+
+    var response = await request.send();
+    response.stream.transform(utf8.decoder).listen((value) {
+      if (value.contains('success')) {
+        DatabaseHelper().deletereport(filename);
+      }
+
+      final snackBar = SnackBar(content: Text(value));
+      Scaffold.of(_ctx).showSnackBar(snackBar);
     });
   }
 }

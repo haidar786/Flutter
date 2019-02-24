@@ -78,4 +78,11 @@ class DatabaseHelper {
         res.isNotEmpty ? res.map((c) => OfflineReport.fromMap(c)).toList() : [];
     return list;
   }
+
+  Future<int> deletereport(String filename) async {
+    var dbClient = await db;
+    int res = await dbClient
+        .delete("OfflineReport", where: "filename = ?", whereArgs: [filename]);
+    return res;
+  }
 }

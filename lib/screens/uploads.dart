@@ -12,18 +12,25 @@ class Uploads extends StatefulWidget {
 }
 
 class UploadsState extends State<Uploads> {
+  _refreshWidget() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text('Pending Uploads'),
         ),
-        body: FutureBuilder(
-          future: DatabaseHelper().getReports(),
+        body: StreamBuilder(
+          stream: DatabaseHelper().getReports().asStream(),
           builder: (ctx, snapshot) {
             if (snapshot.hasData) {
               List<OfflineReport> reports = List.from(snapshot.data);
-              return ReportList(reports: reports);
+              return ReportList(
+                reports: reports,
+                callback: _refreshWidget,
+              );
             } else {
               return Center(
                 child: CircularProgressIndicator(),
@@ -35,9 +42,11 @@ class UploadsState extends State<Uploads> {
 }
 
 class ReportList extends StatelessWidget {
+  final callback;
+
   final List<OfflineReport> reports;
 
-  ReportList({this.reports});
+  ReportList({this.reports, this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +72,19 @@ class ReportList extends StatelessWidget {
                 ),
               ),
               title: Text(basename),
-              subtitle: Text(report.latitude.toString() +
-                  ", " +
-                  report.longitude.toString()),
+              subtitle: Text(
+                report.latitude.toString() + ", " + report.longitude.toString(),
+              ),
+              trailing: RaisedButton(
+                child: Text('delete'),
+                onPressed: () {
+                  DatabaseHelper().deletereport(report.filename).then((d) {
+                    reports.removeWhere(
+                        (item) => item.filename == report.filename);
+                    callback();
+                  });
+                },
+              ),
             ),
             LinearProgressIndicator(),
           ],

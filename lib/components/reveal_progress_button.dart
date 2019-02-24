@@ -140,6 +140,7 @@ class __ProgressButtonState extends State<_ProgressButton>
               borderRadius: BorderRadius.circular(30),
             ),
             child: RaisedButton(
+              elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
               ),

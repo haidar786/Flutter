@@ -184,19 +184,23 @@ class SignupScreenState extends State<SignupScreen>
             ],
           ),
         ),
-        Center(
-            child: RevealProgressButton(
-          startColor: emralsColor().shade50,
-          endColor: Colors.green,
-          name: 'SIGN UP',
-          onPressed: () {
-            setState(() {
-              buttonState = 1;
-              _submit();
-            });
-          },
-          state: buttonState,
-        )),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          child: Center(
+              child: RevealProgressButton(
+            startColor: emralsColor().shade50,
+            endColor: Colors.green,
+            name: 'SIGN UP',
+            onPressed: () {
+              print('Signup button pressed');
+              setState(() {
+                buttonState = 1;
+                _submit();
+              });
+            },
+            state: buttonState,
+          )),
+        ),
         InkWell(
           child: Text.rich(
             TextSpan(

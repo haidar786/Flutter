@@ -173,19 +173,23 @@ class LoginScreenState extends State<LoginScreen> {
             ],
           ),
         ),
-        Center(
-          child: RevealProgressButton(
-            startColor: emralsColor(),
-            endColor: Colors.green,
-            name: 'LOGIN',
-            onPressed: () {
-              if (!mounted) return;
-              setState(() {
-                buttonState = 1;
-                _submit(context);
-              });
-            },
-            state: buttonState,
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          child: Center(
+            child: RevealProgressButton(
+              startColor: emralsColor(),
+              endColor: Colors.green,
+              name: 'LOGIN',
+              onPressed: () {
+                if (!mounted) return;
+                setState(() {
+                  print('Signup button pressed');
+                  buttonState = 1;
+                  _submit(context);
+                });
+              },
+              state: buttonState,
+            ),
           ),
         ),
         SizedBox(

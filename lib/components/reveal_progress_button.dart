@@ -33,7 +33,8 @@ class _RevealProgressButtonState extends State<RevealProgressButton>
     return CustomPaint(
       painter: _RevealProgressButtonPainter(
           _fraction, MediaQuery.of(context).size,
-          endColor: widget.endColor),
+          endColor: Colors.transparent //widget.endColor,
+          ),
       child: _ProgressButton(
         callback: reveal,
         startColor: widget.startColor,
@@ -128,7 +129,7 @@ class __ProgressButtonState extends State<_ProgressButton>
         shape: BoxShape.circle,
         child: Container(
           key: _globalKey,
-          height: 48.0,
+          height: 38.0,
           width: widget.state != 0 ? _width : double.infinity,
           child: AnimatedContainer(
             duration: Duration(milliseconds: 300),
@@ -182,8 +183,8 @@ class __ProgressButtonState extends State<_ProgressButton>
       );
     } else if (widget.state == 1) {
       return SizedBox(
-        height: 36.0,
-        width: 36.0,
+        height: 26.0,
+        width: 26.0,
         child: CircularProgressIndicator(
           value: null,
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -195,11 +196,12 @@ class __ProgressButtonState extends State<_ProgressButton>
   }
 
   double calculateElevation() {
-    if (_animatingReveal) {
+    /* if (_animatingReveal) {
       return 0.0;
     } else {
       return _isPressed ? 6.0 : 4.0;
-    }
+    } */
+    return 0.0;
   }
 }
 

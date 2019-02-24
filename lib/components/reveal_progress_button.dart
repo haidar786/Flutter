@@ -107,7 +107,7 @@ class _ProgressButton extends StatefulWidget {
 
 class __ProgressButtonState extends State<_ProgressButton>
     with TickerProviderStateMixin {
-  bool _isPressed = false, _animatingReveal = false;
+  //bool _isPressed = false, _animatingReveal = false;
   double _width = double.infinity;
   Animation _animation;
   GlobalKey _globalKey = GlobalKey();

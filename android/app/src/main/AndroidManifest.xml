@@ -57,6 +57,6 @@
 
         <activity android:name="com.apptreesoftware.barcodescan.BarcodeScannerActivity"/>
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="GOOGLE_MAPS_API_KEY"/>
+               android:value="AIzaSyB99noX8WahyQOJubMgKj4trkBAOEP1Tg8"/>
     </application>
 </manifest>

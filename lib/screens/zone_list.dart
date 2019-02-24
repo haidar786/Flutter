@@ -175,11 +175,16 @@ class _ZoneList extends State<ZoneListWidget> {
   }
 }
 
-class ZoneListItem extends StatelessWidget {
+class ZoneListItem extends StatefulWidget {
   final Zone zone;
 
   ZoneListItem({this.zone});
 
+  @override
+  _ZoneListItemState createState() => _ZoneListItemState();
+}
+
+class _ZoneListItemState extends State<ZoneListItem> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -192,13 +197,13 @@ class ZoneListItem extends StatelessWidget {
                 Expanded(
                   child: Stack(
                     children: <Widget>[
-                      zone.image != null
+                      widget.zone.image != null
                           ? CachedNetworkImage(
                               placeholder: Image.asset(
                                 'assets/placeholder.png',
                                 fit: BoxFit.cover,
                               ),
-                              imageUrl: zone.image,
+                              imageUrl: widget.zone.image,
                               errorWidget: Icon(Icons.error),
                             )
                           : Container(
@@ -207,7 +212,7 @@ class ZoneListItem extends StatelessWidget {
                             ),
                       CachedNetworkImage(
                         height: 30,
-                        imageUrl: zone.flag,
+                        imageUrl: widget.zone.flag,
                       ),
                     ],
                   ),
@@ -219,7 +224,7 @@ class ZoneListItem extends StatelessWidget {
                     children: <Widget>[
                       SizedBox(height: 10),
                       Text(
-                        zone.city,
+                        widget.zone.city,
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -232,7 +237,7 @@ class ZoneListItem extends StatelessWidget {
                               width: 18, height: 18),
                           SizedBox(width: 5),
                           Text(
-                            "${zone.emralsAmount} emrals",
+                            "${widget.zone.emralsAmount} emrals",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
@@ -247,7 +252,7 @@ class ZoneListItem extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "${zone.subscriberCount} sponsors",
+                            "${widget.zone.subscriberCount} sponsors",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
@@ -262,7 +267,7 @@ class ZoneListItem extends StatelessWidget {
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "${zone.reportCount} reports",
+                            "${widget.zone.reportCount} reports",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
@@ -276,7 +281,7 @@ class ZoneListItem extends StatelessWidget {
                               color: emralsColor()[1400]),
                           SizedBox(width: 5),
                           Text(
-                            "${zone.cleanupCount} cleanups",
+                            "${widget.zone.cleanupCount} cleanups",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
@@ -286,7 +291,9 @@ class ZoneListItem extends StatelessWidget {
                           padding: EdgeInsets.zero,
                           shape: StadiumBorder(),
                           color: emralsColor()[1000],
-                          onPressed: () {},
+                          onPressed: () {
+                            _showModal(widget.zone);
+                          },
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -317,6 +324,39 @@ class ZoneListItem extends StatelessWidget {
         )
       ],
     );
+  }
+
+  void _showModal(zone) {
+    Future<void> future = showModalBottomSheet<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new ListTile(
+              leading: new Icon(Icons.directions_walk),
+              title: new Text('100 EMRALS / month ' + zone.city),
+              onTap: () {},
+            ),
+            new ListTile(
+              leading: new Icon(Icons.directions_run),
+              title: new Text('200 EMRALS / month ' + zone.city),
+              onTap: () {},
+            ),
+            new ListTile(
+              leading: new Icon(Icons.directions_bike),
+              title: new Text('500 EMRALS / month ' + zone.city),
+              onTap: () {},
+            ),
+          ],
+        );
+      },
+    );
+    future.then((void value) => _closeModal(value));
+  }
+
+  void _closeModal(void value) {
+    print('modal closed');
   }
 }
 

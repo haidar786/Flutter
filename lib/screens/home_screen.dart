@@ -4,13 +4,14 @@ import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/report_list.dart';
 import 'package:emrals/screens/stats.dart';
 import 'package:emrals/screens/zone_list.dart';
+import 'package:emrals/screens/scanner.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/state_container.dart';
-//import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -29,6 +30,7 @@ class _MyHomePage extends State<MyHomePage> {
     CameraApp(),
     Stats(),
     ZoneListWidget(),
+    Scanner(),
   ];
 
   User user;
@@ -149,13 +151,13 @@ class _MyHomePage extends State<MyHomePage> {
               ),
               title: Text('Zones'),
             ),
-            // BottomNavigationBarItem(
-            //   backgroundColor: Colors.black,
-            //   icon: Icon(
-            //     FontAwesomeIcons.qrcode,
-            //   ),
-            //   title: Text('Scan'),
-            // ),
+            BottomNavigationBarItem(
+              backgroundColor: Colors.black,
+              icon: Icon(
+                FontAwesomeIcons.qrcode,
+              ),
+              title: Text('Scan'),
+            ),
           ],
         ),
       ),

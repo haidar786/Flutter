@@ -1,4 +1,4 @@
-import 'package:emrals/screens/onboard_screen.dart';
+//import 'package:emrals/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
@@ -10,7 +10,7 @@ import 'package:emrals/state_container.dart';
 import 'dart:io';
 import 'package:flutter/rendering.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
 
 final SentryClient sentry = new SentryClient(

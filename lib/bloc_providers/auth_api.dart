@@ -3,6 +3,9 @@ import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/models/auth_result_model.dart';
 import 'package:emrals/models/user.dart';
+import 'dart:io' show Platform;
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_udid/flutter_udid.dart';
 
 class AuthApi {
   DatabaseHelper db = DatabaseHelper();
@@ -22,9 +25,20 @@ class AuthApi {
     User user;
     String authError;
     AuthState authState;
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
     try {
       user = await api.login(username, password);
       await db.saveUser(user);
+
+      String udid = await FlutterUdid.udid;
+      String deviceType = Platform.isIOS ? "ios" : "android";
+
+      if (user != null) {
+        _firebaseMessaging.getToken().then((token) {
+          RestDatasource().registerFCM(user.token, token, udid, deviceType);
+        });
+      }
     } on Exception catch (error) {
       authError = error.toString();
     }

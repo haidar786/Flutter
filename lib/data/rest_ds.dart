@@ -224,22 +224,14 @@ class RestDatasource {
     Map<String, dynamic> payload = {
       "registration_id": registationID,
       "device_id": deviceID,
-      "device_type": deviceType,
+      "type": deviceType,
     };
 
     Map<String, String> headers = {
       "Authorization": "token $token",
       "Content-type": "application/json"
     };
-
-    return _netUtil
-        .post(apiUrl + "devices/",
-            headers: headers, body: json.encoder.convert(payload))
-        .then((dynamic res) {
-      if (res["error"] != null) {
-        throw Exception(res["error"]);
-      }
-      return res;
-    });
+    return _netUtil.post(apiUrl + "devices/",
+        headers: headers, body: json.encoder.convert(payload));
   }
 }

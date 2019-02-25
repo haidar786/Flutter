@@ -21,5 +21,4 @@ void main() {
     var actual = FieldValidator.validateEmail('');
     expect(actual, FieldValidator.EMPTY_EMAIL_MESSAGE);
   });
-  // TODO add invalid email test
 }

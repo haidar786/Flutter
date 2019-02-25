@@ -196,15 +196,6 @@ class __ProgressButtonState extends State<_ProgressButton>
       return Icon(Icons.check, color: Colors.white);
     }
   }
-
-  double calculateElevation() {
-    /* if (_animatingReveal) {
-      return 0.0;
-    } else {
-      return _isPressed ? 6.0 : 4.0;
-    } */
-    return 0.0;
-  }
 }
 
 class _RevealProgressButtonPainter extends CustomPainter {

@@ -1,4 +1,5 @@
 import 'package:emrals/main.dart';
+import 'package:emrals/screens/home_screen.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_permissions/simple_permissions.dart';
@@ -15,6 +16,13 @@ class OnboardScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.all(32.0),
+                child: Image.asset("assets/logo.png",),
+                decoration: BoxDecoration(color: emralsColor()),
+              ),
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -137,7 +145,7 @@ class OnboardScreen extends StatelessWidget {
                     await SharedPreferences.getInstance();
                 sharedPreferences.setBool("onboarded", true);
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (ctx) => EmralsApp()));
+                    context, MaterialPageRoute(builder: (ctx) => MyHomePage()));
               },
               child: Container(
                 height: 80,

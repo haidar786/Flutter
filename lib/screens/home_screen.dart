@@ -18,10 +18,12 @@ class MyHomePage extends StatefulWidget {
   _MyHomePage createState() => _MyHomePage();
 }
 
-class _MyHomePage extends State<MyHomePage> {
+class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
   BuildContext _ctx;
+  Animation emralsAnimation;
+  AnimationController emralsAnimationController;
 
   final List<Widget> _children = [
     ReportListWidget(),
@@ -36,27 +38,17 @@ class _MyHomePage extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    // if (mounted) {
-    //   DatabaseHelper().getUser().then((u) {
-    //     if (u != null) {
-    //       user = u;
-    //       setState(() {
-    //         RestDatasource().updateEmrals(u.token).then((e) {
-    //           StateContainer.of(_ctx)
-    //               .updateEmrals(double.parse(e['emrals_amount']));
-    //           DatabaseHelper().updateUser(u);
-    //         });
-    //       });
-    //     } else {
-    //       Navigator.of(_ctx).pushReplacementNamed("/login");
-    //     }
-    //   });
-    // }
+    emralsAnimationController = AnimationController(duration: Duration(seconds: 2), vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     _ctx = context;
+    double newEmrals = StateContainer.of(context).emralsBalance ?? 0;
+
+    emralsAnimation = Tween<double>(end: newEmrals, begin: 0).animate(CurvedAnimation(parent: emralsAnimationController, curve: Curves.linear));
+    emralsAnimationController.forward(from: 0);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -72,13 +64,18 @@ class _MyHomePage extends State<MyHomePage> {
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: Text(
-              formatter.format(StateContainer.of(_ctx).emralsBalance ?? 0),
-              style: TextStyle(
-                color: emralsColor(),
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
+            child: AnimatedBuilder(
+              animation: emralsAnimation,
+              builder: (ctx, widget) {
+                return Text(
+                  formatter.format(emralsAnimation.value),
+                  style: TextStyle(
+                    color: emralsColor(),
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              },
             ),
             // child: AnimatedBuilder(
             //   animation: StateContainer.of(_ctx).animation,

@@ -1,4 +1,5 @@
 //import 'package:emrals/screens/onboard_screen.dart';
+import 'package:emrals/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
 import 'package:emrals/styles.dart';
@@ -12,8 +13,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/data/database_helper.dart';
+
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 final SentryClient sentry = new SentryClient(
   dsn: "SENTRY_DSN",
@@ -78,26 +82,23 @@ void main() async {
   };
 
   runZoned<Future<Null>>(() async {
-    //SharedPreferences preferences = await SharedPreferences.getInstance();
-    // if (!(preferences.getBool("onboarded") ?? false)) {
-    //   // runApp(
-    //   //   StateContainer(
-    //   //     child: MaterialApp(
-    //   //       home: OnboardScreen(),
-    //   //       debugShowCheckedModeBanner: false,
-    //   //     ),
-    //   //   ),
-    //   // );
-    //   runApp(
-    //     StateContainer(
-    //       child: OnboardScreen(),
-    //     ),
-    //   );
-    // } else {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
     runApp(
-      StateContainer(child: EmralsApp()),
+      StateContainer(
+        child: MaterialApp(
+          home: (!(preferences.getBool("onboarded") ?? false))
+              ? OnboardScreen()
+              : MyHomePage(),
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Colors.black,
+            primarySwatch: emralsColor(),
+            fontFamily: 'Montserrat',
+          ),
+          routes: routes,
+        ),
+      ),
     );
-    //}
   }, onError: (error, stackTrace) async {
     await _reportError(error, stackTrace);
   });
@@ -113,27 +114,4 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
     exception: error,
     stackTrace: stackTrace,
   );
-}
-
-class EmralsApp extends StatefulWidget {
-  @override
-  EmralsAppState createState() {
-    return EmralsAppState();
-  }
-}
-
-class EmralsAppState extends State<EmralsApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyHomePage(),
-      theme: ThemeData(
-        primaryColor: Colors.black,
-        primarySwatch: emralsColor(),
-        fontFamily: 'Montserrat',
-      ),
-      routes: routes,
-    );
-  }
 }

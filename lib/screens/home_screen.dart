@@ -1,4 +1,3 @@
-import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/report_list.dart';
@@ -9,7 +8,6 @@ import 'package:emrals/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/state_container.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 

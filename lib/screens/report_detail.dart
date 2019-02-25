@@ -135,13 +135,37 @@ class ReportDetailState extends State<ReportDetail> {
                               left: 10,
                               child: RaisedButton(
                                 onPressed: () {
-                                  RestDatasource()
-                                      .deleteReport(
-                                          widget.report.id, user.token)
-                                      .then((m) {
-                                    widget.reports.removeWhere(
-                                        (item) => item.id == widget.report.id);
-                                    Navigator.of(context).pop();
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                          title: Text(
+                                              "Are you sure you want to delete this report?"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("Cancel"),
+                                            ),
+                                            FlatButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop(true);
+                                              },
+                                              child: Text("Yes"),
+                                            ),
+                                          ],
+                                        ),
+                                  ).then((d) {
+                                    if (d ?? false) {
+                                      RestDatasource()
+                                          .deleteReport(
+                                              widget.report.id, user.token)
+                                          .then((m) {
+                                        widget.reports.removeWhere((item) =>
+                                            item.id == widget.report.id);
+                                        Navigator.of(context).pop();
+                                      });
+                                    }
                                   });
                                 },
                                 child: Text('delete'),
@@ -193,19 +217,6 @@ class ReportDetailState extends State<ReportDetail> {
                     Text(formatter
                         .format(double.parse(widget.report.reportEmralsAmount)))
                   ]),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.visibility,
-                        color: Colors.purpleAccent,
-                        size: 20,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(widget.report.views.toString()),
-                    ],
-                  ),
                   Row(
                     children: <Widget>[
                       Icon(

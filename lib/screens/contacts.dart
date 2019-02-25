@@ -66,8 +66,8 @@ class ContactList extends StatelessWidget {
             foregroundColor: Colors.white,
             backgroundImage: MemoryImage(contact.avatar),
             child: Text(contact.displayName != null && contact.avatar != null
-                ? contact.displayName.substring(0, 1)
-                : ""),
+                ? ""
+                : contact.displayName.substring(0, 1)),
           ),
           subtitle: contact.emails.length != 0
               ? Text(contact.emails.first.value)

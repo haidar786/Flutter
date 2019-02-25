@@ -125,8 +125,9 @@ class __ProgressButtonState extends State<_ProgressButton>
   Widget build(BuildContext context) {
     return PhysicalModel(
         color: widget.startColor,
-        elevation: calculateElevation(),
-        shape: BoxShape.circle,
+        elevation: 2,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(30),
         child: Container(
           key: _globalKey,
           height: 38.0,
@@ -136,7 +137,7 @@ class __ProgressButtonState extends State<_ProgressButton>
             decoration: BoxDecoration(
               border: Border.all(
                   color: widget.state == 0 ? Colors.white : widget.startColor,
-                  width: 2),
+                  width: 2.5),
               borderRadius: BorderRadius.circular(30),
             ),
             child: RaisedButton(
@@ -170,7 +171,7 @@ class __ProgressButtonState extends State<_ProgressButton>
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
       ..addListener(() {
         setState(() {
-          _width = initialWidth - ((initialWidth - 48.0) * _animation.value);
+          _width = initialWidth - ((initialWidth - 38.0) * _animation.value);
         });
       });
     _controller.forward();

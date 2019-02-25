@@ -9,7 +9,9 @@ import 'package:emrals/screens/home_screen.dart';
 import 'package:emrals/state_container.dart';
 import 'dart:io';
 import 'package:flutter/rendering.dart';
-
+import 'package:flutter_udid/flutter_udid.dart';
+import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/data/database_helper.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
 
@@ -44,9 +46,15 @@ void main() async {
 
   if (Platform.isIOS) iOSPermission();
 
-  _firebaseMessaging.getToken().then((token) {
-    // TODO: send token to server to store user
-    print(token);
+  String udid = await FlutterUdid.udid;
+  String deviceType = Platform.isIOS ? "ios" : "android";
+
+  DatabaseHelper().getUser().then((user) {
+    if (user != null) {
+      _firebaseMessaging.getToken().then((token) {
+        RestDatasource().registerFCM(user.token, token, udid, deviceType);
+      });
+    }
   });
 
   _firebaseMessaging.configure(

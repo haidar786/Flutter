@@ -21,7 +21,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
-  BuildContext _ctx;
   Animation emralsAnimation;
   AnimationController emralsAnimationController;
 
@@ -38,15 +37,17 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    emralsAnimationController = AnimationController(duration: Duration(seconds: 2), vsync: this);
+    emralsAnimationController =
+        AnimationController(duration: Duration(seconds: 2), vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    _ctx = context;
     double newEmrals = StateContainer.of(context).emralsBalance ?? 0;
 
-    emralsAnimation = Tween<double>(end: newEmrals, begin: 0).animate(CurvedAnimation(parent: emralsAnimationController, curve: Curves.linear));
+    emralsAnimation = Tween<double>(end: newEmrals, begin: 0).animate(
+        CurvedAnimation(
+            parent: emralsAnimationController, curve: Curves.linear));
     emralsAnimationController.forward(from: 0);
 
     return Scaffold(
@@ -77,19 +78,6 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
                 );
               },
             ),
-            // child: AnimatedBuilder(
-            //   animation: StateContainer.of(_ctx).animation,
-            //   builder: (BuildContext context, Widget child) {
-            //     return new Text(
-            //       formatter.format(StateContainer.of(_ctx).emralsBalance),
-            //       style: TextStyle(
-            //         color: emralsColor(),
-            //         fontSize: 24.0,
-            //         fontWeight: FontWeight.bold,
-            //       ),
-            //     );
-            //   },
-            // ),
           ),
           IconButton(
             icon: Image.asset("assets/JustElogo.png"),
@@ -115,7 +103,7 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
               this._selectedIndex = index;
             });
           },
-          fixedColor: Colors.red,
+          fixedColor: emralsColor(),
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(

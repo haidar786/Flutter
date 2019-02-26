@@ -52,10 +52,10 @@ class ProfileState extends State<Profile> {
                     Text(
                       _profileObject.username,
                       style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromRGBO(33, 219, 244, 1),
-                          fontFamily: 'Montserrat'),
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromRGBO(33, 219, 244, 1),
+                      ),
                     ),
                     SizedBox(height: 12.0),
                     SizedBox(

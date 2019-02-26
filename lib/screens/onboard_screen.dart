@@ -1,4 +1,3 @@
-import 'package:emrals/main.dart';
 import 'package:emrals/screens/home_screen.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,9 @@ class OnboardScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(32.0),
-                child: Image.asset("assets/logo.png",),
+                child: Image.asset(
+                  "assets/logo.png",
+                ),
                 decoration: BoxDecoration(color: emralsColor()),
               ),
             ),
@@ -117,7 +118,7 @@ class OnboardScreen extends StatelessWidget {
                           Text(
                             "Win EMRALS!",
                             style: TextStyle(
-                                fontSize: 25,
+                                fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xaa000000)),
                           ),

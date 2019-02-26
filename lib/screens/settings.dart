@@ -141,10 +141,10 @@ class _SettingsPage extends State<Settingg> {
                               Text(
                                 _userObject.username,
                                 style: TextStyle(
-                                    fontSize: 30.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color.fromRGBO(33, 219, 244, 1),
-                                    fontFamily: 'Montserrat'),
+                                  fontSize: 30.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromRGBO(33, 219, 244, 1),
+                                ),
                               ),
                               SizedBox(height: 12.0),
                               Container(
@@ -171,8 +171,8 @@ class _SettingsPage extends State<Settingg> {
                                         child: Text(
                                           'Invite Contacts',
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Montserrat'),
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -201,8 +201,8 @@ class _SettingsPage extends State<Settingg> {
                                         child: Text(
                                           'Leaderboard',
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Montserrat'),
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -225,8 +225,8 @@ class _SettingsPage extends State<Settingg> {
                                         child: Text(
                                           'Uploads',
                                           style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: 'Montserrat'),
+                                            color: Colors.white,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -253,8 +253,8 @@ class _SettingsPage extends State<Settingg> {
                                       child: Text(
                                         'Log out',
                                         style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: 'Montserrat'),
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -284,17 +284,16 @@ class _SettingsPage extends State<Settingg> {
                       SizedBox(height: 15.0),
                       Text(
                         'wallet address',
-                        style:
-                            TextStyle(fontSize: 17.0, fontFamily: 'Montserrat'),
+                        style: TextStyle(fontSize: 17.0),
                       ),
                       SizedBox(height: 25.0),
                       new GestureDetector(
                         child: Text(
                           _userObject.emralsAddress ?? "",
                           style: TextStyle(
-                              fontSize: 17.0,
-                              color: Colors.black,
-                              fontFamily: 'Montserrat'),
+                            fontSize: 17.0,
+                            color: Colors.black,
+                          ),
                         ),
                         onTap: () {
                           Clipboard.setData(

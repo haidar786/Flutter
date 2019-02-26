@@ -93,7 +93,6 @@ void main() async {
           theme: ThemeData(
             primaryColor: Colors.black,
             primarySwatch: emralsColor(),
-            fontFamily: 'Montserrat',
           ),
           routes: routes,
         ),

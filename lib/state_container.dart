@@ -27,7 +27,7 @@ class StateContainer extends StatefulWidget {
   StateContainerState createState() => StateContainerState();
 }
 
-class StateContainerState extends State<StateContainer> with TickerProviderStateMixin {
+class StateContainerState extends State<StateContainer> {
   double emralsBalance;
 
   void updateEmrals(double emrals) {

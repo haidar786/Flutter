@@ -21,7 +21,7 @@ class NetworkUtil {
             response.statusCode.toString() +
             res);
       }
-      return _decoder.convert(res);
+      return _decoder.convert(utf8.decode(response.bodyBytes));
     });
   }
 

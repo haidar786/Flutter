@@ -1,3 +1,4 @@
+import 'package:emrals/components/animated_user_emrals.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/models/report_comment.dart';
@@ -26,29 +27,21 @@ class ReportDetail extends StatefulWidget {
 }
 
 class ReportDetailState extends State<ReportDetail> {
-  User user;
   final formatter = new NumberFormat("#,###");
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
-  final TextEditingController commentEditingController =
-      TextEditingController();
-
+  final TextEditingController commentEditingController = TextEditingController();
   List<ReportComment> reportComments;
   ScrollController _controller;
-
+  User loggedInUser;
   @override
   void initState() {
     _controller = ScrollController();
     super.initState();
-    DatabaseHelper().getUser().then((u) {
-      setState(() {
-        user = u;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    loggedInUser = StateContainer.of(context).loggedInUser;
     return PageView.builder(
       itemBuilder: (context, position) {
         return Scaffold(
@@ -58,15 +51,7 @@ class ReportDetailState extends State<ReportDetail> {
             actions: <Widget>[
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  formatter
-                      .format(StateContainer.of(context).emralsBalance ?? 0),
-                  style: TextStyle(
-                    color: emralsColor(),
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: AnimatedUserEmrals(initialEmrals: StateContainer.of(context).emralsBalance,)
               ),
               IconButton(
                 icon: Image.asset("assets/JustElogo.png"),
@@ -128,8 +113,8 @@ class ReportDetailState extends State<ReportDetail> {
                             ],
                           ),
                         )
-                      : (user != null &&
-                              widget.report.posterUsername == user.username)
+                      : (loggedInUser != null &&
+                              widget.report.posterUsername == loggedInUser.username)
                           ? Positioned(
                               bottom: 2,
                               left: 10,
@@ -159,7 +144,7 @@ class ReportDetailState extends State<ReportDetail> {
                                     if (d ?? false) {
                                       RestDatasource()
                                           .deleteReport(
-                                              widget.report.id, user.token)
+                                              widget.report.id, loggedInUser.token)
                                           .then((m) {
                                         widget.reports.removeWhere((item) =>
                                             item.id == widget.report.id);
@@ -435,7 +420,7 @@ class ReportDetailState extends State<ReportDetail> {
                             onPressed: () async {
                               RestDatasource()
                                   .addCommentToReport(widget.report.id,
-                                      commentEditingController.text, user)
+                                      commentEditingController.text, loggedInUser)
                                   .then((b) {
                                 commentEditingController.text = "";
                                 setState(() {
@@ -503,6 +488,7 @@ class ReportCommentListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User loggedInUser = StateContainer.of(context).loggedInUser;
     return InkWell(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
@@ -565,14 +551,12 @@ class ReportCommentListItem extends StatelessWidget {
                                 ),
                           ).then((d) {
                             if (d ?? false) {
-                              DatabaseHelper().getUser().then((u) {
                                 RestDatasource()
-                                    .flagComment(comment.id, u.token)
+                                    .flagComment(comment.id, loggedInUser.token)
                                     .then((m) {
                                   final snackBar = SnackBar(content: Text(m));
                                   Scaffold.of(context).showSnackBar(snackBar);
                                 });
-                              });
                               print("flag comment");
                             }
                           });
@@ -648,21 +632,21 @@ class EmralsTipCircleButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        DatabaseHelper().getUser().then((u) {
-          if (u.emrals > number) {
+        User loggedInUser = StateContainer.of(context).loggedInUser;
+          if (loggedInUser.emrals > number) {
             if (report.solution != '') {
-              RestDatasource().tipCleanup(number, report.id, u.token).then((m) {
+              RestDatasource().tipCleanup(number, report.id, loggedInUser.token).then((m) {
                 Navigator.of(context).pop(number);
-                u.emrals = u.emrals - number;
-                DatabaseHelper().updateUser(u);
+                loggedInUser.emrals = loggedInUser.emrals - number;
+                DatabaseHelper().updateUser(loggedInUser);
                 scaffoldKey.currentState
                     .showSnackBar(SnackBar(content: Text(m['message'])));
               });
             } else {
-              RestDatasource().tipReport(number, report.id, u.token).then((m) {
+              RestDatasource().tipReport(number, report.id, loggedInUser.token).then((m) {
                 Navigator.of(context).pop(number);
-                u.emrals = u.emrals - number;
-                DatabaseHelper().updateUser(u);
+                loggedInUser.emrals = loggedInUser.emrals - number;
+                DatabaseHelper().updateUser(loggedInUser);
                 scaffoldKey.currentState
                     .showSnackBar(SnackBar(content: Text(m['message'])));
               });
@@ -676,7 +660,6 @@ class EmralsTipCircleButton extends StatelessWidget {
                       Navigator.of(context).pushReplacementNamed("/settings")),
             ));
           }
-        });
       },
       child: Container(
         width: 77,

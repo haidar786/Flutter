@@ -26,7 +26,8 @@ class ReportListWidget extends StatefulWidget {
   _ReportList createState() => _ReportList();
 }
 
-class _ReportList extends State<ReportListWidget> {
+class _ReportList extends State<ReportListWidget>
+    with TickerProviderStateMixin {
   final formatter = new NumberFormat("#,###");
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -37,6 +38,7 @@ class _ReportList extends State<ReportListWidget> {
   List<Report> reports = List();
   bool _progressBarActive = true;
   BuildContext _ctx;
+  User user;
 
   @override
   void initState() {
@@ -71,6 +73,8 @@ class _ReportList extends State<ReportListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    User user = StateContainer.of(context).loggedInUser;
+    this.user = user;
     _ctx = context;
     return Scaffold(
       key: _scaffoldKey,
@@ -83,6 +87,18 @@ class _ReportList extends State<ReportListWidget> {
                 controller: _scrollController,
                 itemCount: reports.length,
                 itemBuilder: (BuildContext context, int index) {
+                  AnimationController emralsAnimationController =
+                      AnimationController(
+                          vsync: this, duration: Duration(milliseconds: 200));
+                  Animation<double> emralsAnimation = Tween<double>(
+                          begin: 0,
+                          end: double.parse(reports[index].solution != ''
+                              ? reports[index].solutionEmralsAmount
+                              : reports[index].reportEmralsAmount))
+                      .animate(CurvedAnimation(
+                          parent: emralsAnimationController,
+                          curve: Curves.linear));
+                  emralsAnimationController.forward();
                   return Column(
                     children: <Widget>[
                       GestureDetector(
@@ -297,19 +313,18 @@ class _ReportList extends State<ReportListWidget> {
                                         SizedBox(
                                           width: 5,
                                         ),
-                                        Text(
-                                          formatter.format(
-                                            double.parse(
-                                                reports[index].solution != ''
-                                                    ? reports[index]
-                                                        .solutionEmralsAmount
-                                                    : reports[index]
-                                                        .reportEmralsAmount),
-                                          ),
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: emralsColor()),
+                                        AnimatedBuilder(
+                                          animation: emralsAnimation,
+                                          builder: (ctx, widget) {
+                                            return Text(
+                                              formatter.format(
+                                                  emralsAnimation.value),
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: emralsColor()),
+                                            );
+                                          },
                                         ),
                                       ],
                                     ),
@@ -439,29 +454,15 @@ class _ReportList extends State<ReportListWidget> {
       var parsed = data["results"] as List;
 
       if (!mounted) return;
+
       this.setState(() {
-        DatabaseHelper().getUser().then((u) {
-          if (u == null) {
-            Navigator.of(_ctx).pushReplacementNamed("/login");
-          } else {
-            RestDatasource().updateEmrals(u.token).then((e) {
-              u.emrals = double.parse(e['emrals_amount']);
-              DatabaseHelper().updateUser(u);
-              StateContainer.of(_ctx).updateEmrals(u.emrals);
-
-              DatabaseHelper().getReports().then((m) {
-                m.forEach((report) {
-                  upload(report.filename, report.longitude, report.latitude, u);
-                });
-              });
-
-              //update emrals amount in header
-            });
-          }
+        DatabaseHelper().getReports().then((m) {
+          m.forEach((report) {
+            upload(report.filename, report.longitude, report.latitude, user);
+          });
         });
 
-        reports.addAll(
-            parsed.map<Report>((json) => Report.fromJson(json)).toList());
+        reports.addAll(parsed.map<Report>((json) => Report.fromJson(json)).toList());
         _progressBarActive = false;
       });
     } catch (e) {

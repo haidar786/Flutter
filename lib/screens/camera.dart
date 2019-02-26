@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:emrals/state_container.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:location/location.dart';
@@ -32,20 +33,10 @@ class _CameraAppState extends State<CameraApp> {
   String imagePath;
   bool _isReady = false;
   bool _isLoading = false;
-  String userToken;
   var currentLocation = <String, double>{};
+  String userToken;
 
   var location = Location();
-
-  _setuserToken() async {
-    User userObject;
-    var db = DatabaseHelper();
-    userObject = await db.getUser();
-
-    setState(() {
-      userToken = userObject.token ?? '';
-    });
-  }
 
   Future<void> _setupCameras() async {
     try {
@@ -72,7 +63,6 @@ class _CameraAppState extends State<CameraApp> {
   void initState() {
     super.initState();
     _setupCameras();
-    _setuserToken();
   }
 
   @override
@@ -83,6 +73,7 @@ class _CameraAppState extends State<CameraApp> {
 
   @override
   Widget build(BuildContext context) {
+    userToken = StateContainer.of(context).loggedInUser.token;
     _ctx = context;
     if (!_isReady) return Container();
     return Scaffold(

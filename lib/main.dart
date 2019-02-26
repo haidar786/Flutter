@@ -1,4 +1,5 @@
 //import 'package:emrals/screens/onboard_screen.dart';
+import 'package:emrals/screens/login_screen.dart';
 import 'package:emrals/screens/onboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/routes.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/models/user.dart' as EmralsUser;
 
 //import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
@@ -83,20 +85,22 @@ void main() async {
 
   runZoned<Future<Null>>(() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    EmralsUser.User user = await DatabaseHelper().getUser();
     runApp(
       StateContainer(
-        child: MaterialApp(
-          home: (!(preferences.getBool("onboarded") ?? false))
-              ? OnboardScreen()
-              : MyHomePage(),
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: Colors.black,
-            primarySwatch: emralsColor(),
-          ),
-          routes: routes,
-        ),
-      ),
+          initialUser: user,
+          initialEmrals: user.emrals,
+          child: MaterialApp(
+            home: (!(preferences.getBool("onboarded") ?? false))
+                ? OnboardScreen()
+                : (user == null ? LoginScreen() : MyHomePage()),
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: Colors.black,
+              primarySwatch: emralsColor(),
+            ),
+            routes: routes,
+          )),
     );
   }, onError: (error, stackTrace) async {
     await _reportError(error, stackTrace);

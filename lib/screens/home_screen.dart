@@ -1,3 +1,5 @@
+import 'package:emrals/components/animated_user_emrals.dart';
+import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/report_list.dart';
@@ -19,10 +21,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
-  final formatter = new NumberFormat("#,###");
   int _selectedIndex = 0;
-  Animation emralsAnimation;
-  AnimationController emralsAnimationController;
 
   final List<Widget> _children = [
     ReportListWidget(),
@@ -32,24 +31,13 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
     Scanner(),
   ];
 
-  User user;
-
   @override
   void initState() {
     super.initState();
-    emralsAnimationController =
-        AnimationController(duration: Duration(seconds: 2), vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    double newEmrals = StateContainer.of(context).emralsBalance ?? 0;
-
-    emralsAnimation = Tween<double>(end: newEmrals, begin: 0).animate(
-        CurvedAnimation(
-            parent: emralsAnimationController, curve: Curves.linear));
-    emralsAnimationController.forward(from: 0);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,19 +53,7 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: AnimatedBuilder(
-              animation: emralsAnimation,
-              builder: (ctx, widget) {
-                return Text(
-                  formatter.format(emralsAnimation.value),
-                  style: TextStyle(
-                    color: emralsColor(),
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
-            ),
+            child: AnimatedUserEmrals(initialEmrals: 0,),
           ),
           IconButton(
             icon: Image.asset("assets/JustElogo.png"),

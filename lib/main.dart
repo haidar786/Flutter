@@ -1,25 +1,25 @@
 //import 'package:emrals/screens/onboard_screen.dart';
-import 'package:emrals/screens/login_screen.dart';
-import 'package:emrals/screens/onboard_screen.dart';
-import 'package:flutter/material.dart';
-import 'package:emrals/routes.dart';
-import 'package:emrals/styles.dart';
-import 'package:sentry/sentry.dart';
 import 'dart:async';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:emrals/screens/home_screen.dart';
-import 'package:emrals/state_container.dart';
 import 'dart:io';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_udid/flutter_udid.dart';
-import 'package:emrals/data/rest_ds.dart';
-import 'package:emrals/data/database_helper.dart';
-import 'package:emrals/models/user.dart' as EmralsUser;
-
-//import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io' show Platform;
 
+import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/models/user.dart' as EmralsUser;
+import 'package:emrals/routes.dart';
+import 'package:emrals/screens/home_screen.dart';
+import 'package:emrals/screens/login_screen.dart';
+import 'package:emrals/screens/onboard_screen.dart';
+import 'package:emrals/state_container.dart';
+import 'package:emrals/styles.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_udid/flutter_udid.dart';
+import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+//import 'package:shared_preferences/shared_preferences.dart';
+
 
 final SentryClient sentry = new SentryClient(
   dsn: "SENTRY_DSN",
@@ -89,11 +89,11 @@ void main() async {
     runApp(
       StateContainer(
           initialUser: user,
-          initialEmrals: user.emrals,
+          initialEmrals: user?.emrals,
           child: MaterialApp(
             home: (!(preferences.getBool("onboarded") ?? false))
                 ? OnboardScreen()
-                : (user == null ? LoginScreen() : MyHomePage()),
+                : (user == null ? LoginScreenBase() : MyHomePage()),
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primaryColor: Colors.black,

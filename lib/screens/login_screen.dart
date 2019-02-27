@@ -1,15 +1,16 @@
 //import 'dart:ui';
 
+import 'package:emrals/auth.dart';
 import 'package:emrals/bloc_provider.dart';
 import 'package:emrals/bloc_providers/auth_api.dart';
 import 'package:emrals/blocs/login_bloc.dart';
 import 'package:emrals/components/reveal_progress_button.dart';
 import 'package:emrals/models/auth_result_model.dart';
-import 'package:flutter/material.dart';
-import 'package:emrals/auth.dart';
+import 'package:emrals/state_container.dart';
 import 'package:emrals/styles.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:emrals/utils/field_validator.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreenBase extends StatelessWidget {
   @override
@@ -64,11 +65,11 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final loginBloc = Provider.of<LoginBloc>(context);
-
     loginBloc.authDataStream.listen((AuthData authData) {
       switch (authData.authState) {
         case AuthState.LOGGED_IN:
           {
+            StateContainer.of(context).refreshUser();
             _showSnackBar('Logged in as ${authData.user.username}');
             Navigator.of(context).pushReplacementNamed("/home");
           }
@@ -85,7 +86,6 @@ class LoginScreenState extends State<LoginScreen> {
           {}
       }
     });
-
     var loginForm = Column(
       children: <Widget>[
         Image(image: AssetImage("assets/logo.png")),

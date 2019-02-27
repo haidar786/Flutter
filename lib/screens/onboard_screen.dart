@@ -1,8 +1,8 @@
-import 'package:emrals/screens/home_screen.dart';
+import 'package:emrals/screens/login_screen.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_permissions/simple_permissions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class OnboardScreen extends StatelessWidget {
   @override
@@ -146,7 +146,7 @@ class OnboardScreen extends StatelessWidget {
                     await SharedPreferences.getInstance();
                 sharedPreferences.setBool("onboarded", true);
                 Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (ctx) => MyHomePage()));
+                    context, MaterialPageRoute(builder: (ctx) => LoginScreenBase()));
               },
               child: Container(
                 height: 80,

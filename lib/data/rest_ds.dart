@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:emrals/models/report_comment.dart';
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';

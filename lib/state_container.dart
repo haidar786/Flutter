@@ -1,5 +1,4 @@
 import 'package:emrals/data/database_helper.dart';
-import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/models/user.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,7 @@ class StateContainerState extends State<StateContainer> {
     oldEmrals = 0;
   }
 
-  void refreshUser() async{
+  void refreshUser() async {
     loggedInUser = await DatabaseHelper().getUser();
     setState(() {
       updateEmrals(loggedInUser.emrals);
@@ -60,7 +59,7 @@ class StateContainerState extends State<StateContainer> {
     oldEmrals = temp;
   }
 
-  void updateUser(User user){
+  void updateUser(User user) {
     setState(() {
       this.loggedInUser = user;
     });

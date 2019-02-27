@@ -124,6 +124,9 @@ class LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Username",
+                    labelStyle: new TextStyle(
+                      background: Paint()..color = Colors.white,
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
@@ -152,6 +155,9 @@ class LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Password",
+                    labelStyle: new TextStyle(
+                      background: Paint()..color = Colors.white,
+                    ),
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),

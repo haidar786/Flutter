@@ -215,6 +215,20 @@ class RestDatasource {
     });
   }
 
+  Future<dynamic> deleteComment(int commentID, String token) {
+    Map<String, String> payload = {
+      "id": commentID.toString(),
+    };
+
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+
+    return _netUtil.post(apiUrl + "delete_comment/",
+        headers: headers, body: json.encoder.convert(payload));
+  }
+
   Future<dynamic> registerFCM(
     String token,
     String registationID,

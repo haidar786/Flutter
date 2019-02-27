@@ -40,7 +40,6 @@ class _AnimatedUserEmralsState extends State<AnimatedUserEmrals> with SingleTick
     double oldEmrals = StateContainer.of(context).oldEmrals ?? 0;
     double newEmrals = StateContainer.of(context).emralsBalance ?? 0;
     if (oldEmrals != newEmrals) {
-      print("Emrals going from $oldEmrals to $newEmrals");
       runAnimation(newEmrals, oldEmrals).whenComplete(() {
         oldEmrals = newEmrals;
         StateContainer.of(context).oldEmrals = newEmrals;
@@ -53,7 +52,6 @@ class _AnimatedUserEmralsState extends State<AnimatedUserEmrals> with SingleTick
     return AnimatedBuilder(
       animation: emralsAnimation,
       builder: (ctx, w) {
-        print(emralsAnimation.value);
         return Text(
           widget.formatter.format(emralsAnimation.value),
           style: TextStyle(

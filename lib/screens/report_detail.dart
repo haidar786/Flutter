@@ -1,16 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/components/animated_user_emrals.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
-import 'package:emrals/models/report_comment.dart';
-import 'package:emrals/screens/profile.dart';
-import 'package:flutter/material.dart';
 import 'package:emrals/models/report.dart';
+import 'package:emrals/models/report_comment.dart';
 import 'package:emrals/models/user.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/screens/camera.dart';
-import 'package:emrals/styles.dart';
-import 'package:intl/intl.dart';
+import 'package:emrals/screens/map.dart';
+import 'package:emrals/screens/profile.dart';
 import 'package:emrals/state_container.dart';
+import 'package:emrals/styles.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 
 class ReportDetail extends StatefulWidget {
@@ -28,60 +29,68 @@ class ReportDetail extends StatefulWidget {
 
 class ReportDetailState extends State<ReportDetail> {
   final formatter = new NumberFormat("#,###");
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  final TextEditingController commentEditingController = TextEditingController();
+  final TextEditingController commentEditingController =
+      TextEditingController();
   List<ReportComment> reportComments;
   ScrollController _controller;
   User loggedInUser;
+  PageController pageController;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   @override
   void initState() {
     _controller = ScrollController();
     super.initState();
+    pageController =
+        PageController(initialPage: widget.reports.indexOf(widget.report));
   }
 
   @override
   Widget build(BuildContext context) {
     loggedInUser = StateContainer.of(context).loggedInUser;
-    return PageView.builder(
-      itemBuilder: (context, position) {
-        return Scaffold(
-          key: scaffoldKey,
-          appBar: AppBar(
-            title: Text("Report Detail"),
-            actions: <Widget>[
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: AnimatedUserEmrals(initialEmrals: StateContainer.of(context).emralsBalance,)
-              ),
-              IconButton(
-                icon: Image.asset("assets/JustElogo.png"),
-                onPressed: () {
-                  Navigator.pushNamed(
-                    context,
-                    '/settings',
-                  );
-                },
-              ),
-            ],
+    return Scaffold(
+      key: scaffoldKey,
+      appBar: AppBar(
+        title: Text("Report Detail"),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: AnimatedUserEmrals(
+                initialEmrals: StateContainer.of(context).emralsBalance,
+              )),
+          IconButton(
+            icon: Image.asset("assets/JustElogo.png"),
+            onPressed: () {
+              Navigator.pushNamed(
+                context,
+                '/settings',
+              );
+            },
           ),
-          body: ListView(
+        ],
+      ),
+      body: PageView.builder(
+        controller: pageController,
+        itemCount: widget.reports.length,
+        itemBuilder: (ctx, index) {
+          Report report = widget.reports[index];
+          return ListView(
             controller: _controller,
             children: <Widget>[
               Stack(
                 children: <Widget>[
                   CachedNetworkImage(
-                    imageUrl: widget.report.solution != ""
-                        ? widget.report.solution
-                        : widget.report.thumbnail,
+                    imageUrl: report.solution != ""
+                        ? report.solution
+                        : report.thumbnail,
                     placeholder: AspectRatio(aspectRatio: 1),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
                     padding: EdgeInsets.all(8),
-                    child: Text(widget.report.title),
+                    child: Text(report.title),
                     decoration: BoxDecoration(color: Colors.white70),
                   ),
-                  widget.report.solution != ""
+                  report.solution != ""
                       ? Positioned(
                           bottom: 10,
                           left: 10,
@@ -100,8 +109,7 @@ class ReportDetailState extends State<ReportDetail> {
                                 decoration: BoxDecoration(
                                   color: const Color(0xff7c94b6),
                                   image: DecorationImage(
-                                    image:
-                                        NetworkImage(widget.report.thumbnail),
+                                    image: NetworkImage(report.thumbnail),
                                     fit: BoxFit.cover,
                                   ),
                                   border: Border.all(
@@ -114,7 +122,7 @@ class ReportDetailState extends State<ReportDetail> {
                           ),
                         )
                       : (loggedInUser != null &&
-                              widget.report.posterUsername == loggedInUser.username)
+                              report.posterUsername == loggedInUser.username)
                           ? Positioned(
                               bottom: 2,
                               left: 10,
@@ -144,10 +152,10 @@ class ReportDetailState extends State<ReportDetail> {
                                     if (d ?? false) {
                                       RestDatasource()
                                           .deleteReport(
-                                              widget.report.id, loggedInUser.token)
+                                              report.id, loggedInUser.token)
                                           .then((m) {
-                                        widget.reports.removeWhere((item) =>
-                                            item.id == widget.report.id);
+                                        widget.reports.removeWhere(
+                                            (item) => item.id == report.id);
                                         Navigator.of(context).pop();
                                       });
                                     }
@@ -162,7 +170,12 @@ class ReportDetailState extends State<ReportDetail> {
                     right: 0,
                     child: GestureDetector(
                       onTap: () {
-                        widget.report.launchMaps();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MapPage(report: report)),
+                        );
+//                        report.launchMaps();
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 10, bottom: 10),
@@ -171,7 +184,7 @@ class ReportDetailState extends State<ReportDetail> {
                         decoration: BoxDecoration(
                           color: const Color(0xff7c94b6),
                           image: DecorationImage(
-                            image: NetworkImage(widget.report.googleURL),
+                            image: NetworkImage(report.googleURL),
                             fit: BoxFit.cover,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(50.0)),
@@ -200,7 +213,7 @@ class ReportDetailState extends State<ReportDetail> {
                       width: 5,
                     ),
                     Text(formatter
-                        .format(double.parse(widget.report.reportEmralsAmount)))
+                        .format(double.parse(report.reportEmralsAmount)))
                   ]),
                   Row(
                     children: <Widget>[
@@ -212,7 +225,7 @@ class ReportDetailState extends State<ReportDetail> {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(widget.report.posterUsername),
+                      Text(report.posterUsername),
                     ],
                   ),
                   Row(
@@ -225,7 +238,7 @@ class ReportDetailState extends State<ReportDetail> {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(widget.report.timeAgo),
+                      Text(report.timeAgo),
                     ],
                   ),
                 ],
@@ -248,25 +261,25 @@ class ReportDetailState extends State<ReportDetail> {
                             showDialog(
                                 context: context,
                                 builder: (ctx) {
-                                  return TipDialog(widget.report, scaffoldKey);
+                                  return TipDialog(report, scaffoldKey);
                                 }).then((d) {
                               if (d != null) {
                                 StateContainer.of(context).updateEmrals(
                                     StateContainer.of(context).emralsBalance -
                                         d);
                                 setState(() {
-                                  if (widget.report.solution.isEmpty) {
+                                  if (report.solution.isEmpty) {
                                     widget.report.reportEmralsAmount =
-                                        (double.parse(widget.report
-                                                    .reportEmralsAmount) +
+                                        (double.parse(
+                                                    report.reportEmralsAmount) +
                                                 d)
                                             .toString();
                                   } else {
-                                    widget.report.solutionEmralsAmount =
-                                        (double.parse(widget.report
+                                    report.solutionEmralsAmount = (double.parse(
+                                                widget.report
                                                     .solutionEmralsAmount) +
-                                                d)
-                                            .toString();
+                                            d)
+                                        .toString();
                                   }
                                 });
                               }
@@ -294,7 +307,7 @@ class ReportDetailState extends State<ReportDetail> {
                                 ),
                                 onPressed: () {
                                   Share.share(
-                                      "http://www.emrals.com/alerts/${widget.report.slug}");
+                                      "http://www.emrals.com/alerts/${report.slug}");
                                 },
                                 label: Text(
                                   "Share",
@@ -314,7 +327,7 @@ class ReportDetailState extends State<ReportDetail> {
                       ],
                     ),
                   ),
-                  widget.report.solution != ''
+                  report.solution != ''
                       ? Column(
                           children: <Widget>[
                             Row(
@@ -336,14 +349,14 @@ class ReportDetailState extends State<ReportDetail> {
                               ],
                             ),
                             Text(
-                              "${widget.report.solutionEmralsAmount} EMRALS WON!",
+                              "${report.solutionEmralsAmount} EMRALS WON!",
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: emralsColor()),
                             ),
                             Text(
-                              "Congrats ${widget.report.posterUsername}",
+                              "Congrats ${report.posterUsername}",
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -419,8 +432,10 @@ class ReportDetailState extends State<ReportDetail> {
                             color: Colors.white,
                             onPressed: () async {
                               RestDatasource()
-                                  .addCommentToReport(widget.report.id,
-                                      commentEditingController.text, loggedInUser)
+                                  .addCommentToReport(
+                                      widget.report.id,
+                                      commentEditingController.text,
+                                      loggedInUser)
                                   .then((b) {
                                 commentEditingController.text = "";
                                 setState(() {
@@ -439,7 +454,7 @@ class ReportDetailState extends State<ReportDetail> {
                 ),
               ),
               FutureBuilder(
-                future: RestDatasource().getReportComments(widget.report.id),
+                future: RestDatasource().getReportComments(report.id),
                 builder: (ctx, snapshot) {
                   if (snapshot.hasData) {
                     reportComments = snapshot.data;
@@ -474,9 +489,9 @@ class ReportDetailState extends State<ReportDetail> {
                 },
               )
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -489,12 +504,14 @@ class ReportCommentListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     User loggedInUser = StateContainer.of(context).loggedInUser;
+    bool loggedInUserComment = loggedInUser.id == comment.userid;
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => Profile(
+        showDialog(
+            context: context,
+            builder: (ctx) => ProfileDialog(
                   id: comment.userid,
-                )));
+                ));
       },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -533,7 +550,7 @@ class ReportCommentListItem extends StatelessWidget {
                             context: context,
                             builder: (ctx) => AlertDialog(
                                   title: Text(
-                                      "Are you sure you want to flag this comment?"),
+                                      "Are you sure you want to ${loggedInUserComment ? "delete" : "flag"} this comment?"),
                                   actions: <Widget>[
                                     FlatButton(
                                       onPressed: () {
@@ -551,20 +568,29 @@ class ReportCommentListItem extends StatelessWidget {
                                 ),
                           ).then((d) {
                             if (d ?? false) {
+                              if (!loggedInUserComment) {
                                 RestDatasource()
                                     .flagComment(comment.id, loggedInUser.token)
                                     .then((m) {
                                   final snackBar = SnackBar(content: Text(m));
                                   Scaffold.of(context).showSnackBar(snackBar);
                                 });
-                              print("flag comment");
+                              } else {
+                                RestDatasource()
+                                    .deleteComment(
+                                        comment.id, loggedInUser.token)
+                                    .then((m) {
+                                  final snackBar = SnackBar(content: Text(m));
+                                  Scaffold.of(context).showSnackBar(snackBar);
+                                });
+                              }
                             }
                           });
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Flag",
+                            !loggedInUserComment ? "Flag" : "Delete",
                             style:
                                 TextStyle(fontSize: 10, color: Colors.black54),
                           ),
@@ -633,33 +659,37 @@ class EmralsTipCircleButton extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         User loggedInUser = StateContainer.of(context).loggedInUser;
-          if (loggedInUser.emrals > number) {
-            if (report.solution != '') {
-              RestDatasource().tipCleanup(number, report.id, loggedInUser.token).then((m) {
-                Navigator.of(context).pop(number);
-                loggedInUser.emrals = loggedInUser.emrals - number;
-                DatabaseHelper().updateUser(loggedInUser);
-                scaffoldKey.currentState
-                    .showSnackBar(SnackBar(content: Text(m['message'])));
-              });
-            } else {
-              RestDatasource().tipReport(number, report.id, loggedInUser.token).then((m) {
-                Navigator.of(context).pop(number);
-                loggedInUser.emrals = loggedInUser.emrals - number;
-                DatabaseHelper().updateUser(loggedInUser);
-                scaffoldKey.currentState
-                    .showSnackBar(SnackBar(content: Text(m['message'])));
-              });
-            }
+        if (loggedInUser.emrals > number) {
+          if (report.solution != '') {
+            RestDatasource()
+                .tipCleanup(number, report.id, loggedInUser.token)
+                .then((m) {
+              Navigator.of(context).pop(number);
+              loggedInUser.emrals = loggedInUser.emrals - number;
+              DatabaseHelper().updateUser(loggedInUser);
+              scaffoldKey.currentState
+                  .showSnackBar(SnackBar(content: Text(m['message'])));
+            });
           } else {
-            scaffoldKey.currentState.showSnackBar(SnackBar(
-              content: Text("Insufficient ballance"),
-              action: SnackBarAction(
-                  label: "Deposit",
-                  onPressed: () =>
-                      Navigator.of(context).pushReplacementNamed("/settings")),
-            ));
+            RestDatasource()
+                .tipReport(number, report.id, loggedInUser.token)
+                .then((m) {
+              Navigator.of(context).pop(number);
+              loggedInUser.emrals = loggedInUser.emrals - number;
+              DatabaseHelper().updateUser(loggedInUser);
+              scaffoldKey.currentState
+                  .showSnackBar(SnackBar(content: Text(m['message'])));
+            });
           }
+        } else {
+          scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text("Insufficient ballance"),
+            action: SnackBarAction(
+                label: "Deposit",
+                onPressed: () =>
+                    Navigator.of(context).pushReplacementNamed("/settings")),
+          ));
+        }
       },
       child: Container(
         width: 77,

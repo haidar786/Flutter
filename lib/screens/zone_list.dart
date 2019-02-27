@@ -1,18 +1,17 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emrals/models/zone.dart';
+import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:emrals/models/zone.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emrals/styles.dart';
 
 class ZoneListWidget extends StatefulWidget {
   @override
   _ZoneList createState() => _ZoneList();
 }
 
-class _ZoneList extends State<ZoneListWidget> {
+class _ZoneList extends State<ZoneListWidget> with AutomaticKeepAliveClientMixin{
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
   int limit = 50;
@@ -173,6 +172,9 @@ class _ZoneList extends State<ZoneListWidget> {
       _progressBarActive = false;
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ZoneListItem extends StatefulWidget {

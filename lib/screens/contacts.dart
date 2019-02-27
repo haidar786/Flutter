@@ -1,7 +1,7 @@
+import 'package:contacts_service/contacts_service.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:contacts_service/contacts_service.dart';
 
 class Contacts extends StatefulWidget {
   @override
@@ -64,10 +64,12 @@ class ContactList extends StatelessWidget {
           title: Text(contact.displayName),
           leading: CircleAvatar(
             foregroundColor: Colors.white,
-            backgroundImage: MemoryImage(contact.avatar),
-            child: Text(contact.displayName != null && contact.avatar != null
-                ? ""
-                : contact.displayName.substring(0, 1)),
+            backgroundImage:
+                contact.avatar != null ? MemoryImage(contact.avatar) : null,
+            child: Text(
+                contact.displayName != null && contact.displayName.isNotEmpty && contact.avatar.isEmpty
+                    ? contact.displayName.substring(0, 1)
+                    : ""),
           ),
           subtitle: contact.emails.length != 0
               ? Text(contact.emails.first.value)

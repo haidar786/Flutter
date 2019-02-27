@@ -138,12 +138,7 @@ class LeaderBoardListItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         if (userId != null)
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (ctx) => Profile(
-                        id: userId,
-                      )));
+          showDialog(context: context, builder: (ctx) => ProfileDialog(id: userId,));
       },
       child: Container(
         color: currentUser ? emralsColor() : Colors.transparent,

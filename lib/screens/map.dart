@@ -1,12 +1,13 @@
+import 'dart:convert';
+
+import 'package:emrals/models/report.dart';
 import 'package:emrals/screens/report_detail.dart';
+import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-import 'package:emrals/models/report.dart';
-import 'package:emrals/styles.dart';
-import 'dart:convert';
-import 'package:location/location.dart' as LocationManager;
 import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
+import 'package:location/location.dart' as LocationManager;
 
 class MapPage extends StatefulWidget {
   final Report report;
@@ -116,6 +117,20 @@ class _MyAppState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Emrals Map'),
+        actions: widget.report != null
+            ? [
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.launch),
+                      onPressed: () {
+                        widget.report.launchMaps();
+                      },
+                    ),
+                  ],
+                )
+              ]
+            : null,
       ),
       body: Hero(
         tag: widget.report != null ? widget.report.id : '',

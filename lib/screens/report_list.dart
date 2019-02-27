@@ -1,25 +1,23 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:emrals/screens/report_detail.dart';
-import 'package:emrals/models/report.dart';
+import 'package:async/async.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emrals/styles.dart';
+import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/models/report.dart';
+import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
-import 'package:share/share.dart';
 import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/profile.dart';
-import 'package:emrals/data/rest_ds.dart';
-import 'package:emrals/data/database_helper.dart';
-import 'package:intl/intl.dart';
+import 'package:emrals/screens/report_detail.dart';
 import 'package:emrals/state_container.dart';
-
-import 'dart:async';
-import 'dart:io';
-import 'package:emrals/models/user.dart';
+import 'package:emrals/styles.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
-import 'package:async/async.dart';
+import 'package:share/share.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -27,7 +25,7 @@ class ReportListWidget extends StatefulWidget {
 }
 
 class _ReportList extends State<ReportListWidget>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin{
   final formatter = new NumberFormat("#,###");
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -204,12 +202,8 @@ class _ReportList extends State<ReportListWidget>
                               padding: EdgeInsets.all(5),
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => Profile(
-                                            id: reports[index].creator)),
-                                  );
+                                  showDialog(context: context, builder: (ctx) => ProfileDialog(
+                                      id: reports[index].creator));
                                 },
                                 child: Container(
                                   width: 77,
@@ -505,4 +499,6 @@ class _ReportList extends State<ReportListWidget>
       Scaffold.of(_ctx).showSnackBar(snackBar);
     });
   }
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -1,15 +1,16 @@
-import 'package:emrals/components/animated_user_emrals.dart';
-import 'package:emrals/screens/leaderboard.dart';
-import 'package:flutter/material.dart';
-import 'package:emrals/data/database_helper.dart';
-import 'package:emrals/models/user.dart';
-import 'package:flutter/services.dart';
-import 'package:emrals/styles.dart';
-import 'package:intl/intl.dart';
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:emrals/utils/qr.dart';
+import 'package:emrals/components/animated_user_emrals.dart';
+import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/models/user.dart';
+import 'package:emrals/screens/leaderboard.dart';
+import 'package:emrals/screens/profile.dart';
 import 'package:emrals/state_container.dart';
+import 'package:emrals/styles.dart';
+import 'package:emrals/utils/qr.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 
 class Settingg extends StatefulWidget {
@@ -63,6 +64,7 @@ class _SettingsPage extends State<Settingg> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: Colors.white,
         key: key,
         appBar: AppBar(
           bottom: TabBar(
@@ -102,166 +104,138 @@ class _SettingsPage extends State<Settingg> {
         ),
         body: TabBarView(
           children: [
-            Stack(
-              children: <Widget>[
-                ClipPath(
-                  child: Container(color: Colors.black38),
-                ),
-                SingleChildScrollView(
-                  child: Center(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(height: 50.0),
-                        Container(
-                            width: 150.0,
-                            height: 150.0,
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                image: DecorationImage(
-                                    image: NetworkImage(loggedInUser.picture),
-                                    fit: BoxFit.cover),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(75.0)),
-                                boxShadow: [
-                                  BoxShadow(
-                                      blurRadius: 7.0, color: Colors.black)
-                                ])),
-                        SizedBox(height: 20.0),
-                        Text(
-                          loggedInUser.username,
-                          style: TextStyle(
-                            fontSize: 30.0,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromRGBO(33, 219, 244, 1),
-                          ),
-                        ),
-                        SizedBox(height: 12.0),
-                        Container(
-                            height: 30.0,
-                            width: 120.0,
-                            child: Material(
-                              borderRadius: BorderRadius.circular(20.0),
-                              shadowColor: Colors.black12,
-                              color: emralsColor(),
-                              elevation: 7.0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  SimplePermissions.requestPermission(
-                                          Permission.ReadContacts)
-                                      .then((p) {
-                                    if (p == PermissionStatus.authorized) {
-                                      Navigator.pushNamed(context, '/contacts');
-                                    }
-                                  });
-                                },
-                                child: Center(
-                                  child: Text(
-                                    'Invite Contacts',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )),
-                        SizedBox(height: 25.0),
-                        Container(
-                            height: 30.0,
-                            width: 120.0,
-                            child: Material(
-                              borderRadius: BorderRadius.circular(20.0),
-                              shadowColor: Colors.black12,
-                              color: Color.fromRGBO(164, 211, 34, 1),
-                              elevation: 7.0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (ctx) => LeaderBoard(
-                                            currentUser: loggedInUser,
-                                          ),
-                                    ),
-                                  );
-                                },
-                                child: Center(
-                                  child: Text(
-                                    'Leaderboard',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )),
-                        SizedBox(height: 25.0),
-                        Container(
-                            height: 30.0,
-                            width: 120.0,
-                            child: Material(
-                              borderRadius: BorderRadius.circular(20.0),
-                              shadowColor: Colors.black12,
-                              color: Color.fromRGBO(164, 211, 34, 1),
-                              elevation: 7.0,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/uploads');
-                                },
-                                child: Center(
-                                  child: Text(
-                                    'Uploads',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )),
-                        SizedBox(height: 25.0),
-                        Container(
-                          height: 30.0,
-                          width: 120.0,
-                          child: Material(
-                            borderRadius: BorderRadius.circular(20.0),
-                            shadowColor: Colors.black12,
-                            color: Color.fromRGBO(8, 158, 178, 1),
-                            elevation: 7.0,
-                            child: GestureDetector(
-                              onTap: () {
-                                var db = DatabaseHelper();
-                                db.deleteUsers().then((_) {
-                                  Navigator.of(context).pushNamedAndRemoveUntil(
-                                      "/login", ModalRoute.withName("/home"));
-                                });
-                              },
-                              child: Center(
-                                child: Text(
-                                  'Log out',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+            SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  FutureBuilder(
+                    future: RestDatasource().getUser(StateContainer.of(context).loggedInUser.id),
+                    builder: (ctx, snapshot) {
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+                      return ProfilePage(userProfile: snapshot.data);
+                    },
+                  ),
+                  Container(
+                      height: 30.0,
+                      width: 120.0,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        shadowColor: Colors.black12,
+                        color: emralsColor(),
+                        elevation: 7.0,
+                        child: GestureDetector(
+                          onTap: () {
+                            SimplePermissions.requestPermission(
+                                    Permission.ReadContacts)
+                                .then((p) {
+                              if (p == PermissionStatus.authorized) {
+                                Navigator.pushNamed(context, '/contacts');
+                              }
+                            });
+                          },
+                          child: Center(
+                            child: Text(
+                              'Invite Contacts',
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
+                      )),
+                  SizedBox(height: 25.0),
+                  Container(
+                      height: 30.0,
+                      width: 120.0,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        shadowColor: Colors.black12,
+                        color: Color.fromRGBO(164, 211, 34, 1),
+                        elevation: 7.0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => LeaderBoard(
+                                      currentUser: loggedInUser,
+                                    ),
+                              ),
+                            );
+                          },
+                          child: Center(
+                            child: Text(
+                              'Leaderboard',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
-                        Center(
+                      )),
+                  SizedBox(height: 25.0),
+                  Container(
+                      height: 30.0,
+                      width: 120.0,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(20.0),
+                        shadowColor: Colors.black12,
+                        color: Color.fromRGBO(164, 211, 34, 1),
+                        elevation: 7.0,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/uploads');
+                          },
+                          child: Center(
+                            child: Text(
+                              'Uploads',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
+                  SizedBox(height: 25.0),
+                  Container(
+                    height: 30.0,
+                    width: 120.0,
+                    child: Material(
+                      borderRadius: BorderRadius.circular(20.0),
+                      shadowColor: Colors.black12,
+                      color: Color.fromRGBO(8, 158, 178, 1),
+                      elevation: 7.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          var db = DatabaseHelper();
+                          db.deleteUsers().then((_) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                "/login", ModalRoute.withName("/home"));
+                          });
+                        },
+                        child: Center(
                           child: Text(
-                            "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
-                            textScaleFactor: .9,
+                            'Log out',
                             style: TextStyle(
                               color: Colors.white,
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: Text(
+                      "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
+                      textScaleFactor: .9,
+                      style: TextStyle(
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             Center(
                 child: Column(

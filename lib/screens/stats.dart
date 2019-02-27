@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:emrals/data/stats_api.dart';
@@ -5,7 +6,6 @@ import 'package:emrals/models/stats_exchange_model.dart';
 import 'package:emrals/models/stats_model.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,7 +25,7 @@ launchURL(url) async {
   }
 }
 
-class StatsState extends State<Stats> {
+class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin{
   StatsApi _statsApi = StatsApi();
   StatsModel stats;
   StatsExchangeModel crex24data;
@@ -1086,6 +1086,9 @@ class StatsState extends State<Stats> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class CountDownText extends StatefulWidget {

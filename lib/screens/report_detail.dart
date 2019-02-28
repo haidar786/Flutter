@@ -212,8 +212,7 @@ class ReportDetailState extends State<ReportDetail> {
                     SizedBox(
                       width: 5,
                     ),
-                    Text(formatter
-                        .format(double.parse(report.reportEmralsAmount)))
+                    Text(formatter.format(int.parse(report.reportEmralsAmount)))
                   ]),
                   Row(
                     children: <Widget>[

@@ -108,7 +108,8 @@ class _SettingsPage extends State<Settingg> {
               child: Column(
                 children: <Widget>[
                   FutureBuilder(
-                    future: RestDatasource().getUser(StateContainer.of(context).loggedInUser.id),
+                    future: RestDatasource()
+                        .getUser(StateContainer.of(context).loggedInUser.id),
                     builder: (ctx, snapshot) {
                       if (!snapshot.hasData) return CircularProgressIndicator();
                       return ProfilePage(userProfile: snapshot.data);
@@ -230,8 +231,7 @@ class _SettingsPage extends State<Settingg> {
                     child: Text(
                       "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
                       textScaleFactor: .9,
-                      style: TextStyle(
-                      ),
+                      style: TextStyle(),
                     ),
                   ),
                 ],

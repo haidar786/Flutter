@@ -68,7 +68,7 @@ class ContactList extends StatelessWidget {
                 contact.avatar != null ? MemoryImage(contact.avatar) : null,
             child: Text(contact.displayName != null &&
                     contact.displayName.isNotEmpty &&
-                    contact.avatar != null
+                    contact.avatar == null
                 ? contact.displayName.substring(0, 1)
                 : ""),
           ),

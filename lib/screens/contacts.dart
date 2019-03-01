@@ -2,6 +2,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:emrals/state_container.dart';
 
 class Contacts extends StatefulWidget {
   @override
@@ -78,6 +79,7 @@ class ContactList extends StatelessWidget {
           trailing: contact.emails.length != 0
               ? InviteButton(
                   email: contact.emails.first.value,
+                  token: StateContainer.of(context).loggedInUser.token,
                 )
               : null,
         );

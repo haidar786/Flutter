@@ -23,7 +23,11 @@ dependencies:
   font_awesome_flutter: 8.4.0
   share: 0.6.0+1
   share_extend: 1.0.3
-  google_maps_flutter: 0.3.0+2
+  google_maps_flutter:
+    git:
+     url: git://github.com/flutter/plugins
+     path: packages/google_maps_flutter
+     ref: afa2f0877a10c7f9f6898a0107da07d9ce90b670
   sentry: any
   contacts_service: ^0.1.1
   qr: 1.0.1

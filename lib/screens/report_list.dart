@@ -230,6 +230,22 @@ class _ReportList extends State<ReportListWidget>
                               child: Text(reports[index].title),
                               decoration: BoxDecoration(color: Colors.white70),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(5, 35, 0, 0),
+                              child: Text(
+                                "#" + reports[index].id.toString(),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      offset: Offset(1.5, 1.5),
+                                      blurRadius: 1.0,
+                                      color: Color.fromARGB(255, 0, 0, 0),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
                             reports[index].solution != ""
                                 ? Positioned(
                                     bottom: 10,

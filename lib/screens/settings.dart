@@ -367,9 +367,12 @@ class _SettingsPage extends State<Settingg> {
                         String walletAddress = walletAddressController.text;
                         double amount =
                             double.tryParse(amountController.text) ??
-                                key.currentState.showSnackBar(SnackBar(
+                                key.currentState.showSnackBar(
+                                  SnackBar(
                                     content:
-                                        Text("Please enter a valid amount")));
+                                        Text("Please enter a valid amount"),
+                                  ),
+                                );
 
                         if (loggedInUser.emrals >= amount) {
                           RestDatasource()

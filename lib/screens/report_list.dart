@@ -25,7 +25,7 @@ class ReportListWidget extends StatefulWidget {
 }
 
 class _ReportList extends State<ReportListWidget>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin{
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final formatter = new NumberFormat("#,###");
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
@@ -42,6 +42,7 @@ class _ReportList extends State<ReportListWidget>
   void initState() {
     super.initState();
     fetchReports(limit: 50, offset: 0);
+
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -87,18 +88,124 @@ class _ReportList extends State<ReportListWidget>
                 itemBuilder: (BuildContext context, int index) {
                   AnimationController emralsAnimationController =
                       AnimationController(
-                          vsync: this, duration: Duration(milliseconds: 200));
+                    vsync: this,
+                    duration: Duration(milliseconds: 500),
+                  );
                   Animation<double> emralsAnimation = Tween<double>(
-                          begin: 0,
-                          end: double.parse(reports[index].solution != ''
-                              ? reports[index].solutionEmralsAmount
-                              : reports[index].reportEmralsAmount))
-                      .animate(CurvedAnimation(
-                          parent: emralsAnimationController,
-                          curve: Curves.linear));
+                    begin: 0,
+                    end: double.parse(reports[index].solutionEmralsAmount) +
+                        double.parse(reports[index].reportEmralsAmount),
+                  ).animate(
+                    CurvedAnimation(
+                      parent: emralsAnimationController,
+                      curve: Curves.linear,
+                    ),
+                  );
                   emralsAnimationController.forward();
                   return Column(
                     children: <Widget>[
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (ctx) => ProfileDialog(
+                                      id: reports[index].creator));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Container(
+                                width: 30,
+                                height: 30,
+                                padding: EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: FractionalOffset.topCenter,
+                                    end: FractionalOffset.bottomCenter,
+                                    stops: [0, 0.5, 1],
+                                    colors: [
+                                      const Color(0xFF7DB208),
+                                      const Color(0xFFFFDC03),
+                                      const Color(0xFFDD26BA),
+                                    ],
+                                  ),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                        reports[index].posterAvatar,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  reports[index].posterUsername,
+                                  style: TextStyle(
+                                      color: emralsColor(),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(reports[index].solution != ''
+                                    ? 'cleans ${reports[index].timeAgo} ago '
+                                    : 'reports ${reports[index].timeAgo} ago '),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                            child: Column(
+                              children: <Widget>[
+                                Text(
+                                  'earned',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: emralsColor(),
+                                  ),
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Image.asset(
+                                      "assets/greene.png",
+                                      width: 15,
+                                    ),
+                                    SizedBox(
+                                      width: 2,
+                                    ),
+                                    AnimatedBuilder(
+                                      animation: emralsAnimation,
+                                      builder: (ctx, widget) {
+                                        return Text(
+                                          formatter
+                                              .format(emralsAnimation.value),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor()),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -109,7 +216,6 @@ class _ReportList extends State<ReportListWidget>
                           );
                         },
                         child: Stack(
-                          alignment: const Alignment(1, 1),
                           children: [
                             CachedNetworkImage(
                               placeholder: AspectRatio(aspectRatio: 1),
@@ -117,6 +223,12 @@ class _ReportList extends State<ReportListWidget>
                                   ? reports[index].solution
                                   : reports[index].thumbnail,
                               errorWidget: Icon(Icons.error),
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.all(8),
+                              child: Text(reports[index].title),
+                              decoration: BoxDecoration(color: Colors.white70),
                             ),
                             reports[index].solution != ""
                                 ? Positioned(
@@ -157,277 +269,143 @@ class _ReportList extends State<ReportListWidget>
                                     ),
                                   )
                                 : Container(),
-                            Hero(
-                              tag: reports[index].id,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            MapPage(report: reports[index])),
-                                  );
-                                },
-                                child: Container(
-                                  margin:
-                                      EdgeInsets.only(right: 10, bottom: 10),
-                                  width: 100.0,
-                                  height: 100.0,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff7c94b6),
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                          reports[index].googleURL),
-                                      fit: BoxFit.cover,
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(50.0)),
-                                    border: Border.all(
-                                      color: emralsColor(),
-                                      width: 2,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.all(5),
-                              child: GestureDetector(
-                                onTap: () {
-                                  showDialog(context: context, builder: (ctx) => ProfileDialog(
-                                      id: reports[index].creator));
-                                },
-                                child: Container(
-                                  width: 77,
-                                  height: 77,
-                                  padding: EdgeInsets.all(1),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: FractionalOffset.topCenter,
-                                      end: FractionalOffset.bottomCenter,
-                                      stops: [0, 0.5, 1],
-                                      colors: [
-                                        const Color(0xFF7DB208),
-                                        const Color(0xFFFFDC03),
-                                        const Color(0xFFDD26BA),
-                                      ],
-                                    ),
-                                    shape: BoxShape.circle,
-                                  ),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Hero(
+                                tag: reports[index].id,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              MapPage(report: reports[index])),
+                                    );
+                                  },
                                   child: Container(
+                                    margin:
+                                        EdgeInsets.only(right: 10, bottom: 10),
+                                    width: 100.0,
+                                    height: 100.0,
                                     decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
+                                      color: const Color(0xff7c94b6),
                                       image: DecorationImage(
-                                        fit: BoxFit.fill,
                                         image: NetworkImage(
-                                          reports[index].posterAvatar,
-                                        ),
+                                            reports[index].googleURL),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(50.0)),
+                                      border: Border.all(
+                                        color: emralsColor(),
+                                        width: 2,
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            Expanded(
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    child: RichText(
-                                      //textAlign: TextAlign.right,
-                                      text: TextSpan(
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15.0,
-                                        ),
-                                        children: <TextSpan>[
-                                          TextSpan(
-                                            text: reports[index].posterUsername,
-                                            style: TextStyle(
-                                                color: emralsColor(),
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          TextSpan(
-                                            text: reports[index].solution != ''
-                                                ? ' cleans #${reports[index].id} '
-                                                : ' reports #${reports[index].id} ',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          TextSpan(
-                                            text: reports[index].title,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.calendar_today,
-                                        color: Colors.yellow.shade700,
-                                        size: 20,
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(reports[index].timeAgo),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    Icon(
-                                      reports[index].solution != ''
-                                          ? Icons.local_florist
-                                          : Icons.assessment,
-                                      color: emralsColor(),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: <Widget>[
-                                        Image.asset(
-                                          "assets/greene.png",
-                                          width: 22,
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        AnimatedBuilder(
-                                          animation: emralsAnimation,
-                                          builder: (ctx, widget) {
-                                            return Text(
-                                              formatter.format(
-                                                  emralsAnimation.value),
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: emralsColor()),
-                                            );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: <Widget>[
-                            Opacity(
-                              opacity: reports[index].solution != '' ? 0.0 : 1,
-                              child: OutlineButton(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Opacity(
+                            opacity: reports[index].solution != '' ? 0.0 : 1,
+                            child: RaisedButton.icon(
+                              icon: Icon(
+                                Icons.camera_alt,
                                 color: Colors.white,
-                                splashColor: emralsColor(),
-                                //disabledColor: emralsColor(),
-                                highlightColor: emralsColor().shade700,
-                                disabledTextColor: emralsColor(),
-                                textColor: emralsColor(),
-                                borderSide: BorderSide(
-                                  color: emralsColor(),
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          CameraApp(report: reports[index]),
-                                    ),
-                                  );
-                                },
-                                child: Text("CLEAN"),
-                                shape: StadiumBorder(),
-                              ),
-                            ),
-                            Opacity(
-                              opacity: reports[index].solution != '' ? 0.0 : 1,
-                              child: OutlineButton(
-                                color: Colors.white,
-                                splashColor: emralsColor(),
-                                //disabledColor: emralsColor(),
-                                highlightColor: emralsColor().shade700,
-                                disabledTextColor: emralsColor(),
-                                textColor: emralsColor(),
-                                borderSide: BorderSide(
-                                  color: emralsColor(),
-                                ),
-                                onPressed: () {
-                                  Share.share("http://www.emrals.com/alerts/" +
-                                      reports[index].slug);
-                                },
-                                child: Text("SHARE"),
-                                shape: StadiumBorder(),
-                              ),
-                            ),
-                            OutlineButton(
-                              color: Colors.white,
-                              splashColor: emralsColor(),
-                              //disabledColor: emralsColor(),
-                              highlightColor: emralsColor().shade700,
-                              disabledTextColor: emralsColor(),
-                              textColor: emralsColor(),
-                              borderSide: BorderSide(
-                                color: emralsColor(),
                               ),
                               onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (ctx) {
-                                      return TipDialog(
-                                          reports[index], _scaffoldKey);
-                                    }).then((d) {
-                                  if (d != null) {
-                                    showDialog(
-                                        context: context,
-                                        builder: (ctx) {
-                                          return AlertDialog(
-                                            content: Container(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                              alignment: Alignment.center,
-                                              width: 50,
-                                              height: 50,
-                                            ),
-                                          );
-                                        });
-                                    _handleRefresh().whenComplete(() {
-                                      StateContainer.of(context).updateEmrals(
-                                          StateContainer.of(context)
-                                                  .emralsBalance -
-                                              d);
-                                      if (Navigator.canPop(context)) {
-                                        Navigator.pop(context);
-                                      }
-                                    });
-                                  }
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        CameraApp(report: reports[index]),
+                                  ),
+                                );
                               },
-                              child: Text("TIP"),
-                              shape: StadiumBorder(),
+                              label: Text(
+                                "Clean",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              color: Theme.of(context).accentColor,
                             ),
-                          ],
-                        ),
+                          ),
+                          OutlineButton(
+                            color: Colors.white,
+                            splashColor: emralsColor(),
+                            //disabledColor: emralsColor(),
+                            highlightColor: emralsColor().shade700,
+                            disabledTextColor: emralsColor(),
+                            textColor: emralsColor(),
+                            borderSide: BorderSide(
+                              color: emralsColor(),
+                            ),
+                            onPressed: () {
+                              Share.share("http://www.emrals.com/alerts/" +
+                                  reports[index].slug);
+                            },
+                            child: Text("SHARE"),
+                            shape: StadiumBorder(),
+                          ),
+                          OutlineButton(
+                            color: Colors.white,
+                            splashColor: emralsColor(),
+                            //disabledColor: emralsColor(),
+                            highlightColor: emralsColor().shade700,
+                            disabledTextColor: emralsColor(),
+                            textColor: emralsColor(),
+                            borderSide: BorderSide(
+                              color: emralsColor(),
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (ctx) {
+                                    return TipDialog(
+                                        reports[index], _scaffoldKey);
+                                  }).then((d) {
+                                if (d != null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (ctx) {
+                                        return AlertDialog(
+                                          content: Container(
+                                            child: CircularProgressIndicator(),
+                                            alignment: Alignment.center,
+                                            width: 50,
+                                            height: 50,
+                                          ),
+                                        );
+                                      });
+                                  _handleRefresh().whenComplete(() {
+                                    StateContainer.of(context).updateEmrals(
+                                        StateContainer.of(context)
+                                                .emralsBalance -
+                                            d);
+                                    if (Navigator.canPop(context)) {
+                                      Navigator.pop(context);
+                                    }
+                                  });
+                                }
+                              });
+                            },
+                            child: Text("TIP"),
+                            shape: StadiumBorder(),
+                          ),
+                        ],
                       ),
+                      Container(
+                        height: 1,
+                        color: Colors.grey,
+                      )
                     ],
                   );
                 },
@@ -456,7 +434,8 @@ class _ReportList extends State<ReportListWidget>
           });
         });
 
-        reports.addAll(parsed.map<Report>((json) => Report.fromJson(json)).toList());
+        reports.addAll(
+            parsed.map<Report>((json) => Report.fromJson(json)).toList());
         _progressBarActive = false;
       });
     } catch (e) {
@@ -499,6 +478,7 @@ class _ReportList extends State<ReportListWidget>
       Scaffold.of(_ctx).showSnackBar(snackBar);
     });
   }
+
   @override
   bool get wantKeepAlive => true;
 }

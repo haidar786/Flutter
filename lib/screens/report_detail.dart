@@ -441,27 +441,30 @@ class ReportDetailState extends State<ReportDetail> {
                                   icon: Icon(Icons.send),
                                   color: Colors.white,
                                   onPressed: () async {
-                                    print('set comment loading');
-                                    setState(() {
-                                      _commentLoading = true;
-                                    });
-                                    RestDatasource()
-                                        .addCommentToReport(
-                                            widget.report.id,
-                                            commentEditingController.text,
-                                            loggedInUser)
-                                        .then((b) {
-                                      commentEditingController.text = "";
+                                    if (commentEditingController
+                                        .text.isNotEmpty) {
                                       setState(() {
-                                        reportComments.insert(0, b);
-                                        _commentLoading = false;
+                                        _commentLoading = true;
                                       });
 
-                                      scaffoldKey.currentState.showSnackBar(
-                                          SnackBar(
-                                              content:
-                                                  Text("Comment Posted!")));
-                                    });
+                                      RestDatasource()
+                                          .addCommentToReport(
+                                              widget.report.id,
+                                              commentEditingController.text,
+                                              loggedInUser)
+                                          .then((b) {
+                                        commentEditingController.text = "";
+                                        setState(() {
+                                          reportComments.insert(0, b);
+                                          _commentLoading = false;
+                                        });
+
+                                        scaffoldKey.currentState.showSnackBar(
+                                            SnackBar(
+                                                content:
+                                                    Text("Comment Posted!")));
+                                      });
+                                    }
                                   },
                                 ),
                         ),

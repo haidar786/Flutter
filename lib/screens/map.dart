@@ -33,6 +33,7 @@ class _MyAppState extends State<MapPage> {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (ctx) => ReportDetail(
                   report: reports[m.options.zIndex.toInt()],
+                  reports: reports,
                 )));
       });
     }

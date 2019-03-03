@@ -36,6 +36,7 @@ class ReportDetailState extends State<ReportDetail> {
   User loggedInUser;
   PageController pageController;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
+  bool _commentLoading = false;
   @override
   void initState() {
     _controller = ScrollController();
@@ -44,9 +45,14 @@ class ReportDetailState extends State<ReportDetail> {
         PageController(initialPage: widget.reports.indexOf(widget.report));
   }
 
+  _refreshWidget() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     loggedInUser = StateContainer.of(context).loggedInUser;
+
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -175,7 +181,6 @@ class ReportDetailState extends State<ReportDetail> {
                           MaterialPageRoute(
                               builder: (context) => MapPage(report: report)),
                         );
-//                        report.launchMaps();
                       },
                       child: Container(
                         margin: EdgeInsets.only(right: 10, bottom: 10),
@@ -427,26 +432,38 @@ class ReportDetailState extends State<ReportDetail> {
                           width: 30,
                           height: 30,
                           color: emralsColor(),
-                          child: IconButton(
-                            icon: Icon(Icons.send),
-                            color: Colors.white,
-                            onPressed: () async {
-                              RestDatasource()
-                                  .addCommentToReport(
-                                      widget.report.id,
-                                      commentEditingController.text,
-                                      loggedInUser)
-                                  .then((b) {
-                                commentEditingController.text = "";
-                                setState(() {
-                                  reportComments.insert(0, b);
-                                });
+                          child: _commentLoading
+                              ? CircularProgressIndicator(
+                                  valueColor:
+                                      AlwaysStoppedAnimation(Colors.white),
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.send),
+                                  color: Colors.white,
+                                  onPressed: () async {
+                                    print('set comment loading');
+                                    setState(() {
+                                      _commentLoading = true;
+                                    });
+                                    RestDatasource()
+                                        .addCommentToReport(
+                                            widget.report.id,
+                                            commentEditingController.text,
+                                            loggedInUser)
+                                        .then((b) {
+                                      commentEditingController.text = "";
+                                      setState(() {
+                                        reportComments.insert(0, b);
+                                        _commentLoading = false;
+                                      });
 
-                                scaffoldKey.currentState.showSnackBar(
-                                    SnackBar(content: Text("Comment Posted!")));
-                              });
-                            },
-                          ),
+                                      scaffoldKey.currentState.showSnackBar(
+                                          SnackBar(
+                                              content:
+                                                  Text("Comment Posted!")));
+                                    });
+                                  },
+                                ),
                         ),
                       )
                     ],
@@ -464,7 +481,10 @@ class ReportDetailState extends State<ReportDetail> {
                         physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (ctx, index) {
                           ReportComment comment = reportComments[index];
-                          return ReportCommentListItem(comment: comment);
+                          return ReportCommentListItem(
+                              comment: comment,
+                              comments: reportComments,
+                              callback: _refreshWidget);
                         },
                         itemCount: reportComments.length,
                         shrinkWrap: true,
@@ -498,8 +518,10 @@ class ReportDetailState extends State<ReportDetail> {
 
 class ReportCommentListItem extends StatelessWidget {
   final ReportComment comment;
+  final List comments;
+  final callback;
 
-  ReportCommentListItem({this.comment});
+  ReportCommentListItem({this.comment, this.comments, this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -580,6 +602,9 @@ class ReportCommentListItem extends StatelessWidget {
                                     .deleteComment(
                                         comment.id, loggedInUser.token)
                                     .then((m) {
+                                  comments.removeWhere(
+                                      (item) => item.id == comment.id);
+                                  callback();
                                   final snackBar = SnackBar(content: Text(m));
                                   Scaffold.of(context).showSnackBar(snackBar);
                                 });

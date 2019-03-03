@@ -18,6 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:share/share.dart';
+import 'package:emrals/data/rest_ds.dart';
 
 class ReportListWidget extends StatefulWidget {
   @override
@@ -435,6 +436,12 @@ class _ReportList extends State<ReportListWidget>
     int limit,
   }) async {
     try {
+      RestDatasource()
+          .updateEmrals(StateContainer.of(_ctx).loggedInUser.token)
+          .then((e) {
+        StateContainer.of(_ctx).updateEmrals(double.parse(e['emrals_amount']));
+      });
+
       final response =
           await http.get(apiUrl + 'alerts/?limit=$limit&offset=$offset');
 

@@ -8,6 +8,7 @@ import 'package:emrals/styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:emrals/state_container.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -49,7 +50,9 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
         actions: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(vertical: 16),
-            child: AnimatedUserEmrals(initialEmrals: 0,),
+            child: AnimatedUserEmrals(
+              initialEmrals: StateContainer.of(context).emralsBalance,
+            ),
           ),
           IconButton(
             icon: Image.asset("assets/JustElogo.png"),

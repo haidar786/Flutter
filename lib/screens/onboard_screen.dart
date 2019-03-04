@@ -116,7 +116,7 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Win EMRALS!",
+                            "Earn EMRALS!",
                             style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -124,7 +124,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Win EMRALS when your cleanup is verified",
+                            "Earn EMRALS when your cleanup is verified",
                             style: TextStyle(color: Colors.black54),
                           )
                         ],
@@ -145,8 +145,8 @@ class OnboardScreen extends StatelessWidget {
                 SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
                 sharedPreferences.setBool("onboarded", true);
-                Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (ctx) => LoginScreenBase()));
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (ctx) => LoginScreenBase()));
               },
               child: Container(
                 height: 80,

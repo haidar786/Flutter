@@ -13,6 +13,7 @@ import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ReportDetail extends StatefulWidget {
   final Report report;
@@ -84,11 +85,21 @@ class ReportDetailState extends State<ReportDetail> {
             children: <Widget>[
               Stack(
                 children: <Widget>[
-                  CachedNetworkImage(
-                    imageUrl: report.solution != ""
-                        ? report.solution
-                        : report.thumbnail,
-                    placeholder: AspectRatio(aspectRatio: 1),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ZoomImage(report),
+                        ),
+                      );
+                    },
+                    child: CachedNetworkImage(
+                      imageUrl: report.solution != ""
+                          ? report.solution
+                          : report.thumbnail,
+                      placeholder: AspectRatio(aspectRatio: 1),
+                    ),
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width,
@@ -671,6 +682,23 @@ class TipDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ZoomImage extends StatelessWidget {
+  final Report report;
+
+  ZoomImage(this.report);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: PhotoView(
+          loadingChild: Center(child: CircularProgressIndicator()),
+          initialScale: 0.2,
+          imageProvider: NetworkImage(report.image),
+        ));
   }
 }
 

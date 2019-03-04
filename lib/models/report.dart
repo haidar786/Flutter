@@ -5,6 +5,7 @@ class Report {
   final String title;
   final int creator;
   final String thumbnail;
+  final String image;
   final String posterAvatar;
   final String posterUsername;
   final double latitude;
@@ -23,6 +24,7 @@ class Report {
     this.title,
     this.creator,
     this.thumbnail,
+    this.image,
     this.posterAvatar,
     this.posterUsername,
     this.latitude,
@@ -43,6 +45,7 @@ class Report {
       title: json['title'] as String,
       creator: json['creator'] as int,
       thumbnail: json['thumbnail'] as String,
+      image: json['image'] as String,
       posterAvatar: json['poster_avatar'] as String,
       posterUsername: json['poster_username'] as String,
       latitude: json['latitude'] as double,

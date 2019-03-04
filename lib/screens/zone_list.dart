@@ -11,9 +11,8 @@ class ZoneListWidget extends StatefulWidget {
   _ZoneList createState() => _ZoneList();
 }
 
-class _ZoneList extends State<ZoneListWidget> with AutomaticKeepAliveClientMixin{
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
+class _ZoneList extends State<ZoneListWidget>
+    with AutomaticKeepAliveClientMixin {
   int limit = 50;
   int offset = 0;
   ScrollController _scrollController = ScrollController();
@@ -143,7 +142,6 @@ class _ZoneList extends State<ZoneListWidget> with AutomaticKeepAliveClientMixin
       body: _progressBarActive == true
           ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
-              key: _refreshIndicatorKey,
               onRefresh: _handleRefresh,
               child: ListView.builder(
                 controller: _scrollController,

@@ -28,8 +28,6 @@ class ReportListWidget extends StatefulWidget {
 class _ReportList extends State<ReportListWidget>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final formatter = new NumberFormat("#,###");
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int limit = 50;
   int offset = 0;
@@ -47,7 +45,6 @@ class _ReportList extends State<ReportListWidget>
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        //limit += 50;
         offset += limit;
         fetchReports(
           offset: offset,
@@ -64,9 +61,8 @@ class _ReportList extends State<ReportListWidget>
   }
 
   Future<void> _handleRefresh() {
-    reports = List<Report>();
     return fetchReports(
-      limit: limit,
+      limit: 50,
       offset: 0,
     );
   }
@@ -81,7 +77,6 @@ class _ReportList extends State<ReportListWidget>
       body: _progressBarActive == true
           ? Center(child: CircularProgressIndicator())
           : RefreshIndicator(
-              key: _refreshIndicatorKey,
               onRefresh: _handleRefresh,
               child: ListView.builder(
                 controller: _scrollController,
@@ -446,8 +441,12 @@ class _ReportList extends State<ReportListWidget>
 
       this.setState(() {
         RestDatasource().updateEmrals(user.token).then((e) {
-          StateContainer.of(_ctx)
-              .updateEmrals(double.parse(e['emrals_amount']));
+          if (user.emrals != double.parse(e['emrals_amount'])) {
+            StateContainer.of(_ctx)
+                .updateEmrals(double.parse(e['emrals_amount']));
+            user.emrals = double.parse(e['emrals_amount']);
+            DatabaseHelper().updateUser(user);
+          }
         });
 
         DatabaseHelper().getReports().then((m) {
@@ -455,9 +454,14 @@ class _ReportList extends State<ReportListWidget>
             upload(report.filename, report.longitude, report.latitude, user);
           });
         });
+        if (offset > 50) {
+          reports.addAll(
+              parsed.map<Report>((json) => Report.fromJson(json)).toList());
+        } else {
+          reports =
+              parsed.map<Report>((json) => Report.fromJson(json)).toList();
+        }
 
-        reports.addAll(
-            parsed.map<Report>((json) => Report.fromJson(json)).toList());
         _progressBarActive = false;
       });
     } catch (e) {

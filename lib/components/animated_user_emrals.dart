@@ -12,7 +12,8 @@ class AnimatedUserEmrals extends StatefulWidget {
   _AnimatedUserEmralsState createState() => _AnimatedUserEmralsState();
 }
 
-class _AnimatedUserEmralsState extends State<AnimatedUserEmrals> with SingleTickerProviderStateMixin{
+class _AnimatedUserEmralsState extends State<AnimatedUserEmrals>
+    with SingleTickerProviderStateMixin {
   Animation emralsAnimation;
   AnimationController emralsAnimationController;
 
@@ -25,15 +26,17 @@ class _AnimatedUserEmralsState extends State<AnimatedUserEmrals> with SingleTick
   @override
   void initState() {
     super.initState();
-    emralsAnimationController = AnimationController(duration: Duration(seconds: 2), vsync: this);
+    emralsAnimationController =
+        AnimationController(duration: Duration(seconds: 2), vsync: this);
   }
 
-  Future runAnimation(double end, double begin) async{
-    emralsAnimation = Tween<double>(end: end, begin: begin).animate(CurvedAnimation(parent: emralsAnimationController, curve: Curves.linear));
+  Future runAnimation(double end, double begin) async {
+    emralsAnimation = Tween<double>(end: end, begin: begin).animate(
+        CurvedAnimation(
+            parent: emralsAnimationController, curve: Curves.linear));
     emralsAnimationController.reset();
     await emralsAnimationController.forward();
   }
-
 
   @override
   Widget build(BuildContext context) {

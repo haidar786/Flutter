@@ -217,7 +217,7 @@ class LoginScreenState extends State<LoginScreen> {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 5,
         ),
         Center(
           child: InkWell(

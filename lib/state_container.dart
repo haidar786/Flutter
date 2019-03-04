@@ -41,9 +41,7 @@ class StateContainerState extends State<StateContainer> {
     super.initState();
     loggedInUser = widget.initialUser;
     emralsBalance = widget.initialEmrals;
-    DatabaseHelper().getUser().then((u) {
-      oldEmrals = u.emrals;
-    });
+    oldEmrals = loggedInUser.emrals;
   }
 
   void refreshUser() async {

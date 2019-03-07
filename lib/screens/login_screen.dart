@@ -8,7 +8,7 @@ import 'package:emrals/components/reveal_progress_button.dart';
 import 'package:emrals/models/auth_result_model.dart';
 import 'package:emrals/state_container.dart';
 import 'package:emrals/styles.dart';
-import 'package:emrals/utils/field_validator.dart';
+import 'package:emrals/utils/form_util.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -64,6 +64,7 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FormUtil _formUtil = new FormUtil();
     final loginBloc = Provider.of<LoginBloc>(context);
     loginBloc.authDataStream.listen((AuthData authData) {
       switch (authData.authState) {
@@ -119,8 +120,7 @@ class LoginScreenState extends State<LoginScreen> {
                 child: TextFormField(
                   onSaved: (val) => _username = val,
                   key: new Key('username'),
-                  validator: (val) =>
-                      FieldValidator.validate(name: 'username', value: val),
+                  validator: _formUtil.validateName,
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Username",
@@ -149,8 +149,7 @@ class LoginScreenState extends State<LoginScreen> {
                 child: TextFormField(
                   obscureText: true,
                   onSaved: (val) => _password = val,
-                  validator: (val) =>
-                      FieldValidator.validate(name: 'password', value: val),
+                  validator: _formUtil.validateName,
                   key: new Key('password'),
                   decoration: InputDecoration(
                     filled: true,

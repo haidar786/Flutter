@@ -1,6 +1,10 @@
 // import 'package:emrals/screens/login_screen.dart';
 // import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/testing.dart';
+//import 'package:emrals/utils/network_util.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 class AuthMock {
   AuthMock({this.userId});
@@ -38,23 +42,36 @@ class AuthMock {
   }
 }
 
+class ApiProvider {
+  Client client = Client();
+  // fetchPosts() async {
+  //   final response = await client.get("https://jsonplaceholder.typicode.com/posts/1");
+  //   ItemModel itemModel = ItemModel.fromJson(json.decode(response.body));
+  //   return itemModel;
+  // }
+}
+
 void main() {
   // Widget buildTestableWidget(Widget widget) {
   //   return MaterialApp(home: widget);
   // }
 
-  /* testWidgets('empty email and password doesn\'t call sign in',
-      (WidgetTester tester) async {
-    // builds our widget
-    await tester.pumpWidget(buildTestableWidget(LoginScreen()));
+  // testWidgets('empty email and password doesn\'t call sign in',
+  //     (WidgetTester tester) async {
 
-    // finds the login button
-    final loginBtn = find.text('LOGIN');
+  //   await tester.pumpWidget(buildTestableWidget(LoginScreen()));
+  //   final loginBtn = find.text('LOGIN');
+  //   expect(loginBtn, findsOneWidget);
+  //   await tester.tap(loginBtn);
+  // });
 
-    // Uses a matcher to verify that the button appears exactly once
-    expect(loginBtn, findsOneWidget);
-
-    // taps the login button
-    await tester.tap(loginBtn);
-  }); */
+  test("Testing the network call", () {
+    //setup the test
+    //final apiProvider = NetworkUtil();
+    final apiProvider = ApiProvider();
+    apiProvider.client = MockClient((request) async {
+      final mapJson = {'id': 123};
+      return Response(json.encode(mapJson), 200);
+    });
+  });
 }

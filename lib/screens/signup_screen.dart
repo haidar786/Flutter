@@ -1,13 +1,13 @@
 import 'package:emrals/components/reveal_progress_button.dart';
-import 'package:emrals/utils/field_validator.dart';
+import 'package:emrals/utils/form_util.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart' show User;
 import 'package:emrals/screens/signup_screen_presenter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:emrals/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:emrals/state_container.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -67,6 +67,8 @@ class SignupScreenState extends State<SignupScreen>
   @override
   Widget build(BuildContext context) {
     _ctx = context;
+    FormUtil _formUtil = new FormUtil();
+
     var signupForm = Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -80,7 +82,7 @@ class SignupScreenState extends State<SignupScreen>
                   autofocus: true,
                   autocorrect: false,
                   onSaved: (val) => _username = val,
-                  validator: FieldValidator.validateUsername,
+                  validator: _formUtil.validateName,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.person,
@@ -111,7 +113,7 @@ class SignupScreenState extends State<SignupScreen>
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (val) => _email = val,
-                  validator: FieldValidator.validateEmail,
+                  validator: _formUtil.validateEmail,
                   decoration: InputDecoration(
                     filled: true,
                     prefixIcon: Icon(
@@ -141,9 +143,9 @@ class SignupScreenState extends State<SignupScreen>
                 child: TextFormField(
                   autocorrect: false,
                   maxLength: 20,
-                  obscureText: passwordVisible,
+                  obscureText: !passwordVisible,
                   onSaved: (val) => _password = val,
-                  validator: FieldValidator.validatePassword,
+                  validator: _formUtil.validatePassword,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,
@@ -247,8 +249,7 @@ class SignupScreenState extends State<SignupScreen>
     _showSnackBar("logged in as" + user.username);
     var db = DatabaseHelper();
     await db.saveUser(user);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('user_picture', user.picture);
+    StateContainer.of(context).updateUser(user);
     Navigator.of(_ctx).pushReplacementNamed('/home');
   }
 }

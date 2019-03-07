@@ -440,7 +440,9 @@ class _ReportList extends State<ReportListWidget>
       if (!mounted) return;
 
       this.setState(() {
-        RestDatasource().updateEmrals(user.token).then((e) {
+        RestDatasource()
+            .updateEmrals(StateContainer.of(_ctx).loggedInUser.token)
+            .then((e) {
           if (user.emrals != double.parse(e['emrals_amount'])) {
             StateContainer.of(_ctx)
                 .updateEmrals(double.parse(e['emrals_amount']));

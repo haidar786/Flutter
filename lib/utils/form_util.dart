@@ -1,12 +1,13 @@
 class FormUtil {
   String nameRegex = r'^.*(?=.{3,20})(?=.*[a-zA-Z ]*$)';
-  String nameInvalidMessage = "Name must be 3-20 characters a-z and A-Z";
+  String nameInvalidMessage = "Please enter 3-20 upper or lowercase characters";
   String emailRegex =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  String emailInvalidMessage = "Invalid Email";
+  String emailInvalidMessage = "Please enter a valid email address";
   String passwordRegex =
-      r'^.*(?=.{8,20})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$';
-  String passwordInvalidMessage = "8-20 letters, 1 number, 1 special character";
+      r'^.*(?=.{8,200})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!#$%&? "]).*$';
+  String passwordInvalidMessage =
+      "8-200 letters, 1 number, 1 special character";
 
   String validateName(String value) =>
       validate(value, nameRegex, 'name', nameInvalidMessage);
@@ -18,7 +19,7 @@ class FormUtil {
   String validate(value, rule, name, warning) {
     RegExp regExp = new RegExp(rule);
     if (value.length == 0)
-      return name + " is required";
+      return "Please enter your " + name;
     else if (!regExp.hasMatch(value)) return warning;
     return null;
   }

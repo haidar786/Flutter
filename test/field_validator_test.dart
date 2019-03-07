@@ -1,24 +1,21 @@
-import 'package:emrals/utils/field_validator.dart';
+import 'package:emrals/utils/form_util.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('empty value returns error string', () {
-    var actual = FieldValidator.validate(name: '_', value: '');
-    expect(actual, 'Please fill in a _.');
-  });
+  FormUtil _formUtil = new FormUtil();
 
   test('password with less than 8 characters returns error string', () {
-    var actual = FieldValidator.validatePassword('1234567');
-    expect(actual, FieldValidator.INVALID_PASSWORD_MESSAGE);
+    var actual = _formUtil.validatePassword('1234567');
+    expect(actual, _formUtil.passwordInvalidMessage);
   });
 
   test('empty username returns error string', () {
-    var actual = FieldValidator.validateUsername('');
-    expect(actual, FieldValidator.INVALID_USERNAME_MESSAGE);
+    var actual = _formUtil.validateName(' ');
+    expect(actual, _formUtil.nameInvalidMessage);
   });
 
-  test('empty email returns error string', () {
-    var actual = FieldValidator.validateEmail('');
-    expect(actual, FieldValidator.EMPTY_EMAIL_MESSAGE);
+  test('invalid email', () {
+    var actual = _formUtil.validateEmail('abcd');
+    expect(actual, _formUtil.emailInvalidMessage);
   });
 }

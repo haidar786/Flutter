@@ -11,7 +11,7 @@ class User {
 
   User.map(dynamic obj) {
     this._username = obj["username"];
-    this._token = obj["token"];
+    this._token = obj["token"] ?? obj["key"];
     this._emrals = double.parse(obj["emrals"].toString());
     this._picture = obj["picture"];
     this._xp = obj["xp"];

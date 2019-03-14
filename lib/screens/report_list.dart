@@ -79,16 +79,23 @@ class _ReportList extends State<ReportListWidget>
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: TabBar(
-          labelColor: Colors.black,
-          tabs: [
-            Tab(
-              text: 'all',
+        appBar: PreferredSize(
+          child: Container(
+            color: Colors.black,
+            height: 30.0,
+            child: TabBar(
+              labelColor: Colors.white,
+              tabs: [
+                Tab(
+                  text: 'all',
+                ),
+                Tab(
+                  text: 'nearby',
+                ),
+              ],
             ),
-            Tab(
-              text: 'nearby',
-            ),
-          ],
+          ),
+          preferredSize: Size.fromHeight(30.0),
         ),
         key: _scaffoldKey,
         body: TabBarView(

@@ -21,7 +21,7 @@ class _ZoneList extends State<ZoneListWidget>
   bool _progressBarActive = true;
   String searchTerm = "";
   bool searchActive = false;
-  ZoneSortType sortType = ZoneSortType.RELEVANCE;
+  ZoneSortType sortType = ZoneSortType.RECENT;
   var currentLocation = <String, double>{};
   var location = Location();
 

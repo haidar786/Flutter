@@ -87,10 +87,10 @@ class _ReportList extends State<ReportListWidget>
               labelColor: Colors.white,
               tabs: [
                 Tab(
-                  text: 'all',
+                  text: 'recent',
                 ),
                 Tab(
-                  text: 'nearby',
+                  text: 'closest',
                 ),
               ],
             ),
@@ -252,17 +252,20 @@ class _ReportList extends State<ReportListWidget>
                                   ),
                                   Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Container(
-                                        width: MediaQuery.of(context).size.width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         padding: EdgeInsets.all(8),
                                         child: Text(reports[index].title),
-                                        decoration:
-                                        BoxDecoration(color: Colors.white70),
+                                        decoration: BoxDecoration(
+                                            color: Colors.white70),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.only(left: 5.0, top: 5),
+                                        padding: const EdgeInsets.only(
+                                            left: 5.0, top: 5),
                                         child: Text(
                                           "#" + reports[index].id.toString(),
                                           style: TextStyle(
@@ -271,7 +274,8 @@ class _ReportList extends State<ReportListWidget>
                                               Shadow(
                                                 offset: Offset(1.5, 1.5),
                                                 blurRadius: 1.0,
-                                                color: Color.fromARGB(255, 0, 0, 0),
+                                                color: Color.fromARGB(
+                                                    255, 0, 0, 0),
                                               )
                                             ],
                                           ),

@@ -6,7 +6,7 @@ class Transaction {
   final String note;
   final String txid;
   final int user;
-  final String subscription;
+  final int subscription;
   final int alert;
 
   Transaction.fromJSON(Map<String, dynamic> json)

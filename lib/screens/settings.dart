@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:emrals/components/animated_user_emrals.dart';
 import 'package:emrals/data/database_helper.dart';
@@ -40,7 +38,6 @@ class _SettingsPage extends State<Settingg> {
 
   @override
   Widget build(BuildContext context) {
-    User loggedInUser = StateContainer.of(context).loggedInUser;
     return DefaultTabController(
       length: 4,
       child: Scaffold(

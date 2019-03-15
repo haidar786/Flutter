@@ -1,7 +1,7 @@
 name: emrals
-description: A new Flutter application.
+description: Earn money cleaning up
 
-version: 0.2.4+401
+version: 0.2.5+402
 
 environment:
   sdk: ">=2.1.0-dev.9.4 <3.0.0"

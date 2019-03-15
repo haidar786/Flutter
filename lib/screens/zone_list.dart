@@ -18,6 +18,7 @@ class _ZoneList extends State<ZoneListWidget>
   ScrollController _scrollController = ScrollController();
   List<Zone> zones = List();
   bool _progressBarActive = true;
+  bool _loadMoreActive = false;
   String searchTerm = "";
   bool searchActive = false;
   ZoneSortType sortType = ZoneSortType.RELEVANCE;
@@ -31,7 +32,9 @@ class _ZoneList extends State<ZoneListWidget>
           _scrollController.position.maxScrollExtent) {
         limit = 50;
         offset += 50;
+        _loadMoreActive = true;
         fetchZones(limit, offset);
+        _loadMoreActive = false;
       }
     });
   }
@@ -321,7 +324,8 @@ class _ZoneListItemState extends State<ZoneListItem> {
         Container(
           height: 10,
           color: Colors.black,
-        )
+        ),
+        _loadMoreActive ? CircularProgressIndicator() : Container(),
       ],
     );
   }

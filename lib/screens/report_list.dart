@@ -36,7 +36,6 @@ class _ReportList extends State<ReportListWidget>
   List<Report> reports = List();
   List<Report> nearbyreports = List();
   bool _progressBarActive = true;
-  bool _loadMoreActive = false;
   BuildContext _ctx;
   User user;
   var currentLocation = <String, double>{};
@@ -51,12 +50,10 @@ class _ReportList extends State<ReportListWidget>
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         offset += limit;
-        _loadMoreActive = true;
         fetchReports(
           offset: offset,
           limit: limit,
         );
-        _loadMoreActive = false;
       }
     });
   }
@@ -467,10 +464,7 @@ class _ReportList extends State<ReportListWidget>
                             Container(
                               height: 1,
                               color: Colors.grey,
-                            ),
-                            _loadMoreActive
-                                ? CircularProgressIndicator()
-                                : Container(),
+                            )
                           ],
                         );
                       },
@@ -836,10 +830,7 @@ class _ReportList extends State<ReportListWidget>
                             Container(
                               height: 1,
                               color: Colors.grey,
-                            ),
-                            _loadMoreActive
-                                ? CircularProgressIndicator()
-                                : Container(),
+                            )
                           ],
                         );
                       },

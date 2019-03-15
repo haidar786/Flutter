@@ -151,7 +151,10 @@ class _ZoneList extends State<ZoneListWidget>
                 itemCount: zones.length,
                 itemBuilder: (BuildContext context, int index) {
                   Zone zone = zones[index];
-                  return ZoneListItem(zone: zone);
+                  return ZoneListItem(
+                    zone: zone,
+                    loadMoreActive: _loadMoreActive,
+                  );
                 },
               ),
             ),
@@ -180,8 +183,9 @@ class _ZoneList extends State<ZoneListWidget>
 
 class ZoneListItem extends StatefulWidget {
   final Zone zone;
+  final loadMoreActive;
 
-  ZoneListItem({this.zone});
+  ZoneListItem({this.zone, this.loadMoreActive});
 
   @override
   _ZoneListItemState createState() => _ZoneListItemState();
@@ -325,7 +329,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
           height: 10,
           color: Colors.black,
         ),
-        _loadMoreActive ? CircularProgressIndicator() : Container(),
+        widget.loadMoreActive ? CircularProgressIndicator() : Container(),
       ],
     );
   }

@@ -45,7 +45,7 @@ class _SettingsPage extends State<Settingg> {
         key: key,
         appBar: AppBar(
           bottom: TabBar(
-            labelPadding: EdgeInsets.only(right: 10.0, left: 10.0),
+            labelPadding: EdgeInsets.all(0.0),
             tabs: [
               Tab(
                 icon: Icon(Icons.account_circle),
@@ -477,11 +477,6 @@ class TransactionsPage extends StatelessWidget {
       "Content-type": "application/json"
     };
 
-//    response.forEach((m) {
-//    transactions.add(Transaction.fromJSON(m));
-//    });
-//    return transactions;
-
     return FutureBuilder(
         future: NetworkUtil().get(apiUrl + "transactions/", headers),
         builder: (context, snapshot) {
@@ -499,11 +494,11 @@ class TransactionsPage extends StatelessWidget {
               Transaction transaction = transactions[index];
               return InkWell(
                 onTap: () {
-                  showDialog(
-                      context: context,
-                      builder: (ctx) => ProfileDialog(
-                            id: transaction.id,
-                          ));
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (ctx) => ProfileDialog(
+                  //           id: transaction.id,
+                  //         ));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -526,7 +521,7 @@ class TransactionsPage extends StatelessWidget {
                                             transaction.subscription.toString()
                                         : transaction.note,
                             style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.w600),
+                                fontSize: 14, fontWeight: FontWeight.w600),
                           ),
 //                          Text(
 //                            transaction.subscription ?? "",

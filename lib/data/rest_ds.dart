@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:emrals/models/report_comment.dart';
+import 'package:emrals/models/transaction.dart';
 import 'package:emrals/utils/network_util.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/models/user_profile.dart';
@@ -246,5 +247,19 @@ class RestDatasource {
     };
     return _netUtil.post(apiUrl + "devices/",
         headers: headers, body: json.encoder.convert(payload));
+  }
+
+  Future<List<Transaction>> getTransactions(String token) async{
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+    List<Transaction> transactions = [];
+    List<Map<String, dynamic>> response = List.from(await _netUtil.get(apiUrl + "transactions/",headers));
+    response.forEach((m) {
+      transactions.add(Transaction.fromJSON(m));
+    });
+    print(transactions.length);
+    return transactions;
   }
 }

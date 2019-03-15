@@ -250,29 +250,34 @@ class _ReportList extends State<ReportListWidget>
                                         : reports[index].thumbnail,
                                     errorWidget: Icon(Icons.error),
                                   ),
-                                  Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    padding: EdgeInsets.all(8),
-                                    child: Text(reports[index].title),
-                                    decoration:
+                                  Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        padding: EdgeInsets.all(8),
+                                        child: Text(reports[index].title),
+                                        decoration:
                                         BoxDecoration(color: Colors.white70),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(5, 35, 0, 0),
-                                    child: Text(
-                                      "#" + reports[index].id.toString(),
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        shadows: <Shadow>[
-                                          Shadow(
-                                            offset: Offset(1.5, 1.5),
-                                            blurRadius: 1.0,
-                                            color: Color.fromARGB(255, 0, 0, 0),
-                                          )
-                                        ],
                                       ),
-                                    ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 5.0, top: 5),
+                                        child: Text(
+                                          "#" + reports[index].id.toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            shadows: <Shadow>[
+                                              Shadow(
+                                                offset: Offset(1.5, 1.5),
+                                                blurRadius: 1.0,
+                                                color: Color.fromARGB(255, 0, 0, 0),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   reports[index].solution != ""
                                       ? Positioned(

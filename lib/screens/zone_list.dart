@@ -5,6 +5,7 @@ import 'package:emrals/models/zone.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
 
 class ZoneListWidget extends StatefulWidget {
   @override
@@ -21,17 +22,19 @@ class _ZoneList extends State<ZoneListWidget>
   String searchTerm = "";
   bool searchActive = false;
   ZoneSortType sortType = ZoneSortType.RELEVANCE;
+  var currentLocation = <String, double>{};
+  var location = Location();
 
   @override
   void initState() {
     super.initState();
-    fetchZones(0, 0);
+    fetchZones(0, 0, sortType);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
         limit = 50;
         offset += 50;
-        fetchZones(limit, offset);
+        fetchZones(limit, offset, sortType);
       }
     });
   }
@@ -45,7 +48,7 @@ class _ZoneList extends State<ZoneListWidget>
   Future<void> _handleRefresh() {
     _progressBarActive = true;
     zones = List<Zone>();
-    return fetchZones(0, 0);
+    return fetchZones(0, 0, sortType);
   }
 
   @override
@@ -70,6 +73,7 @@ class _ZoneList extends State<ZoneListWidget>
                       )).then((d) {
                 setState(() {
                   sortType = d;
+                  _handleRefresh();
                 });
               });
             }),
@@ -129,7 +133,7 @@ class _ZoneList extends State<ZoneListWidget>
                           searchActive = false;
                           zones = [];
                           _progressBarActive = true;
-                          fetchZones(0, 10);
+                          fetchZones(0, 10, sortType);
                         });
                       },
                     )
@@ -158,9 +162,18 @@ class _ZoneList extends State<ZoneListWidget>
   fetchZones(
     int offset,
     int limit,
+    sortType,
   ) async {
-    final response =
-        await http.get(apiUrl + 'zones/?limit=$limit&offset=$offset');
+    var requestURL = apiUrl +
+        'zones/?limit=$limit&offset=$offset&sort=' +
+        sortType.toString();
+    if (sortType == ZoneSortType.CLOSEST) {
+      currentLocation = await location.getLocation();
+      requestURL = apiUrl +
+          'zones/?limit=$limit&offset=$offset&longitude=${currentLocation["longitude"]}&latitude=${currentLocation["latitude"]}';
+    }
+    print(requestURL);
+    final response = await http.get(requestURL);
 
     var data = json.decode(response.body);
     var parsed = data["results"] as List;
@@ -242,13 +255,13 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           )
                         ],
                       ),
-                      SizedBox(height: 3),
+                      SizedBox(height: 2),
                       Row(
                         children: [
                           Icon(
                             Icons.favorite,
                             color: emralsColor()[1000],
-                            size: 20,
+                            size: 15,
                           ),
                           SizedBox(width: 5),
                           Text(
@@ -257,13 +270,13 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           )
                         ],
                       ),
-                      SizedBox(height: 3),
+                      SizedBox(height: 2),
                       Row(
                         children: [
                           Icon(
                             Icons.camera_alt,
                             color: emralsColor()[1500],
-                            size: 20,
+                            size: 15,
                           ),
                           SizedBox(width: 5),
                           Text(
@@ -272,12 +285,12 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           )
                         ],
                       ),
-                      SizedBox(height: 3),
+                      SizedBox(height: 2),
                       Row(
                         children: [
                           Image.asset("assets/trophy.png",
-                              width: 20,
-                              height: 20,
+                              width: 15,
+                              height: 15,
                               color: emralsColor()[1400]),
                           SizedBox(width: 5),
                           Text(
@@ -399,4 +412,12 @@ class _ZoneSortDialogState extends State<ZoneSortDialog> {
   }
 }
 
-enum ZoneSortType { RELEVANCE, EMRALS, CLEANUPS, REPORTS, CLOSEST, RECENT }
+enum ZoneSortType {
+  RECENT,
+  EMRALS,
+  CLEANUPS,
+  REPORTS,
+  CLOSEST,
+  VIEWS,
+  SUBSCRIBERS,
+}

@@ -45,6 +45,7 @@ class _SettingsPage extends State<Settingg> {
         key: key,
         appBar: AppBar(
           bottom: TabBar(
+            labelPadding: EdgeInsets.only(right: 10.0, left: 10.0),
             tabs: [
               Tab(
                 icon: Icon(Icons.account_circle),
@@ -63,7 +64,7 @@ class _SettingsPage extends State<Settingg> {
               ),
               Tab(
                 icon: Icon(Icons.list),
-                text: "Transactions",
+                text: "transactions",
               )
             ],
           ),
@@ -514,7 +515,16 @@ class TransactionsPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            transaction.note,
+                            transaction.note == "reporting"
+                                ? "tipped user for reporting alert #" +
+                                    transaction.alert.toString()
+                                : transaction.note == "cleaning"
+                                    ? "tipped user for cleaning alert #" +
+                                        transaction.alert.toString()
+                                    : transaction.subscription != null
+                                        ? "subscription id:" +
+                                            transaction.subscription.toString()
+                                        : transaction.note,
                             style: TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.w600),
                           ),

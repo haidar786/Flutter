@@ -149,7 +149,7 @@ class LoginScreenState extends State<LoginScreen> {
                 child: TextFormField(
                   obscureText: true,
                   onSaved: (val) => _password = val,
-                  validator: _formUtil.validateName,
+                  validator: _formUtil.validatePassword,
                   key: new Key('password'),
                   decoration: InputDecoration(
                     filled: true,

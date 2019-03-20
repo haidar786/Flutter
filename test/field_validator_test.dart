@@ -9,6 +9,16 @@ void main() {
     expect(actual, _formUtil.passwordInvalidMessage);
   });
 
+  test('password without a special character returns error string', () {
+    var actual = _formUtil.validatePassword('password123');
+    expect(actual, _formUtil.passwordInvalidMessage);
+  });
+
+  test('password without a number returns error string', () {
+    var actual = _formUtil.validatePassword('password!!!');
+    expect(actual, _formUtil.passwordInvalidMessage);
+  });
+
   test('empty username returns error string', () {
     var actual = _formUtil.validateName(' ');
     expect(actual, _formUtil.nameInvalidMessage);

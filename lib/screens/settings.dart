@@ -299,13 +299,20 @@ class ReceivePage extends StatelessWidget {
   }
 }
 
-class SendPage extends StatelessWidget {
-  final TextEditingController walletAddressController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
+class SendPage extends StatefulWidget {
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldState;
 
   SendPage({this.scaffoldState});
+
+  @override
+  _SendPageState createState() => _SendPageState();
+}
+
+class _SendPageState extends State<SendPage> {
+  final TextEditingController walletAddressController = TextEditingController();
+
+  final TextEditingController amountController = TextEditingController();
 
   Future scan() async {
     try {
@@ -330,7 +337,7 @@ class SendPage extends StatelessWidget {
   Widget build(BuildContext context) {
     User loggedInUser = StateContainer.of(context).loggedInUser;
     return Form(
-      key: formKey,
+      key: SendPage.formKey,
       child: ListView(
         shrinkWrap: true,
         padding: EdgeInsets.all(16),
@@ -420,17 +427,17 @@ class SendPage extends StatelessWidget {
           SizedBox(height: 30),
           GestureDetector(
             onTap: () {
-              if (formKey.currentState.validate()) {
+              if (SendPage.formKey.currentState.validate()) {
                 String walletAddress = walletAddressController.text;
                 double amount = double.tryParse(amountController.text) ??
-                    scaffoldState.currentState.showSnackBar(
+                    widget.scaffoldState.currentState.showSnackBar(
                         SnackBar(content: Text("Please enter a valid amount")));
 
                 if (loggedInUser.emrals >= amount) {
                   RestDatasource()
                       .sendEmrals(amount, walletAddress, loggedInUser.token)
                       .then((m) {
-                    scaffoldState.currentState
+                    widget.scaffoldState.currentState
                         .showSnackBar(SnackBar(content: Text(m)));
                     if (m != "Invalid Emrals Address") {
                       StateContainer.of(context).updateEmrals(
@@ -438,7 +445,7 @@ class SendPage extends StatelessWidget {
                     }
                   });
                 } else {
-                  scaffoldState.currentState.showSnackBar(SnackBar(
+                  widget.scaffoldState.currentState.showSnackBar(SnackBar(
                       content: Text("You don't have enough emrals for that!")));
                 }
               }

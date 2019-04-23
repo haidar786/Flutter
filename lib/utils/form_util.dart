@@ -1,5 +1,7 @@
 class FormUtil {
   String nameRegex = r'^.*(?=.{3,20})(?=.*[a-zA-Z ]*$)';
+  String notBlankRegex = r'^(?!\s*$).+';
+  String passwordBlankMessage = "Please enter your password"
   String nameInvalidMessage = "Please enter 3-20 upper or lowercase characters";
   String emailRegex =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -9,6 +11,8 @@ class FormUtil {
   String passwordInvalidMessage =
       "8-200 letters, 1 number, 1 special character";
 
+  String validatePasswordEntered(String value) =>
+      validate(value, notBlankRegex, 'password', passwordBlankMessage);
   String validateName(String value) =>
       validate(value, nameRegex, 'name', nameInvalidMessage);
   String validateEmail(String value) =>

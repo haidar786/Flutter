@@ -302,7 +302,7 @@ class ReceivePage extends StatelessWidget {
 class SendPage extends StatelessWidget {
   final TextEditingController walletAddressController = TextEditingController();
   final TextEditingController amountController = TextEditingController();
-  final formKey = GlobalKey<FormState>();
+  static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldState;
 
   SendPage({this.scaffoldState});

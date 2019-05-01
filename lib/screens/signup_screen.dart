@@ -145,7 +145,7 @@ class SignupScreenState extends State<SignupScreen>
                   maxLength: 20,
                   obscureText: !passwordVisible,
                   onSaved: (val) => _password = val,
-                  validator: _formUtil.validatePassword,
+                  // validator: _formUtil.validatePassword,
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.lock,

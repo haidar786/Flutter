@@ -53,6 +53,7 @@ class _ZoneList extends State<ZoneListWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     zones.retainWhere(
         (z) => z.city.toLowerCase().contains(searchTerm.toLowerCase()));
     return Scaffold(

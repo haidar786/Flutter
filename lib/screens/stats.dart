@@ -25,7 +25,7 @@ launchURL(url) async {
   }
 }
 
-class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin{
+class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
   StatsApi _statsApi = StatsApi();
   StatsModel stats;
   StatsExchangeModel crex24data;
@@ -40,6 +40,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin{
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Theme(
       data: ThemeData(
         brightness: Brightness.dark,

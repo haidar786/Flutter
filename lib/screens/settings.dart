@@ -15,14 +15,14 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_permissions/simple_permissions.dart';
 
-class Settingg extends StatefulWidget {
-  const Settingg({Key key}) : super(key: key);
+class Settings extends StatefulWidget {
+  const Settings({Key key}) : super(key: key);
 
   @override
   _SettingsPage createState() => _SettingsPage();
 }
 
-class _SettingsPage extends State<Settingg> {
+class _SettingsPage extends State<Settings> {
   final key = new GlobalKey<ScaffoldState>();
   final formatter = new NumberFormat("#,###");
 
@@ -116,6 +116,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[

@@ -73,6 +73,7 @@ class _ReportList extends State<ReportListWidget>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     User user = StateContainer.of(context).loggedInUser;
     this.user = user;
     _ctx = context;

@@ -146,7 +146,7 @@ class OnboardScreen extends StatelessWidget {
                     await SharedPreferences.getInstance();
                 sharedPreferences.setBool("onboarded", true);
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (ctx) => LoginScreenBase()));
+                    MaterialPageRoute(builder: (ctx) => LoginScreen()));
               },
               child: Container(
                 height: 80,

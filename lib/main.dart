@@ -20,7 +20,6 @@ import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 //import 'package:shared_preferences/shared_preferences.dart';
 
-
 final SentryClient sentry = new SentryClient(
   dsn: "SENTRY_DSN",
   environmentAttributes: const Event(
@@ -93,7 +92,7 @@ void main() async {
           child: MaterialApp(
             home: (!(preferences.getBool("onboarded") ?? false))
                 ? OnboardScreen()
-                : (user == null ? LoginScreenBase() : MyHomePage()),
+                : (user == null ? LoginScreen() : MyHomePage()),
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               primaryColor: Colors.black,

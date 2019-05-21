@@ -67,7 +67,7 @@ class SignupScreenState extends State<SignupScreen>
   @override
   Widget build(BuildContext context) {
     _ctx = context;
-    FormUtil _formUtil = new FormUtil();
+    FormUtil _formUtil = FormUtil();
 
     var signupForm = Column(
       mainAxisSize: MainAxisSize.min,
@@ -91,7 +91,7 @@ class SignupScreenState extends State<SignupScreen>
                     ),
                     filled: true,
                     labelText: 'Username',
-                    labelStyle: new TextStyle(
+                    labelStyle: TextStyle(
                       background: Paint()..color = Colors.white,
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -122,7 +122,7 @@ class SignupScreenState extends State<SignupScreen>
                       semanticLabel: 'user sign up email icon',
                     ),
                     labelText: 'Email',
-                    labelStyle: new TextStyle(
+                    labelStyle: TextStyle(
                       background: Paint()..color = Colors.white,
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -167,7 +167,7 @@ class SignupScreenState extends State<SignupScreen>
                     ),
                     filled: true,
                     labelText: 'Password',
-                    labelStyle: new TextStyle(
+                    labelStyle: TextStyle(
                       background: Paint()..color = Colors.white,
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -246,7 +246,7 @@ class SignupScreenState extends State<SignupScreen>
 
   @override
   void onSignupSuccess(User user) async {
-    _showSnackBar("logged in as" + user.username);
+    _showSnackBar("Logged in as" + user.username);
     var db = DatabaseHelper();
     await db.saveUser(user);
     StateContainer.of(context).updateUser(user);

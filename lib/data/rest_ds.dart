@@ -249,13 +249,14 @@ class RestDatasource {
         headers: headers, body: json.encoder.convert(payload));
   }
 
-  Future<List<Transaction>> getTransactions(String token) async{
+  Future<List<Transaction>> getTransactions(String token) async {
     Map<String, String> headers = {
       "Authorization": "token $token",
       "Content-type": "application/json"
     };
     List<Transaction> transactions = [];
-    List<Map<String, dynamic>> response = List.from(await _netUtil.get(apiUrl + "transactions/",headers));
+    List<Map<String, dynamic>> response =
+        List.from(await _netUtil.get(apiUrl + "transactions/", headers));
     response.forEach((m) {
       transactions.add(Transaction.fromJSON(m));
     });

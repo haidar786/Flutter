@@ -1,4 +1,5 @@
 import 'package:emrals/components/reveal_progress_button.dart';
+import 'package:emrals/screens/empty_screen.dart';
 import 'package:emrals/utils/form_util.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/auth.dart';
@@ -10,6 +11,15 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:emrals/state_container.dart';
 
 class SignupScreen extends StatefulWidget {
+  static const usernameFieldKey = Key('username_field');
+  static const emailFieldKey = Key('email_field');
+  static const passwordFieldKey = Key('password_field');
+  static const signUpButtonKey = Key('sign_up_button');
+  final SignupScreenPresenter signupScreenPresenter;
+  final bool isMock;
+
+  const SignupScreen({Key key, this.signupScreenPresenter, this.isMock = false})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return SignupScreenState();
@@ -36,17 +46,26 @@ class SignupScreenState extends State<SignupScreen>
     }
   }
 
-  SignupScreenState() {
-    _presenter = SignupScreenPresenter(this);
+  @override
+  void initState() {
+    super.initState();
+    _presenter = widget.signupScreenPresenter ?? SignupScreenPresenter();
     var authStateProviderSignup = AuthStateProvider();
     authStateProviderSignup.subscribe(this);
   }
 
-  void _submit() {
+  void _submit() async {
     final form = formKey.currentState;
     if (form.validate()) {
       form.save();
-      _presenter.doSignup(_username, _password, _email);
+      var result = await _presenter.doSignup(_username, _email, _password);
+      print(result);
+      if (result is User) {
+        this.onSignupSuccess(result);
+      }
+      if (result is String) {
+        this.onSignupError(result);
+      }
     } else {
       setState(() {
         buttonState = 0;
@@ -79,6 +98,7 @@ class SignupScreenState extends State<SignupScreen>
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: TextFormField(
+                  key: SignupScreen.usernameFieldKey,
                   autofocus: true,
                   autocorrect: false,
                   onSaved: (val) => _username = val,
@@ -110,6 +130,7 @@ class SignupScreenState extends State<SignupScreen>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  key: SignupScreen.emailFieldKey,
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
                   onSaved: (val) => _email = val,
@@ -141,6 +162,7 @@ class SignupScreenState extends State<SignupScreen>
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
+                  key: SignupScreen.passwordFieldKey,
                   autocorrect: false,
                   maxLength: 20,
                   obscureText: !passwordVisible,
@@ -189,19 +211,21 @@ class SignupScreenState extends State<SignupScreen>
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Center(
-              child: RevealProgressButton(
-            startColor: emralsColor().shade50,
-            endColor: Colors.green,
-            name: 'SIGN UP',
-            onPressed: () {
-              print('Signup button pressed');
-              setState(() {
-                buttonState = 1;
-                _submit();
-              });
-            },
-            state: buttonState,
-          )),
+            child: RevealProgressButton(
+              key: SignupScreen.signUpButtonKey,
+              startColor: emralsColor().shade50,
+              endColor: Colors.green,
+              name: 'SIGN UP',
+              onPressed: () {
+                print('Signup button pressed');
+                setState(() {
+                  buttonState = 1;
+                  _submit();
+                });
+              },
+              state: buttonState,
+            ),
+          ),
         ),
         InkWell(
           child: Text.rich(
@@ -246,10 +270,19 @@ class SignupScreenState extends State<SignupScreen>
 
   @override
   void onSignupSuccess(User user) async {
-    _showSnackBar("Logged in as" + user.username);
-    var db = DatabaseHelper();
-    await db.saveUser(user);
-    StateContainer.of(context).updateUser(user);
-    Navigator.of(_ctx).pushReplacementNamed('/home');
+    print('Sign up successful: ${user.toString()}');
+    if (widget.isMock == false) {
+      _showSnackBar("Logged in as" + user.username);
+      var db = DatabaseHelper();
+      await db.saveUser(user);
+      StateContainer.of(context).updateUser(user);
+      Navigator.of(context).pop();
+      Navigator.of(_ctx).pushReplacementNamed('/home');
+    } else {
+      StateContainer.of(context).updateUser(user);
+      //Navigator.of(_ctx).pushReplacementNamed('/home');
+      Navigator.of(_ctx).pushReplacement(
+          MaterialPageRoute(builder: (context) => EmptyScreen()));
+    }
   }
 }

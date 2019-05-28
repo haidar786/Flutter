@@ -28,22 +28,22 @@ dependencies:
      url: git://github.com/flutter/plugins
      path: packages/google_maps_flutter
      ref: afa2f0877a10c7f9f6898a0107da07d9ce90b670
-  sentry: any
+  sentry: ^2.2.0
   contacts_service: ^0.1.1
   qr: 1.0.1
   simple_permissions: ^0.1.9
   firebase_messaging: 3.0.1
   shared_preferences: ^0.4.3
-  test: ^1.5.1
+  #test: ^1.5.1
   path: 1.6.2
   #firebase_ml_vision: 0.6.0+1
   qr_mobile_vision: 0.1.0
   flutter_udid: 1.0.0
+  mockito: ^4.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito:
 
 flutter:
   uses-material-design: true

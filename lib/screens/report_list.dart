@@ -376,15 +376,17 @@ class _ReportList extends State<ReportListWidget>
                                       Icons.camera_alt,
                                       color: Colors.white,
                                     ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              CameraApp(report: reports[index]),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: reports[index].solution != ''
+                                        ? null
+                                        : () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => CameraApp(
+                                                    report: reports[index]),
+                                              ),
+                                            );
+                                          },
                                     label: Text(
                                       "Clean",
                                       style: TextStyle(color: Colors.white),
@@ -742,15 +744,19 @@ class _ReportList extends State<ReportListWidget>
                                       Icons.camera_alt,
                                       color: Colors.white,
                                     ),
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => CameraApp(
-                                              report: nearbyreports[index]),
-                                        ),
-                                      );
-                                    },
+                                    onPressed: nearbyreports[index].solution !=
+                                            ''
+                                        ? null
+                                        : () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => CameraApp(
+                                                    report:
+                                                        nearbyreports[index]),
+                                              ),
+                                            );
+                                          },
                                     label: Text(
                                       "Clean",
                                       style: TextStyle(color: Colors.white),

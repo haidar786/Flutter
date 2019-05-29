@@ -8,15 +8,15 @@ import 'package:emrals/models/user_profile.dart';
 import 'package:emrals/styles.dart';
 
 class RestDatasource {
-  NetworkUtil _netUtil = NetworkUtil();
-  static final loginURL = apiUrl + "login/";
-  static final signupURL = apiUrl + "rest-auth/registration/";
-  static final tipURL = apiUrl + "tip/";
-  static final reportURL = apiUrl + "alerts/";
-  static final inviteURL = apiUrl + "invite/";
-  static final usersURL = apiUrl + "users/";
-  static final sendURL = apiUrl + "send/";
-  static final updateURL = apiUrl + "me/";
+  final NetworkUtil _netUtil = NetworkUtil();
+  static final loginURL = apiUrl + "/login/";
+  static final signupURL = apiUrl + "/rest-auth/registration/";
+  static final tipURL = apiUrl + "/tip/";
+  static final reportURL = apiUrl + "/alerts/";
+  static final inviteURL = apiUrl + "/invite/";
+  static final usersURL = apiUrl + "/users/";
+  static final sendURL = apiUrl + "/send/";
+  static final updateURL = apiUrl + "/me/";
 
   Future<User> login(String username, String password) {
     return _netUtil.post(loginURL, body: {
@@ -165,16 +165,16 @@ class RestDatasource {
   }
 
   Future<dynamic> getLeaderboardReports() async {
-    return _netUtil.get(apiUrl + "leaderboard/reports");
+    return _netUtil.get(apiUrl + "/leaderboard/reports");
   }
 
   Future<dynamic> getLeaderboardCleanups() async {
-    return _netUtil.get(apiUrl + "leaderboard/cleanups");
+    return _netUtil.get(apiUrl + "/leaderboard/cleanups");
   }
 
   Future<dynamic> getReportComments(int reportid) async {
     Map<String, dynamic> json =
-        await _netUtil.get(apiUrl + "alerts/$reportid/");
+        await _netUtil.get(apiUrl + "/alerts/$reportid/");
     return (json["comments"] as List<dynamic>)
         .map((m) => ReportComment.fromJSON(m))
         .toList();
@@ -190,7 +190,7 @@ class RestDatasource {
       "Content-type": "application/json"
     };
 
-    return _netUtil.post(apiUrl + "flag_comment/",
+    return _netUtil.post(apiUrl + "/flag_comment/",
         headers: headers, body: json.encoder.convert(payload));
   }
 
@@ -208,7 +208,7 @@ class RestDatasource {
       "Content-type": "application/json"
     };
     return _netUtil
-        .post(apiUrl + "comments/",
+        .post(apiUrl + "/comments/",
             headers: headers, body: json.encoder.convert(payload))
         .then((d) {
       return ReportComment.fromJSON(d);
@@ -225,7 +225,7 @@ class RestDatasource {
       "Content-type": "application/json"
     };
 
-    return _netUtil.post(apiUrl + "delete_comment/",
+    return _netUtil.post(apiUrl + "/delete_comment/",
         headers: headers, body: json.encoder.convert(payload));
   }
 
@@ -245,7 +245,7 @@ class RestDatasource {
       "Authorization": "token $token",
       "Content-type": "application/json"
     };
-    return _netUtil.post(apiUrl + "devices/",
+    return _netUtil.post(apiUrl + "/devices/",
         headers: headers, body: json.encoder.convert(payload));
   }
 
@@ -256,7 +256,7 @@ class RestDatasource {
     };
     List<Transaction> transactions = [];
     List<Map<String, dynamic>> response =
-        List.from(await _netUtil.get(apiUrl + "transactions/", headers));
+        List.from(await _netUtil.get(apiUrl + "/transactions/", headers));
     response.forEach((m) {
       transactions.add(Transaction.fromJSON(m));
     });

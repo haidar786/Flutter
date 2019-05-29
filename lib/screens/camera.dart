@@ -15,15 +15,15 @@ import 'package:emrals/styles.dart';
 import 'dart:convert';
 import 'package:emrals/models/offline_report.dart';
 
-class CameraApp extends StatefulWidget {
+class ReportScreen extends StatefulWidget {
   final Report report;
-  CameraApp({Key key, this.report}) : super(key: key);
+  ReportScreen({Key key, this.report}) : super(key: key);
 
   @override
-  _CameraAppState createState() => _CameraAppState();
+  _ReportScreenState createState() => _ReportScreenState();
 }
 
-class _CameraAppState extends State<CameraApp> {
+class _ReportScreenState extends State<ReportScreen> {
   BuildContext _ctx;
   List<CameraDescription> cameras;
   CameraController controller;
@@ -32,7 +32,7 @@ class _CameraAppState extends State<CameraApp> {
   String imagePath;
   bool _isReady = false;
   bool _isLoading = false;
-  var currentLocation = <String, double>{};
+  LocationData currentLocation;
   String userToken;
 
   var location = Location();
@@ -89,9 +89,7 @@ class _CameraAppState extends State<CameraApp> {
               child: Center(
                 child: _cameraPreviewWidget(),
               ),
-              decoration: BoxDecoration(
-                color: Colors.black,
-              ),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
             ),
           ),
         ],
@@ -148,7 +146,7 @@ class _CameraAppState extends State<CameraApp> {
     showInSnackBar('Error: ${e.code}\n${e.description}');
   }
 
-  Future getLocaion() async {
+  Future getLocation() async {
     currentLocation = await location.getLocation();
   }
 
@@ -158,7 +156,7 @@ class _CameraAppState extends State<CameraApp> {
       if (mounted) {
         setState(() {
           imagePath = filePath;
-          getLocaion();
+          getLocation();
           upload(File(filePath));
         });
       }
@@ -171,19 +169,19 @@ class _CameraAppState extends State<CameraApp> {
           http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
       var length = await imageFile.length();
 
-      var uri = Uri.parse(apiUrl + "upload/");
+      var uri = Uri.parse(apiUrl + "/upload/");
 
       var request = http.MultipartRequest("POST", uri);
-      request.fields['longitude'] = currentLocation["longitude"].toString();
-      request.fields['latitude'] = currentLocation["latitude"].toString();
+      request.fields['longitude'] = currentLocation.longitude.toString();
+      request.fields['latitude'] = currentLocation.latitude.toString();
       if (widget.report != null) {
         request.fields['report_id'] = widget.report.id.toString();
       }
 
       var report = OfflineReport(
         imagePath,
-        currentLocation["latitude"],
-        currentLocation["longitude"],
+        currentLocation.latitude,
+        currentLocation.longitude,
       );
 
       var multipartFile = http.MultipartFile(

@@ -10,10 +10,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Stats extends StatefulWidget {
+class StatsScreen extends StatefulWidget {
   @override
-  StatsState createState() {
-    return StatsState();
+  StatsScreenState createState() {
+    return StatsScreenState();
   }
 }
 
@@ -25,7 +25,8 @@ launchURL(url) async {
   }
 }
 
-class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
+class StatsScreenState extends State<StatsScreen>
+    with AutomaticKeepAliveClientMixin {
   StatsApi _statsApi = StatsApi();
   StatsModel stats;
   StatsExchangeModel crex24data;
@@ -43,8 +44,8 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
     super.build(context);
     return Theme(
       data: ThemeData(
-        brightness: Brightness.dark,
-      ),
+          brightness: Brightness.dark,
+          primaryColor: Theme.of(context).primaryColor),
       child: Scaffold(
         body: Column(
           children: <Widget>[
@@ -127,7 +128,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                   flex: 2,
                   child: Container(
                     height: 170,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     padding: EdgeInsets.all(8),
                     alignment: Alignment.center,
                     child: CircularProgressIndicator(
@@ -140,7 +141,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                   flex: 1,
                   child: Container(
                     height: 170,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     padding: EdgeInsets.all(8),
                     alignment: Alignment.center,
                     child: CircularProgressIndicator(
@@ -159,7 +160,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                         flex: 2,
                         child: Container(
                           height: 170,
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Icon(
                             FontAwesomeIcons.exclamationTriangle,
@@ -172,7 +173,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                         flex: 1,
                         child: Container(
                           height: 170,
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Icon(
                             FontAwesomeIcons.exclamationTriangle,
@@ -190,7 +191,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                         flex: 2,
                         child: Container(
                           height: 170,
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -378,7 +379,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                         flex: 1,
                         child: Container(
                           height: 170,
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Column(
                             children: <Widget>[
@@ -493,7 +494,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                     flex: 2,
                     child: Container(
                       height: 150,
-                      color: Colors.black,
+                      color: Theme.of(context).primaryColor,
                       alignment: Alignment.center,
                       child: CircularProgressIndicator(
                         valueColor:
@@ -506,7 +507,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                     flex: 5,
                     child: Container(
                       height: 150,
-                      color: Colors.black,
+                      color: Theme.of(context).primaryColor,
                       alignment: Alignment.center,
                       child: CircularProgressIndicator(
                         valueColor:
@@ -523,7 +524,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                           flex: 2,
                           child: Container(
                             height: 150,
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                             padding: EdgeInsets.all(8),
                             child: Icon(
                               FontAwesomeIcons.exclamationTriangle,
@@ -536,7 +537,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                           flex: 5,
                           child: Container(
                             height: 150,
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                             padding: EdgeInsets.all(8),
                             child: Icon(
                               FontAwesomeIcons.exclamationTriangle,
@@ -553,7 +554,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                           flex: 2,
                           child: Container(
                             height: 150,
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                             padding: EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -570,7 +571,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
-                                        color: Colors.black,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   ),
@@ -598,7 +599,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                           flex: 5,
                           child: Container(
                             height: 150,
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                             padding: EdgeInsets.all(8),
                             child: Column(
                               children: <Widget>[
@@ -612,9 +613,10 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
                                     child: Text(
                                       'Price',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                          color: Colors.black),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -725,7 +727,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
   Widget _statsRow3(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      color: Colors.black,
+      color: Theme.of(context).primaryColor,
       padding: EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
@@ -1005,7 +1007,7 @@ class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin {
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      color: Colors.black,
+      color: Theme.of(context).primaryColor,
       padding: EdgeInsets.all(8),
       child: Wrap(
         direction: Axis.horizontal,

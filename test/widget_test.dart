@@ -1,5 +1,7 @@
 // import 'package:emrals/screens/login_screen.dart';
 // import 'package:flutter/material.dart';
+import 'package:emrals/components/animated_text.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/testing.dart';
 //import 'package:emrals/utils/network_util.dart';
@@ -73,5 +75,18 @@ void main() {
       final mapJson = {'id': 123};
       return Response(json.encode(mapJson), 200);
     });
+  });
+
+  testWidgets(
+      'AnimatedText Widget starts at zero and animates to the specified value',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: AnimatedText(value: 100)));
+    final initialValueFinder = find.text('0');
+    final finalValueFinder = find.text('100');
+    expect(initialValueFinder, findsOneWidget);
+    expect(finalValueFinder, findsNothing);
+    await tester.pumpAndSettle();
+    expect(finalValueFinder, findsOneWidget);
+    expect(initialValueFinder, findsNothing);
   });
 }

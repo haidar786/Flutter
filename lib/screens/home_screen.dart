@@ -19,13 +19,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   int _selectedIndex = 0;
-  PageController pageController = PageController();
+  final PageController pageController = PageController();
   final List<Widget> _children = [
-    ReportListWidget(),
-    CameraApp(),
-    Stats(),
-    ZoneListWidget(),
-    Scanner(),
+    ViewReportsScreen(),
+    ReportScreen(),
+    StatsScreen(),
+    ZoneListScreen(),
+    ScannerScreen(),
   ];
 
   @override
@@ -36,7 +36,6 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: new IconButton(
           icon: new Icon(Icons.map, color: emralsColor()),
@@ -70,59 +69,50 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
         physics: NeverScrollableScrollPhysics(),
         children: _children,
       ),
-      bottomNavigationBar: Theme(
-        data: ThemeData(
-          brightness: Brightness.dark,
-          canvasColor: Colors.black,
-        ),
-        child: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            setState(() {
-              this._selectedIndex = index;
-            });
-            pageController.jumpToPage(index);
-          },
-          fixedColor: emralsColor(),
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              backgroundColor: Colors.black,
-              icon: Icon(
-                Icons.view_agenda,
-              ),
-              title: Text('Activity'),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: darkGrey,
+        selectedItemColor: emralsColor(),
+        unselectedItemColor: Colors.grey,
+        currentIndex: _selectedIndex,
+        type: BottomNavigationBarType.fixed,
+        onTap: (index) {
+          setState(() {
+            this._selectedIndex = index;
+          });
+          pageController.jumpToPage(index);
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.view_agenda,
             ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.black,
-              icon: Icon(
-                Icons.camera,
-              ),
-              title: Text('Report'),
+            title: Text('Activity'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.camera,
             ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.black,
-              icon: Icon(
-                Icons.multiline_chart,
-              ),
-              title: Text('Stats'),
+            title: Text('Report'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.multiline_chart,
             ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.black,
-              icon: Icon(
-                Icons.map,
-              ),
-              title: Text('Zones'),
+            title: Text('Stats'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.map,
             ),
-            BottomNavigationBarItem(
-              backgroundColor: Colors.black,
-              icon: Icon(
-                FontAwesomeIcons.qrcode,
-              ),
-              title: Text('Scan'),
+            title: Text('Zones'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              FontAwesomeIcons.qrcode,
             ),
-          ],
-        ),
+            title: Text('Scan'),
+          ),
+        ],
       ),
     );
   }

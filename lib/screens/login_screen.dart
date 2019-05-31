@@ -2,6 +2,7 @@ import 'package:emrals/auth.dart';
 import 'package:emrals/components/reveal_progress_button.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/user.dart';
+import 'package:emrals/screens/empty_screen.dart';
 import 'package:emrals/screens/login_screen_presenter.dart';
 import 'package:emrals/state_container.dart';
 import 'package:emrals/styles.dart';
@@ -10,6 +11,15 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const usernameFieldKey = Key('username_field');
+  static const passwordFieldKey = Key('password_field');
+  static const loginButtonKey = Key('login_button');
+  final LoginScreenPresenter loginScreenPresenter;
+  final bool isMock;
+
+  const LoginScreen({Key key, this.loginScreenPresenter, this.isMock = false})
+      : super(key: key);
+
   @override
   LoginScreenState createState() {
     return LoginScreenState();
@@ -29,7 +39,7 @@ class LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-    _presenter = LoginScreenPresenter(this);
+    _presenter = widget.loginScreenPresenter ?? LoginScreenPresenter();
     AuthStateProvider()..subscribe(this);
   }
 
@@ -59,17 +69,28 @@ class LoginScreenState extends State<LoginScreen>
   @override
   void onLoginSuccess(User user) async {
     //_showSnackBar('Logged in as ${user.username}');
-    await DatabaseHelper().saveUser(user);
-    StateContainer.of(_ctx).updateUser(user);
-    Navigator.of(_ctx).pushReplacementNamed('/home');
+    if (widget.isMock == false) {
+      await DatabaseHelper().saveUser(user);
+      StateContainer.of(_ctx).updateUser(user);
+      Navigator.of(_ctx).pushReplacementNamed('/home');
+    } else {
+      StateContainer.of(context).updateUser(user);
+      Navigator.of(_ctx).pushReplacement(
+          MaterialPageRoute(builder: (context) => EmptyScreen()));
+    }
   }
 
-  void _submit(BuildContext context) {
+  void _submit(BuildContext context) async {
     final form = formKey.currentState;
 
     if (form.validate()) {
       form.save();
-      _presenter.doLogin(_username, _password);
+      try {
+        final User user = await _presenter.doLogin(_username, _password);
+        this.onLoginSuccess(user);
+      } on Exception catch (e) {
+        this.onLoginError(e.toString());
+      }
     } else {
       setState(() {
         buttonState = 0;
@@ -117,7 +138,7 @@ class LoginScreenState extends State<LoginScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   onSaved: (val) => _username = val,
-                  key: Key('username'),
+                  key: LoginScreen.usernameFieldKey,
                   validator: _formUtil.validateName,
                   decoration: InputDecoration(
                     filled: true,
@@ -148,7 +169,7 @@ class LoginScreenState extends State<LoginScreen>
                   obscureText: true,
                   onSaved: (val) => _password = val,
                   validator: _formUtil.validatePasswordEntered,
-                  key: Key('password'),
+                  key: LoginScreen.passwordFieldKey,
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Password",
@@ -180,6 +201,7 @@ class LoginScreenState extends State<LoginScreen>
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Center(
             child: RevealProgressButton(
+              key: LoginScreen.loginButtonKey,
               startColor: emralsColor(),
               endColor: Colors.green,
               name: 'LOGIN',

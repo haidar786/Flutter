@@ -76,10 +76,10 @@ class ReportWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: Material(
         elevation: 4,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Column(
           children: <Widget>[
@@ -307,33 +307,30 @@ class ReportWidget extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Opacity(
-                    opacity: report.solution != '' ? 0.0 : 1,
-                    child: RaisedButton.icon(
-                      icon: Icon(
-                        Icons.camera_alt,
-                        color: Colors.white,
-                      ),
-                      onPressed: report.solution != ''
-                          ? null
-                          : () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ReportScreen(report: report),
-                                ),
-                              );
-                            },
-                      label: Text(
-                        "Clean",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      color: Theme.of(context).accentColor,
+                  RaisedButton.icon(
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
                     ),
+                    onPressed: report.solution != ''
+                        ? null
+                        : () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ReportScreen(report: report),
+                              ),
+                            );
+                          },
+                    label: Text(
+                      "Clean",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                    color: Theme.of(context).accentColor,
                   ),
                   RaisedButton(
                     color: Colors.white,

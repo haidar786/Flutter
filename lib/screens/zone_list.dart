@@ -164,9 +164,9 @@ class _ZoneListItemState extends State<ZoneListItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: Material(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 4,
         child: InkWell(
@@ -191,9 +191,13 @@ class _ZoneListItemState extends State<ZoneListItem> {
                               alignment: Alignment.center,
                               child: Text('No Image'),
                             ),
-                      CachedNetworkImage(
-                        height: 30,
-                        imageUrl: widget.zone.flag,
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: CachedNetworkImage(
+                          height: 30,
+                          imageUrl: widget.zone.flag,
+                        ),
                       ),
                     ],
                   ),

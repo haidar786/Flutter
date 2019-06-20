@@ -18,7 +18,7 @@ final routes = {
   '/camera': (BuildContext context) => ReportScreen(),
   '/leaderboard': (BuildContext context) => LeaderBoard(),
   '/contacts': (BuildContext context) => Contacts(),
-  '/map': (BuildContext context) => MapPage(),
+  '/map': (BuildContext context) => MapPage(key: UniqueKey()),
   '/profile': (BuildContext context) => ProfilePage(),
   '/uploads': (BuildContext context) => Uploads(),
 };

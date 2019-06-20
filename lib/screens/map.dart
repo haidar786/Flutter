@@ -24,19 +24,20 @@ class _MyAppState extends State<MapPage> {
       Completer<GoogleMapController>();
   Set<Marker> markers;
   List<Report> reports = [];
+  bool singleReport;
 
   @override
   void initState() {
     super.initState();
-    if (widget.report == null) {
-      markers = Set<Marker>.of(
-        reports.map(reportToMarker).toList(),
-      );
-    } else {
+    singleReport = widget.report != null;
+    if (singleReport) {
       markers = Set<Marker>.of([reportToMarker(widget.report)]);
+      centreCamera(LatLng(widget.report.latitude, widget.report.longitude));
+    } else {
+      markers = Set<Marker>();
+      centreCamera();
+      loadReports();
     }
-    refresh();
-    loadReports();
   }
 
   @override
@@ -44,23 +45,20 @@ class _MyAppState extends State<MapPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Emrals Map'),
-        actions: widget.report != null
+        actions: singleReport
             ? [
-                Row(
-                  children: <Widget>[
-                    IconButton(
-                      icon: Icon(Icons.launch),
-                      onPressed: () {
-                        widget.report.launchMaps();
-                      },
-                    ),
-                  ],
-                )
+                IconButton(
+                  tooltip: 'Open in map app.',
+                  icon: Icon(Icons.launch),
+                  onPressed: () {
+                    widget.report.launchMaps();
+                  },
+                ),
               ]
             : null,
       ),
       body: Hero(
-        tag: widget.report != null ? widget.report.id : '',
+        tag: singleReport ? widget.report.id : '',
         child: GoogleMap(
           onMapCreated: _onMapCreated,
           markers: markers,
@@ -74,8 +72,7 @@ class _MyAppState extends State<MapPage> {
   }
 
   void _onMapCreated(GoogleMapController controller) {
-    completer.complete(controller);
-    refresh();
+    if (completer.isCompleted == false) completer.complete(controller);
   }
 
   Future<LatLng> getUserLocation() async {
@@ -85,7 +82,7 @@ class _MyAppState extends State<MapPage> {
       currentLocation = await location.getLocation();
       final lat = currentLocation.latitude;
       final lng = currentLocation.longitude;
-      final center = widget.report != null
+      final center = singleReport
           ? LatLng(widget.report.latitude, widget.report.longitude)
           : LatLng(lat, lng);
       return center;
@@ -95,10 +92,10 @@ class _MyAppState extends State<MapPage> {
     }
   }
 
-  void refresh() async {
-    final center = await getUserLocation();
+  void centreCamera([LatLng latLng]) async {
     final GoogleMapController mapController = await completer.future;
-    mapController.moveCamera(
+    final LatLng center = latLng ?? await getUserLocation();
+    mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: center == null ? LatLng(0, 0) : center,
@@ -114,6 +111,9 @@ class _MyAppState extends State<MapPage> {
     var parsed = data["results"] as List;
     setState(() {
       reports = parsed.map((d) => Report.fromJson(d)).toList();
+      markers = Set<Marker>.of(
+        reports.map(reportToMarker).toList(),
+      );
     });
   }
 
@@ -121,25 +121,27 @@ class _MyAppState extends State<MapPage> {
     return Marker(
       markerId: MarkerId(report.id.toString()),
       position: LatLng(report.latitude, report.longitude),
-      consumeTapEvents: true,
-      zIndex: reports.indexOf(report).toDouble(),
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (ctx) => ReportDetail(
-                  report: report,
-                  reports: reports,
-                  showSnackbar: (String message) {
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(message),
+      consumeTapEvents: false,
+      icon: BitmapDescriptor.defaultMarkerWithHue(singleReport ? BitmapDescriptor.hueGreen : BitmapDescriptor.hueRed),
+      onTap: !singleReport
+          ? () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => ReportDetail(
+                        report: report,
+                        reports: reports,
+                        showSnackbar: (String message) {
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(message),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
                 ),
-          ),
-        );
-      },
+              );
+            }
+          : null,
       infoWindow:
           InfoWindow(title: report.title, snippet: 'Report #${report.id}'),
     );

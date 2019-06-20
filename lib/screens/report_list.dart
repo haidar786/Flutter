@@ -271,7 +271,11 @@ class ReportWidget extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MapPage(report: report)),
+                              builder: (context) => MapPage(
+                                    report: report,
+                                    key: UniqueKey(),
+                                  ),
+                            ),
                           );
                         },
                         child: Container(

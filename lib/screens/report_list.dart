@@ -70,8 +70,14 @@ class _ViewReportsScreen extends State<ViewReportsScreen>
 class ReportWidget extends StatelessWidget {
   final Report report;
   final VoidCallback onTipPressed;
+  final bool animateText;
+  final formatter = NumberFormat("#,###");
 
-  const ReportWidget({Key key, this.report, @required this.onTipPressed})
+  ReportWidget(
+      {Key key,
+      this.report,
+      @required this.onTipPressed,
+      this.animateText = true})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -163,10 +169,22 @@ class ReportWidget extends StatelessWidget {
                           SizedBox(
                             width: 2,
                           ),
-                          AnimatedText(
-                            value: double.parse(report.solutionEmralsAmount) +
-                                double.parse(report.reportEmralsAmount),
-                          )
+                          animateText
+                              ? AnimatedText(
+                                  value: double.parse(
+                                          report.solutionEmralsAmount) +
+                                      double.parse(report.reportEmralsAmount),
+                                )
+                              : Text(
+                                  formatter.format(double.parse(
+                                          report.solutionEmralsAmount) +
+                                      double.parse(report.reportEmralsAmount)),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: EMRALS_COLOR,
+                                  ),
+                                )
                         ],
                       ),
                     ],
@@ -398,6 +416,7 @@ class _ReportListPageState extends State<ReportListPage>
   bool get wantKeepAlive => true;
   final int limit = 50;
   PagewiseLoadController<Report> pageLoadController;
+  bool refreshedOnce = false;
 
   @override
   void initState() {
@@ -416,7 +435,12 @@ class _ReportListPageState extends State<ReportListPage>
   Widget build(BuildContext context) {
     super.build(context);
     return RefreshIndicator(
-      onRefresh: () async => pageLoadController.reset(),
+      onRefresh: () async {
+        setState(() {
+          refreshedOnce = true;
+        });
+        pageLoadController.reset();
+      },
       child: PagewiseListView(
         padding: const EdgeInsets.symmetric(vertical: 6),
         loadingBuilder: (BuildContext context) => Center(
@@ -426,6 +450,7 @@ class _ReportListPageState extends State<ReportListPage>
         itemBuilder: (BuildContext context, Report report, int index) =>
             ReportWidget(
               report: report,
+              animateText: !refreshedOnce,
               onTipPressed: () {
                 showDialog(
                     context: context,

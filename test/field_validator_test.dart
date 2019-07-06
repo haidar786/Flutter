@@ -1,5 +1,5 @@
 import 'package:emrals/utils/form_util.dart';
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   FormUtil _formUtil = new FormUtil();

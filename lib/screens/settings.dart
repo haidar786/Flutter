@@ -13,16 +13,16 @@ import 'package:emrals/utils/qr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:simple_permissions/simple_permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class Settingg extends StatefulWidget {
-  const Settingg({Key key}) : super(key: key);
+class Settings extends StatefulWidget {
+  const Settings({Key key}) : super(key: key);
 
   @override
   _SettingsPage createState() => _SettingsPage();
 }
 
-class _SettingsPage extends State<Settingg> {
+class _SettingsPage extends State<Settings> {
   final key = new GlobalKey<ScaffoldState>();
   final formatter = new NumberFormat("#,###");
 
@@ -116,6 +116,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -127,117 +128,137 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
               return ProfilePage(userProfile: snapshot.data);
             },
           ),
-          Container(
-              height: 30.0,
-              width: 120.0,
-              child: Material(
-                borderRadius: BorderRadius.circular(20.0),
-                shadowColor: Colors.black12,
-                color: emralsColor(),
-                elevation: 7.0,
-                child: GestureDetector(
-                  onTap: () {
-                    SimplePermissions.requestPermission(Permission.ReadContacts)
-                        .then((p) {
-                      if (p == PermissionStatus.authorized) {
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              SizedBox(
+                width: 120,
+                child: Material(
+                  color: emralsColor(),
+                  shape: StadiumBorder(),
+                  child: InkWell(
+                    customBorder: StadiumBorder(),
+                    onTap: () async {
+                      Map<PermissionGroup, PermissionStatus> permissions =
+                          await PermissionHandler()
+                              .requestPermissions([PermissionGroup.contacts]);
+                      if (permissions[PermissionGroup.contacts] ==
+                          PermissionStatus.granted) {
                         Navigator.pushNamed(context, '/contacts');
                       }
-                    });
-                  },
-                  child: Center(
-                    child: Text(
-                      'Invite Contacts',
-                      style: TextStyle(
-                        color: Colors.white,
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Center(
+                        child: Text(
+                          'Invite Contacts',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-              )),
-          SizedBox(height: 25.0),
-          Container(
-              height: 30.0,
-              width: 120.0,
-              child: Material(
-                borderRadius: BorderRadius.circular(20.0),
-                shadowColor: Colors.black12,
-                color: Color.fromRGBO(164, 211, 34, 1),
-                elevation: 7.0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => LeaderBoard(
-                              currentUser:
-                                  StateContainer.of(context).loggedInUser,
-                            ),
-                      ),
-                    );
-                  },
-                  child: Center(
-                    child: Text(
-                      'Leaderboard',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              )),
-          SizedBox(height: 25.0),
-          Container(
-              height: 30.0,
-              width: 120.0,
-              child: Material(
-                borderRadius: BorderRadius.circular(20.0),
-                shadowColor: Colors.black12,
-                color: Color.fromRGBO(164, 211, 34, 1),
-                elevation: 7.0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/uploads');
-                  },
-                  child: Center(
-                    child: Text(
-                      'Uploads',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              )),
-          SizedBox(height: 25.0),
-          Container(
-            height: 30.0,
-            width: 120.0,
-            child: Material(
-              borderRadius: BorderRadius.circular(20.0),
-              shadowColor: Colors.black12,
-              color: Color.fromRGBO(8, 158, 178, 1),
-              elevation: 7.0,
-              child: GestureDetector(
-                onTap: () {
-                  var db = DatabaseHelper();
-                  db.deleteUsers().then((_) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        "/login", ModalRoute.withName("/home"));
-                  });
-                },
-                child: Center(
-                  child: Text(
-                    'Log out',
-                    style: TextStyle(
-                      color: Colors.white,
                     ),
                   ),
                 ),
               ),
-            ),
+              SizedBox(
+                width: 120,
+                child: Material(
+                  color: Color.fromRGBO(164, 211, 34, 1),
+                  shape: StadiumBorder(),
+                  child: InkWell(
+                    customBorder: StadiumBorder(),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => LeaderBoard(
+                                currentUser:
+                                    StateContainer.of(context).loggedInUser,
+                              ),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Center(
+                        child: Text(
+                          'Leaderboard',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 25.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              SizedBox(
+                width: 120,
+                child: Material(
+                  color: Color.fromRGBO(164, 211, 34, 1),
+                  shape: StadiumBorder(),
+                  child: InkWell(
+                    customBorder: StadiumBorder(),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/uploads');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Center(
+                        child: Text(
+                          'Uploads',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 120,
+                child: Material(
+                  color: Color.fromRGBO(8, 158, 178, 1),
+                  shape: StadiumBorder(),
+                  child: InkWell(
+                    customBorder: StadiumBorder(),
+                    onTap: () {
+                      var db = DatabaseHelper();
+                      db.deleteUsers().then((_) {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            "/login", ModalRoute.withName("/home"));
+                      });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      child: Center(
+                        child: Text(
+                          'Log out',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           SizedBox(
-            height: 10,
+            height: 32,
           ),
           Center(
             child: Text(
@@ -485,7 +506,7 @@ class TransactionsPage extends StatelessWidget {
     };
 
     return FutureBuilder(
-        future: NetworkUtil().get(apiUrl + "transactions/", headers),
+        future: NetworkUtil().get(apiUrl + "/transactions/", headers),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return Center(child: CircularProgressIndicator());
@@ -495,69 +516,76 @@ class TransactionsPage extends StatelessWidget {
             transactions.add(Transaction.fromJSON(m));
           });
 
-          return new ListView.builder(
-            itemCount: transactions.length,
-            itemBuilder: (ctx, index) {
-              Transaction transaction = transactions[index];
-              return InkWell(
-                onTap: () {
-                  // showDialog(
-                  //     context: context,
-                  //     builder: (ctx) => ProfileDialog(
-                  //           id: transaction.id,
-                  //         ));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            transaction.note == "reporting"
-                                ? "tipped user for reporting alert #" +
-                                    transaction.alert.toString()
-                                : transaction.note == "cleaning"
-                                    ? "tipped user for cleaning alert #" +
-                                        transaction.alert.toString()
-                                    : transaction.subscription != null
-                                        ? "subscription id:" +
-                                            transaction.subscription.toString()
-                                        : transaction.note,
-                            style: TextStyle(
-                                fontSize: 14, fontWeight: FontWeight.w600),
-                          ),
+          return transactions.isEmpty
+              ? Center(
+                  child: Text('No transactions have been made.'),
+                )
+              : ListView.builder(
+                  itemCount: transactions.length,
+                  itemBuilder: (ctx, index) {
+                    Transaction transaction = transactions[index];
+                    return InkWell(
+                      onTap: () {
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (ctx) => ProfileDialog(
+                        //           id: transaction.id,
+                        //         ));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  transaction.note == "reporting"
+                                      ? "tipped user for reporting alert #" +
+                                          transaction.alert.toString()
+                                      : transaction.note == "cleaning"
+                                          ? "tipped user for cleaning alert #" +
+                                              transaction.alert.toString()
+                                          : transaction.subscription != null
+                                              ? "subscription id:" +
+                                                  transaction.subscription
+                                                      .toString()
+                                              : transaction.note,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600),
+                                ),
 //                          Text(
 //                            transaction.subscription ?? "",
 //                            style: TextStyle(fontSize: 14),
 //                          ),
-                          SizedBox(height: 3),
-                          Text(
-                            DateFormat.yMMMd().format(transaction.created),
-                            style: TextStyle(color: Colors.black38),
-                          )
-                        ],
+                                SizedBox(height: 3),
+                                Text(
+                                  DateFormat.yMMMd()
+                                      .format(transaction.created),
+                                  style: TextStyle(color: Colors.black38),
+                                )
+                              ],
+                            ),
+                            transaction.amount != null
+                                ? Text(
+                                    "${transaction.amount > 0 ? "-" : "+"}${transaction.amount.round()}",
+                                    style: TextStyle(
+                                        color: transaction.amount < 0
+                                            ? emralsColor()
+                                            : emralsColor()[1300],
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                : Container(),
+                          ],
+                        ),
                       ),
-                      transaction.amount != null
-                          ? Text(
-                              "${transaction.amount > 0 ? "-" : "+"}${transaction.amount.round()}",
-                              style: TextStyle(
-                                  color: transaction.amount < 0
-                                      ? emralsColor()
-                                      : emralsColor()[1300],
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          : Container(),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+                    );
+                  },
+                );
         });
   }
 }

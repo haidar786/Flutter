@@ -74,7 +74,7 @@ class RestDatasource {
     });
   }
 
-  Future<dynamic> updateEmrals(String token) {
+  Future<dynamic> updateEmralsBalance(String token) {
     Map<String, String> headers = {
       "Authorization": "token $token",
       "Content-type": "application/json"

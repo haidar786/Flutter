@@ -72,6 +72,7 @@ class LoginScreenState extends State<LoginScreen>
     if (widget.isMock == false) {
       await DatabaseHelper().saveUser(user);
       StateContainer.of(_ctx).updateUser(user);
+      StateContainer.of(context).refreshUser();
       Navigator.of(_ctx).pushReplacementNamed('/home');
     } else {
       StateContainer.of(context).updateUser(user);

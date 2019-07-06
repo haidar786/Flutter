@@ -18,13 +18,8 @@ import 'package:photo_view/photo_view.dart';
 class ReportDetail extends StatefulWidget {
   final Report report;
   final List reports;
-  final ValueChanged<String> showSnackbar;
 
-  ReportDetail(
-      {Key key,
-      @required this.report,
-      this.reports,
-      @required this.showSnackbar})
+  ReportDetail({Key key, @required this.report, this.reports})
       : super(key: key);
 
   @override
@@ -103,7 +98,7 @@ class ReportDetailState extends State<ReportDetail> {
                       imageUrl: report.solution != ""
                           ? report.solution
                           : report.thumbnail,
-                      placeholder: (context, _) => AspectRatio(aspectRatio: 1),
+                      placeholder: AspectRatio(aspectRatio: 1),
                     ),
                   ),
                   Container(
@@ -195,11 +190,7 @@ class ReportDetailState extends State<ReportDetail> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MapPage(
-                                  report: report,
-                                  key: UniqueKey(),
-                                ),
-                          ),
+                              builder: (context) => MapPage(report: report)),
                         );
                       },
                       child: Container(
@@ -286,7 +277,7 @@ class ReportDetailState extends State<ReportDetail> {
                             showDialog(
                                 context: context,
                                 builder: (ctx) {
-                                  return TipDialog(report, widget.showSnackbar);
+                                  return TipDialog(report, scaffoldKey);
                                 }).then((d) {
                               if (d != null) {
                                 StateContainer.of(context).updateEmrals(
@@ -399,7 +390,7 @@ class ReportDetailState extends State<ReportDetail> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    ReportScreen(report: widget.report),
+                                    CameraApp(report: widget.report),
                               ),
                             );
                           },
@@ -658,9 +649,9 @@ class ReportCommentListItem extends StatelessWidget {
 
 class TipDialog extends StatelessWidget {
   final Report report;
-  final ValueChanged<String> showSnackbar;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const TipDialog(this.report, this.showSnackbar);
+  TipDialog(this.report, this.scaffoldKey);
 
   @override
   Widget build(BuildContext context) {
@@ -680,11 +671,11 @@ class TipDialog extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                EmralsTipCircleButton(10, Colors.purple, report, showSnackbar),
+                EmralsTipCircleButton(10, Colors.purple, report, scaffoldKey),
                 EmralsTipCircleButton(
-                    50, Theme.of(context).accentColor, report, showSnackbar),
+                    50, Theme.of(context).accentColor, report, scaffoldKey),
                 EmralsTipCircleButton(
-                    100, Colors.cyan.shade600, report, showSnackbar),
+                    100, Colors.cyan.shade600, report, scaffoldKey),
               ],
             )
           ],
@@ -715,10 +706,9 @@ class EmralsTipCircleButton extends StatelessWidget {
   final int number;
   final Color color;
   final Report report;
-  final ValueChanged<String> showSnackbar;
+  final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const EmralsTipCircleButton(
-      this.number, this.color, this.report, this.showSnackbar);
+  EmralsTipCircleButton(this.number, this.color, this.report, this.scaffoldKey);
 
   @override
   Widget build(BuildContext context) {
@@ -733,7 +723,8 @@ class EmralsTipCircleButton extends StatelessWidget {
               Navigator.of(context).pop(number);
               loggedInUser.emrals = loggedInUser.emrals - number;
               DatabaseHelper().updateUser(loggedInUser);
-              showSnackbar(m['message']);
+              scaffoldKey.currentState
+                  .showSnackBar(SnackBar(content: Text(m['message'])));
             });
           } else {
             RestDatasource()
@@ -742,18 +733,18 @@ class EmralsTipCircleButton extends StatelessWidget {
               Navigator.of(context).pop(number);
               loggedInUser.emrals = loggedInUser.emrals - number;
               DatabaseHelper().updateUser(loggedInUser);
-              showSnackbar(m['message']);
+              scaffoldKey.currentState
+                  .showSnackBar(SnackBar(content: Text(m['message'])));
             });
           }
         } else {
-          showSnackbar('Insufficient balance');
-          /* scaffoldKey.currentState.showSnackBar(SnackBar(
-            content: Text("Insufficient balance"),
+          scaffoldKey.currentState.showSnackBar(SnackBar(
+            content: Text("Insufficient ballance"),
             action: SnackBarAction(
                 label: "Deposit",
                 onPressed: () =>
                     Navigator.of(context).pushReplacementNamed("/settings")),
-          ),); */
+          ));
         }
       },
       child: Container(

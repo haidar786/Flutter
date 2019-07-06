@@ -1,47 +1,40 @@
+//import 'dart:ui';
+
 import 'package:emrals/auth.dart';
+import 'package:emrals/bloc_provider.dart';
+import 'package:emrals/bloc_providers/auth_api.dart';
+import 'package:emrals/blocs/login_bloc.dart';
 import 'package:emrals/components/reveal_progress_button.dart';
-import 'package:emrals/data/database_helper.dart';
-import 'package:emrals/models/user.dart';
-import 'package:emrals/screens/empty_screen.dart';
-import 'package:emrals/screens/login_screen_presenter.dart';
+import 'package:emrals/models/auth_result_model.dart';
 import 'package:emrals/state_container.dart';
 import 'package:emrals/styles.dart';
 import 'package:emrals/utils/form_util.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const usernameFieldKey = Key('username_field');
-  static const passwordFieldKey = Key('password_field');
-  static const loginButtonKey = Key('login_button');
-  final LoginScreenPresenter loginScreenPresenter;
-  final bool isMock;
-
-  const LoginScreen({Key key, this.loginScreenPresenter, this.isMock = false})
-      : super(key: key);
-
+class LoginScreenBase extends StatelessWidget {
   @override
-  LoginScreenState createState() {
-    return LoginScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider<LoginBloc>(
+      child: LoginScreen(),
+      builder: (_, bloc) => bloc ?? LoginBloc(AuthApi()),
+      onDispose: (_, bloc) => bloc.dispose(),
+    );
   }
 }
 
-class LoginScreenState extends State<LoginScreen>
-    implements LoginScreenContract, AuthStateListener {
-  BuildContext _ctx;
+class LoginScreen extends StatefulWidget {
+  @override
+  LoginScreenState createState() {
+    return new LoginScreenState();
+  }
+}
+
+class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   String _password, _username;
   int buttonState = 0;
-
-  LoginScreenPresenter _presenter;
-
-  @override
-  void initState() {
-    super.initState();
-    _presenter = widget.loginScreenPresenter ?? LoginScreenPresenter();
-    AuthStateProvider()..subscribe(this);
-  }
 
   launchURL(url) async {
     if (await canLaunch(url)) {
@@ -51,46 +44,13 @@ class LoginScreenState extends State<LoginScreen>
     }
   }
 
-  @override
-  void onAuthStateChanged(AuthState state) {
-    // Invoked when the AuthStateProvider is initialised
-    if (state == AuthState.LOGGED_IN)
-      Navigator.of(_ctx).pushReplacementNamed('/home');
-  }
-
-  @override
-  void onLoginError(String errorTxt) {
-    _showSnackBar(errorTxt);
-    setState(() {
-      buttonState = 0;
-    });
-  }
-
-  @override
-  void onLoginSuccess(User user) async {
-    //_showSnackBar('Logged in as ${user.username}');
-    if (widget.isMock == false) {
-      await DatabaseHelper().saveUser(user);
-      StateContainer.of(_ctx).updateUser(user);
-      Navigator.of(_ctx).pushReplacementNamed('/home');
-    } else {
-      StateContainer.of(context).updateUser(user);
-      Navigator.of(_ctx).pushReplacement(
-          MaterialPageRoute(builder: (context) => EmptyScreen()));
-    }
-  }
-
-  void _submit(BuildContext context) async {
+  void _submit(BuildContext context) {
+    final loginBloc = Provider.of<LoginBloc>(context);
     final form = formKey.currentState;
 
     if (form.validate()) {
       form.save();
-      try {
-        final User user = await _presenter.doLogin(_username, _password);
-        this.onLoginSuccess(user);
-      } on Exception catch (e) {
-        this.onLoginError(e.toString());
-      }
+      loginBloc.authenticate(username: _username, password: _password);
     } else {
       setState(() {
         buttonState = 0;
@@ -104,8 +64,29 @@ class LoginScreenState extends State<LoginScreen>
 
   @override
   Widget build(BuildContext context) {
-    _ctx = context;
-    FormUtil _formUtil = FormUtil();
+    FormUtil _formUtil = new FormUtil();
+    final loginBloc = Provider.of<LoginBloc>(context);
+    loginBloc.authDataStream.listen((AuthData authData) {
+      switch (authData.authState) {
+        case AuthState.LOGGED_IN:
+          {
+            StateContainer.of(context).refreshUser();
+            _showSnackBar('Logged in as ${authData.user.username}');
+            Navigator.of(context).pushReplacementNamed("/home");
+          }
+          break;
+        case AuthState.AUTH_ERROR:
+          {
+            _showSnackBar(authData.errorString);
+            setState(() {
+              buttonState = 0;
+            });
+          }
+          break;
+        default:
+          {}
+      }
+    });
     var loginForm = Column(
       children: <Widget>[
         Image(image: AssetImage("assets/logo.png")),
@@ -138,12 +119,12 @@ class LoginScreenState extends State<LoginScreen>
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
                   onSaved: (val) => _username = val,
-                  key: LoginScreen.usernameFieldKey,
+                  key: new Key('username'),
                   validator: _formUtil.validateName,
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Username",
-                    labelStyle: TextStyle(
+                    labelStyle: new TextStyle(
                       background: Paint()..color = Colors.white,
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -169,11 +150,11 @@ class LoginScreenState extends State<LoginScreen>
                   obscureText: true,
                   onSaved: (val) => _password = val,
                   validator: _formUtil.validatePasswordEntered,
-                  key: LoginScreen.passwordFieldKey,
+                  key: new Key('password'),
                   decoration: InputDecoration(
                     filled: true,
                     labelText: "Password",
-                    labelStyle: TextStyle(
+                    labelStyle: new TextStyle(
                       background: Paint()..color = Colors.white,
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -201,13 +182,13 @@ class LoginScreenState extends State<LoginScreen>
           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Center(
             child: RevealProgressButton(
-              key: LoginScreen.loginButtonKey,
               startColor: emralsColor(),
               endColor: Colors.green,
               name: 'LOGIN',
               onPressed: () {
                 if (!mounted) return;
                 setState(() {
+                  print('Signup button pressed');
                   buttonState = 1;
                   _submit(context);
                 });
@@ -242,9 +223,7 @@ class LoginScreenState extends State<LoginScreen>
             child: Text(
               "Forgot password?",
               style: TextStyle(
-                color: Colors.white,
-                decoration: TextDecoration.underline,
-              ),
+                  color: Colors.white, decoration: TextDecoration.underline),
             ),
             onTap: () =>
                 launchURL('https://www.emrals.com/accounts/password/reset'),

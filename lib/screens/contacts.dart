@@ -115,7 +115,6 @@ class _InviteButtonState extends State<InviteButton>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     if (state == InviteButtonStates.IDLE) {
       icon = Icon(
         Icons.add,

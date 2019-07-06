@@ -10,10 +10,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class StatsScreen extends StatefulWidget {
+class Stats extends StatefulWidget {
   @override
-  StatsScreenState createState() {
-    return StatsScreenState();
+  StatsState createState() {
+    return StatsState();
   }
 }
 
@@ -25,8 +25,7 @@ launchURL(url) async {
   }
 }
 
-class StatsScreenState extends State<StatsScreen>
-    with AutomaticKeepAliveClientMixin {
+class StatsState extends State<Stats> with AutomaticKeepAliveClientMixin{
   StatsApi _statsApi = StatsApi();
   StatsModel stats;
   StatsExchangeModel crex24data;
@@ -41,11 +40,10 @@ class StatsScreenState extends State<StatsScreen>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Theme(
       data: ThemeData(
-          brightness: Brightness.dark,
-          primaryColor: Theme.of(context).primaryColor),
+        brightness: Brightness.dark,
+      ),
       child: Scaffold(
         body: Column(
           children: <Widget>[
@@ -128,7 +126,7 @@ class StatsScreenState extends State<StatsScreen>
                   flex: 2,
                   child: Container(
                     height: 170,
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.black,
                     padding: EdgeInsets.all(8),
                     alignment: Alignment.center,
                     child: CircularProgressIndicator(
@@ -141,7 +139,7 @@ class StatsScreenState extends State<StatsScreen>
                   flex: 1,
                   child: Container(
                     height: 170,
-                    color: Theme.of(context).primaryColor,
+                    color: Colors.black,
                     padding: EdgeInsets.all(8),
                     alignment: Alignment.center,
                     child: CircularProgressIndicator(
@@ -160,7 +158,7 @@ class StatsScreenState extends State<StatsScreen>
                         flex: 2,
                         child: Container(
                           height: 170,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.black,
                           padding: EdgeInsets.all(8),
                           child: Icon(
                             FontAwesomeIcons.exclamationTriangle,
@@ -173,7 +171,7 @@ class StatsScreenState extends State<StatsScreen>
                         flex: 1,
                         child: Container(
                           height: 170,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.black,
                           padding: EdgeInsets.all(8),
                           child: Icon(
                             FontAwesomeIcons.exclamationTriangle,
@@ -191,7 +189,7 @@ class StatsScreenState extends State<StatsScreen>
                         flex: 2,
                         child: Container(
                           height: 170,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.black,
                           padding: EdgeInsets.all(8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -379,7 +377,7 @@ class StatsScreenState extends State<StatsScreen>
                         flex: 1,
                         child: Container(
                           height: 170,
-                          color: Theme.of(context).primaryColor,
+                          color: Colors.black,
                           padding: EdgeInsets.all(8),
                           child: Column(
                             children: <Widget>[
@@ -494,7 +492,7 @@ class StatsScreenState extends State<StatsScreen>
                     flex: 2,
                     child: Container(
                       height: 150,
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.black,
                       alignment: Alignment.center,
                       child: CircularProgressIndicator(
                         valueColor:
@@ -507,7 +505,7 @@ class StatsScreenState extends State<StatsScreen>
                     flex: 5,
                     child: Container(
                       height: 150,
-                      color: Theme.of(context).primaryColor,
+                      color: Colors.black,
                       alignment: Alignment.center,
                       child: CircularProgressIndicator(
                         valueColor:
@@ -524,7 +522,7 @@ class StatsScreenState extends State<StatsScreen>
                           flex: 2,
                           child: Container(
                             height: 150,
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.black,
                             padding: EdgeInsets.all(8),
                             child: Icon(
                               FontAwesomeIcons.exclamationTriangle,
@@ -537,7 +535,7 @@ class StatsScreenState extends State<StatsScreen>
                           flex: 5,
                           child: Container(
                             height: 150,
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.black,
                             padding: EdgeInsets.all(8),
                             child: Icon(
                               FontAwesomeIcons.exclamationTriangle,
@@ -554,7 +552,7 @@ class StatsScreenState extends State<StatsScreen>
                           flex: 2,
                           child: Container(
                             height: 150,
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.black,
                             padding: EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -571,7 +569,7 @@ class StatsScreenState extends State<StatsScreen>
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
-                                        color: Theme.of(context).primaryColor,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
@@ -599,7 +597,7 @@ class StatsScreenState extends State<StatsScreen>
                           flex: 5,
                           child: Container(
                             height: 150,
-                            color: Theme.of(context).primaryColor,
+                            color: Colors.black,
                             padding: EdgeInsets.all(8),
                             child: Column(
                               children: <Widget>[
@@ -613,10 +611,9 @@ class StatsScreenState extends State<StatsScreen>
                                     child: Text(
                                       'Price',
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                          color: Colors.black),
                                     ),
                                   ),
                                 ),
@@ -727,7 +724,7 @@ class StatsScreenState extends State<StatsScreen>
   Widget _statsRow3(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      color: Theme.of(context).primaryColor,
+      color: Colors.black,
       padding: EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
@@ -1007,7 +1004,7 @@ class StatsScreenState extends State<StatsScreen>
     return Container(
       width: double.infinity,
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      color: Theme.of(context).primaryColor,
+      color: Colors.black,
       padding: EdgeInsets.all(8),
       child: Wrap(
         direction: Axis.horizontal,

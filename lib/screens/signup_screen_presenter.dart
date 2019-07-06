@@ -7,15 +7,16 @@ abstract class SignupScreenContract {
 }
 
 class SignupScreenPresenter {
-  final RestDatasource api = RestDatasource();
+  SignupScreenContract _view;
+  RestDatasource api = RestDatasource();
+  SignupScreenPresenter(this._view);
 
-  Future<dynamic> doSignup(
-      String username, String email, String password) async {
+  doSignup(String username, String email, String password) async {
     try {
-      User user = await api.signup(username, password, email);
-      return user;
+      var user = await api.signup(username, email, password);
+      _view.onSignupSuccess(user);
     } on Exception catch (error) {
-      return error.toString();
+      _view.onSignupError(error.toString());
     }
   }
 }

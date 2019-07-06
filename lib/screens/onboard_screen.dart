@@ -2,7 +2,7 @@ import 'package:emrals/screens/login_screen.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:simple_permissions/simple_permissions.dart';
 
 class OnboardScreen extends StatelessWidget {
   @override
@@ -137,16 +137,16 @@ class OnboardScreen extends StatelessWidget {
             SizedBox(height: 10),
             GestureDetector(
               onTap: () async {
-                await PermissionHandler().requestPermissions([
-                  PermissionGroup.camera,
-                  PermissionGroup.microphone,
-                  PermissionGroup.location
-                ]);
+                await SimplePermissions.requestPermission(Permission.Camera);
+                await SimplePermissions.requestPermission(
+                    Permission.RecordAudio);
+                await SimplePermissions.requestPermission(
+                    Permission.AccessFineLocation);
                 SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
                 sharedPreferences.setBool("onboarded", true);
                 Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (ctx) => LoginScreen()));
+                    MaterialPageRoute(builder: (ctx) => LoginScreenBase()));
               },
               child: Container(
                 height: 80,

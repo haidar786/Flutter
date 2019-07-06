@@ -1,44 +1,60 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emrals/data/zone_api.dart';
 import 'package:emrals/models/zone.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 
-class ZoneListScreen extends StatefulWidget {
+class ZoneListWidget extends StatefulWidget {
   @override
   _ZoneList createState() => _ZoneList();
 }
 
-class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin{
-  @override
-  bool get wantKeepAlive => true;
-  final int limit = 50;
-  PagewiseLoadController<Zone> pageLoadController;
+class _ZoneList extends State<ZoneListWidget>
+    with AutomaticKeepAliveClientMixin {
+  int limit = 50;
+  int offset = 0;
+  ScrollController _scrollController = ScrollController();
+  List<Zone> zones = List();
+  bool _progressBarActive = true;
   String searchTerm = "";
   bool searchActive = false;
   ZoneSortType sortType = ZoneSortType.RECENT;
   var currentLocation = <String, double>{};
   var location = Location();
-  final ZoneApi zoneApi = ZoneApi();
 
   @override
   void initState() {
     super.initState();
-    pageLoadController = PagewiseLoadController(
-      pageSize: limit,
-      pageFuture: (int batch) => zoneApi.getZones(
-            limit: limit,
-            offset: limit * batch,
-            zoneSortType: sortType,
-          ),
-    );
+    fetchZones(0, 0, sortType);
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        limit = 50;
+        offset += 50;
+        fetchZones(limit, offset, sortType);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleRefresh() {
+    _progressBarActive = true;
+    zones = List<Zone>();
+    return fetchZones(0, 0, sortType);
   }
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    zones.retainWhere(
+        (z) => z.city.toLowerCase().contains(searchTerm.toLowerCase()));
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       floatingActionButton: Column(
@@ -57,19 +73,12 @@ class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin
                       )).then((d) {
                 setState(() {
                   sortType = d;
-                  pageLoadController = PagewiseLoadController(
-                    pageSize: limit,
-                    pageFuture: (int batch) => zoneApi.getZones(
-                          limit: limit,
-                          offset: limit * batch,
-                          zoneSortType: sortType,
-                        ),
-                  );
+                  _handleRefresh();
                 });
               });
             }),
           ),
-          /* SizedBox(height: 10),
+          SizedBox(height: 10),
           FloatingActionButton(
             onPressed: () {
               setState(() {
@@ -80,14 +89,14 @@ class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin
               Icons.search,
               color: Colors.white,
             ),
-          ), */
+          ),
         ],
       ),
-      /* appBar: searchActive
+      appBar: searchActive
           ? PreferredSize(
               child: Container(
                 padding: EdgeInsets.only(left: 10),
-                color: darkGrey,
+                color: Colors.black,
                 child: Row(
                   children: [
                     Expanded(
@@ -132,23 +141,51 @@ class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin
                 ),
               ),
               preferredSize: Size.fromHeight(50))
-          : null, */
-      body: RefreshIndicator(
-        onRefresh: () async => pageLoadController.reset(),
-        child: PagewiseListView(
-          padding: const EdgeInsets.symmetric(vertical: 6),
-          pageLoadController: pageLoadController,
-          noItemsFoundBuilder: (BuildContext context) => Center(
-                child: Text('No zones found.'),
+          : null,
+      backgroundColor: Colors.white,
+      body: _progressBarActive == true
+          ? Center(child: CircularProgressIndicator())
+          : RefreshIndicator(
+              onRefresh: _handleRefresh,
+              child: ListView.builder(
+                controller: _scrollController,
+                itemCount: zones.length,
+                itemBuilder: (BuildContext context, int index) {
+                  Zone zone = zones[index];
+                  return ZoneListItem(zone: zone);
+                },
               ),
-          loadingBuilder: (BuildContext context) =>
-              Center(child: CircularProgressIndicator()),
-          itemBuilder: (BuildContext context, Zone zone, int index) =>
-              ZoneListItem(zone: zone),
-        ),
-      ),
+            ),
     );
   }
+
+  fetchZones(
+    int offset,
+    int limit,
+    sortType,
+  ) async {
+    var requestURL = apiUrl +
+        'zones/?limit=$limit&offset=$offset&sort=' +
+        sortType.toString();
+    if (sortType == ZoneSortType.CLOSEST) {
+      currentLocation = await location.getLocation();
+      requestURL = apiUrl +
+          'zones/?limit=$limit&offset=$offset&longitude=${currentLocation["longitude"]}&latitude=${currentLocation["latitude"]}';
+    }
+    print(requestURL);
+    final response = await http.get(requestURL);
+
+    var data = json.decode(response.body);
+    var parsed = data["results"] as List;
+    if (!mounted) return;
+    setState(() {
+      zones.addAll(parsed.map<Zone>((json) => Zone.fromJson(json)).toList());
+      _progressBarActive = false;
+    });
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class ZoneListItem extends StatefulWidget {
@@ -163,14 +200,10 @@ class ZoneListItem extends StatefulWidget {
 class _ZoneListItemState extends State<ZoneListItem> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
-      child: Material(
-        borderRadius: BorderRadius.circular(12),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        elevation: 4,
-        child: InkWell(
-          onTap: null,
+    return Column(
+      children: <Widget>[
+        InkWell(
+          onTap: () {},
           child: IntrinsicHeight(
             child: Row(
               children: <Widget>[
@@ -179,25 +212,20 @@ class _ZoneListItemState extends State<ZoneListItem> {
                     children: <Widget>[
                       widget.zone.image != null
                           ? CachedNetworkImage(
-                              placeholder: (context, _) => Image.asset(
-                                    'assets/placeholder.png',
-                                    fit: BoxFit.cover,
-                                  ),
+                              placeholder: Image.asset(
+                                'assets/placeholder.png',
+                                fit: BoxFit.cover,
+                              ),
                               imageUrl: widget.zone.image,
-                              errorWidget: (context, _, error) =>
-                                  Icon(Icons.error),
+                              errorWidget: Icon(Icons.error),
                             )
                           : Container(
                               alignment: Alignment.center,
                               child: Text('No Image'),
                             ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: CachedNetworkImage(
-                          height: 30,
-                          imageUrl: widget.zone.flag,
-                        ),
+                      CachedNetworkImage(
+                        height: 30,
+                        imageUrl: widget.zone.flag,
                       ),
                     ],
                   ),
@@ -273,30 +301,29 @@ class _ZoneListItemState extends State<ZoneListItem> {
                       ),
                       SizedBox(height: 10),
                       RaisedButton(
-                        padding: EdgeInsets.zero,
-                        shape: StadiumBorder(),
-                        color: emralsColor()[1000],
-                        onPressed: () {
-                          _showModal(widget.zone);
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(
-                              Icons.favorite,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "FUND",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      )
+                          padding: EdgeInsets.zero,
+                          shape: StadiumBorder(),
+                          color: emralsColor()[1000],
+                          onPressed: () {
+                            _showModal(widget.zone);
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Icon(
+                                Icons.favorite,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "FUND",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
+                          ))
                     ],
                   ),
                 )
@@ -304,7 +331,11 @@ class _ZoneListItemState extends State<ZoneListItem> {
             ),
           ),
         ),
-      ),
+        Container(
+          height: 10,
+          color: Colors.black,
+        )
+      ],
     );
   }
 
@@ -312,28 +343,25 @@ class _ZoneListItemState extends State<ZoneListItem> {
     Future<void> future = showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return Theme(
-          data: ThemeData(canvasColor: Colors.transparent),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: Icon(Icons.directions_walk),
-                title: Text('100 EMRALS / month ' + zone.city),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.directions_run),
-                title: Text('200 EMRALS / month ' + zone.city),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Icon(Icons.directions_bike),
-                title: Text('500 EMRALS / month ' + zone.city),
-                onTap: () {},
-              ),
-            ],
-          ),
+        return new Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new ListTile(
+              leading: new Icon(Icons.directions_walk),
+              title: new Text('100 EMRALS / month ' + zone.city),
+              onTap: () {},
+            ),
+            new ListTile(
+              leading: new Icon(Icons.directions_run),
+              title: new Text('200 EMRALS / month ' + zone.city),
+              onTap: () {},
+            ),
+            new ListTile(
+              leading: new Icon(Icons.directions_bike),
+              title: new Text('500 EMRALS / month ' + zone.city),
+              onTap: () {},
+            ),
+          ],
         );
       },
     );
@@ -382,4 +410,14 @@ class _ZoneSortDialogState extends State<ZoneSortDialog> {
       ),
     );
   }
+}
+
+enum ZoneSortType {
+  RECENT,
+  EMRALS,
+  CLEANUPS,
+  REPORTS,
+  CLOSEST,
+  VIEWS,
+  SUBSCRIBERS,
 }

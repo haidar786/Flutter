@@ -11,14 +11,14 @@ import 'package:emrals/screens/uploads.dart';
 import 'package:flutter/material.dart';
 
 final routes = {
-  '/login': (BuildContext context) => LoginScreen(),
+  '/login': (BuildContext context) => LoginScreenBase(),
   '/signup': (BuildContext context) => SignupScreen(),
   '/home': (BuildContext context) => MyHomePage(),
-  '/settings': (BuildContext context) => Settings(),
-  '/camera': (BuildContext context) => ReportScreen(),
+  '/settings': (BuildContext context) => Settingg(),
+  '/camera': (BuildContext context) => CameraApp(),
   '/leaderboard': (BuildContext context) => LeaderBoard(),
   '/contacts': (BuildContext context) => Contacts(),
-  '/map': (BuildContext context) => MapPage(key: UniqueKey()),
+  '/map': (BuildContext context) => MapPage(),
   '/profile': (BuildContext context) => ProfilePage(),
   '/uploads': (BuildContext context) => Uploads(),
 };

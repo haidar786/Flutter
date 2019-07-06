@@ -7,9 +7,16 @@ abstract class LoginScreenContract {
 }
 
 class LoginScreenPresenter {
+  LoginScreenContract _view;
   RestDatasource api = RestDatasource();
+  LoginScreenPresenter(this._view);
 
-  Future<User> doLogin(String username, String password) async {
-    return api.login(username, password);
+  doLogin(String username, String password) async {
+    try {
+      var user = await api.login(username, password);
+      _view.onLoginSuccess(user);
+    } on Exception catch (error) {
+      _view.onLoginError(error.toString());
+    }
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:emrals/models/report.dart';
@@ -20,69 +19,43 @@ class MapPage extends StatefulWidget {
 }
 
 class _MyAppState extends State<MapPage> {
-  final Completer<GoogleMapController> completer =
-      Completer<GoogleMapController>();
-  Set<Marker> markers;
+  GoogleMapController mapController;
+
+  var location = Location();
+  var currentLocation = <String, double>{};
+
   List<Report> reports = [];
-  bool singleReport;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    if (widget.report == null) {
+      mapController.onMarkerTapped.add((m) {
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (ctx) => ReportDetail(
+                  report: reports[m.options.zIndex.toInt()],
+                  reports: reports,
+                )));
+      });
+    }
+
+    refresh();
+  }
 
   @override
   void initState() {
     super.initState();
-    singleReport = widget.report != null;
-    if (singleReport) {
-      markers = Set<Marker>.of([reportToMarker(widget.report)]);
-      centreCamera(LatLng(widget.report.latitude, widget.report.longitude));
-    } else {
-      markers = Set<Marker>();
-      centreCamera();
-      loadReports();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Emrals Map'),
-        actions: singleReport
-            ? [
-                IconButton(
-                  tooltip: 'Open in map app.',
-                  icon: Icon(Icons.launch),
-                  onPressed: () {
-                    widget.report.launchMaps();
-                  },
-                ),
-              ]
-            : null,
-      ),
-      body: Hero(
-        tag: singleReport ? widget.report.id : '',
-        child: GoogleMap(
-          onMapCreated: _onMapCreated,
-          markers: markers,
-          myLocationEnabled: true,
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(0.0, 0.0),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    if (completer.isCompleted == false) completer.complete(controller);
+    refresh();
+    loadReports();
   }
 
   Future<LatLng> getUserLocation() async {
-    LocationData currentLocation;
+    var currentLocation = <String, double>{};
     final location = LocationManager.Location();
     try {
       currentLocation = await location.getLocation();
-      final lat = currentLocation.latitude;
-      final lng = currentLocation.longitude;
-      final center = singleReport
+      final lat = currentLocation["latitude"];
+      final lng = currentLocation["longitude"];
+      final center = widget.report != null
           ? LatLng(widget.report.latitude, widget.report.longitude)
           : LatLng(lat, lng);
       return center;
@@ -92,58 +65,85 @@ class _MyAppState extends State<MapPage> {
     }
   }
 
-  void centreCamera([LatLng latLng]) async {
-    final GoogleMapController mapController = await completer.future;
-    final LatLng center = latLng ?? await getUserLocation();
-    mapController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: center == null ? LatLng(0, 0) : center,
-          zoom: 15.0,
+  void refresh() async {
+    final center = await getUserLocation();
+    if (mapController != null) {
+      mapController.moveCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: center == null ? LatLng(0, 0) : center,
+            zoom: 15.0,
+          ),
         ),
-      ),
-    );
+      );
+    }
+
+    if (widget.report != null && mapController != null) {
+      mapController.addMarker(
+        MarkerOptions(
+          icon:
+              BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+          position: center,
+          infoWindowText: InfoWindowText(
+              widget.report.title, 'Report #' + widget.report.id.toString()),
+        ),
+      );
+    }
   }
 
   Future<void> loadReports() async {
-    final http.Response response = await http.get(apiUrl + '/alerts/');
+    final http.Response response = await http.get(apiUrl + 'alerts/');
     var data = json.decode(response.body);
     var parsed = data["results"] as List;
     setState(() {
       reports = parsed.map((d) => Report.fromJson(d)).toList();
-      markers = Set<Marker>.of(
-        reports.map(reportToMarker).toList(),
-      );
     });
   }
 
-  Marker reportToMarker(Report report) {
-    return Marker(
-      markerId: MarkerId(report.id.toString()),
-      position: LatLng(report.latitude, report.longitude),
-      consumeTapEvents: false,
-      icon: BitmapDescriptor.defaultMarkerWithHue(singleReport ? BitmapDescriptor.hueGreen : BitmapDescriptor.hueRed),
-      onTap: !singleReport
-          ? () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => ReportDetail(
-                        report: report,
-                        reports: reports,
-                        showSnackbar: (String message) {
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(message),
-                            ),
-                          );
-                        },
-                      ),
-                ),
-              );
-            }
-          : null,
-      infoWindow:
-          InfoWindow(title: report.title, snippet: 'Report #${report.id}'),
+  @override
+  Widget build(BuildContext context) {
+    if (widget.report == null) {
+      reports.forEach((report) {
+        mapController.addMarker(
+          MarkerOptions(
+            position: LatLng(report.latitude, report.longitude),
+            consumeTapEvents: true,
+            zIndex: reports.indexOf(report).toDouble(),
+            infoWindowText:
+                InfoWindowText(report.title, 'Report #' + report.id.toString()),
+          ),
+        );
+      });
+    }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Emrals Map'),
+        actions: widget.report != null
+            ? [
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.launch),
+                      onPressed: () {
+                        widget.report.launchMaps();
+                      },
+                    ),
+                  ],
+                )
+              ]
+            : null,
+      ),
+      body: Hero(
+        tag: widget.report != null ? widget.report.id : '',
+        child: GoogleMap(
+          onMapCreated: _onMapCreated,
+          trackCameraPosition: true,
+          myLocationEnabled: true,
+          initialCameraPosition: const CameraPosition(
+            target: LatLng(0.0, 0.0),
+          ),
+        ),
+      ),
     );
   }
 }

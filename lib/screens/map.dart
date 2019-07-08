@@ -43,20 +43,20 @@ class _MyAppState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Emrals Map'),
-        actions: singleReport
-            ? [
-                IconButton(
-                  tooltip: 'Open in map app.',
-                  icon: Icon(Icons.launch),
-                  onPressed: () {
-                    widget.report.launchMaps();
-                  },
-                ),
-              ]
-            : null,
-      ),
+      // appBar: AppBar(
+      //   //title: Text('Emrals Map'),
+      //   actions: singleReport
+      //       ? [
+      //           IconButton(
+      //             tooltip: 'Open in map app.',
+      //             icon: Icon(Icons.launch),
+      //             onPressed: () {
+      //               widget.report.launchMaps();
+      //             },
+      //           ),
+      //         ]
+      //       : null,
+      // ),
       body: Hero(
         tag: singleReport ? widget.report.id : '',
         child: GoogleMap(
@@ -122,7 +122,8 @@ class _MyAppState extends State<MapPage> {
       markerId: MarkerId(report.id.toString()),
       position: LatLng(report.latitude, report.longitude),
       consumeTapEvents: false,
-      icon: BitmapDescriptor.defaultMarkerWithHue(singleReport ? BitmapDescriptor.hueGreen : BitmapDescriptor.hueRed),
+      icon: BitmapDescriptor.defaultMarkerWithHue(
+          singleReport ? BitmapDescriptor.hueGreen : BitmapDescriptor.hueRed),
       onTap: !singleReport
           ? () {
               Navigator.of(context).push(

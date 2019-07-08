@@ -8,6 +8,7 @@ import 'package:emrals/screens/profile.dart';
 import 'package:emrals/screens/settings.dart';
 import 'package:emrals/screens/signup_screen.dart';
 import 'package:emrals/screens/uploads.dart';
+import 'package:emrals/screens/buy.dart';
 import 'package:flutter/material.dart';
 
 final routes = {
@@ -19,6 +20,7 @@ final routes = {
   '/leaderboard': (BuildContext context) => LeaderBoard(),
   '/contacts': (BuildContext context) => Contacts(),
   '/map': (BuildContext context) => MapPage(key: UniqueKey()),
+  '/buy': (BuildContext context) => BuyEmralsScreen(),
   '/profile': (BuildContext context) => ProfilePage(),
   '/uploads': (BuildContext context) => Uploads(),
 };

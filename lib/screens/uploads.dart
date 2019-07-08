@@ -19,25 +19,26 @@ class UploadsState extends State<Uploads> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Pending Uploads'),
-        ),
-        body: StreamBuilder(
-          stream: DatabaseHelper().getReports().asStream(),
-          builder: (ctx, snapshot) {
-            if (snapshot.hasData) {
-              List<OfflineReport> reports = List.from(snapshot.data);
-              return ReportList(
-                reports: reports,
-                callback: _refreshWidget,
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ));
+      appBar: AppBar(
+        title: Text('Pending Uploads'),
+      ),
+      body: StreamBuilder(
+        stream: DatabaseHelper().getReports().asStream(),
+        builder: (ctx, snapshot) {
+          if (snapshot.hasData) {
+            List<OfflineReport> reports = List.from(snapshot.data);
+            return ReportList(
+              reports: reports,
+              callback: _refreshWidget,
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+    );
   }
 }
 

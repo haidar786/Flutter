@@ -1,7 +1,8 @@
 import 'package:emrals/components/animated_user_emrals.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/report_list.dart';
-import 'package:emrals/screens/scanner.dart';
+//import 'package:emrals/screens/scanner.dart';
+import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/stats.dart';
 import 'package:emrals/screens/zone_list.dart';
 import 'package:emrals/styles.dart';
@@ -22,10 +23,11 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   final PageController pageController = PageController();
   final List<Widget> _children = [
     ViewReportsScreen(),
+    ZoneListScreen(),
     ReportScreen(),
     StatsScreen(),
-    ZoneListScreen(),
-    ScannerScreen(),
+    MapPage(),
+    //ScannerScreen(),
   ];
 
   @override
@@ -37,14 +39,33 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: new IconButton(
-          icon: new Icon(Icons.map, color: emralsColor()),
+        title: RaisedButton.icon(
+          icon: Icon(
+            Icons.shopping_cart,
+            color: Colors.white,
+          ),
+          color: emralsColor(),
+          splashColor: emralsColor(),
+          //disabledColor: emralsColor(),
+          highlightColor: emralsColor().shade700,
+          disabledTextColor: emralsColor(),
+          textColor: emralsColor(),
+          /* borderSide: BorderSide(
+                      color: emralsColor(),
+                    ), */
           onPressed: () {
             Navigator.pushNamed(
               context,
-              '/map',
+              '/buy',
             );
           },
+          label: Text(
+            "BUY EMRALS",
+            style: TextStyle(color: Colors.white),
+          ),
+          shape: StadiumBorder(
+            side: BorderSide(color: Colors.white, width: 2),
+          ),
         ),
         actions: <Widget>[
           Padding(
@@ -90,7 +111,13 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.camera,
+              Icons.map,
+            ),
+            title: Text('Zones'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.photo_camera,
             ),
             title: Text('Report'),
           ),
@@ -100,17 +127,17 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
             ),
             title: Text('Stats'),
           ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //     FontAwesomeIcons.qrcode,
+          //   ),
+          //   title: Text('Scan'),
+          // ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.map,
+              FontAwesomeIcons.map,
             ),
-            title: Text('Zones'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesomeIcons.qrcode,
-            ),
-            title: Text('Scan'),
+            title: Text('Map'),
           ),
         ],
       ),

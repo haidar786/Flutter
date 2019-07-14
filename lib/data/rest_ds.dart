@@ -168,6 +168,16 @@ class RestDatasource {
     return _netUtil.get(apiUrl + "/leaderboard/reports");
   }
 
+  Future<dynamic> getEmralsprice(int emralsAmount, String token) async {
+    Map<String, String> headers = {
+      "Authorization": "token $token",
+      "Content-type": "application/json"
+    };
+    return _netUtil.get(
+        apiUrl + "/buy/?emrals_amount=" + emralsAmount.toString(),
+        headers = headers);
+  }
+
   Future<dynamic> getLeaderboardCleanups() async {
     return _netUtil.get(apiUrl + "/leaderboard/cleanups");
   }

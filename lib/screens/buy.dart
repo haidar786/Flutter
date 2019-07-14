@@ -1,6 +1,8 @@
+import 'package:emrals/screens/send_btc.dart';
 import 'package:flutter/material.dart';
-
+import 'package:emrals/state_container.dart';
 import 'package:flutter/services.dart';
+import 'package:emrals/data/rest_ds.dart';
 
 class BuyEmralsScreen extends StatefulWidget {
   @override
@@ -11,6 +13,8 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
   final TextEditingController walletAddressController = TextEditingController();
 
   final TextEditingController amountController = TextEditingController();
+  String send_bitcoin = "Send BTC";
+  String old_amount = "";
 
   @override
   Widget build(BuildContext context) {
@@ -24,63 +28,36 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
           shrinkWrap: true,
           padding: EdgeInsets.all(16),
           children: <Widget>[
-            // Text(
-            //   "Wallet Address",
-            //   style: TextStyle(fontSize: 16),
-            // ),
-            // SizedBox(
-            //   height: 10,
-            // ),
-            // IntrinsicHeight(
-            //   child: Row(
-            //     crossAxisAlignment: CrossAxisAlignment.stretch,
-            //     children: <Widget>[
-            //       Expanded(
-            //         child: TextFormField(
-            //           validator: (s) {
-            //             if (s.isEmpty) {
-            //               return "Please enter a valid wallet address";
-            //             }
-            //           },
-            //           controller: walletAddressController,
-            //           style: TextStyle(fontSize: 18),
-            //           decoration: InputDecoration(
-            //             contentPadding: EdgeInsets.all(10),
-            //             border: OutlineInputBorder(
-            //                 borderRadius: BorderRadius.circular(0),
-            //                 borderSide: BorderSide(color: Colors.black54)),
-            //           ),
-            //         ),
-            //       ),
-            //       SizedBox(width: 10),
-            //       AspectRatio(
-            //         aspectRatio: 1,
-            //         child: Container(
-            //           width: 30,
-            //           height: 30,
-            //           color: Colors.black54,
-            //           child: IconButton(
-            //             icon: Icon(Icons.nfc),
-            //             color: Colors.white,
-            //             onPressed: () {},
-            //           ),
-            //         ),
-            //       )
-            //     ],
-            //   ),
-            // ),
-            // SizedBox(height: 25),
             Text(
-              "Amount",
+              "Amount of EMRALS to buy",
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
             TextFormField(
+              autovalidate: true,
               validator: (s) {
-                if (double.tryParse(s) != null && double.tryParse(s) > 0) {
-                  return null;
-                } else {
-                  return "Please enter a valid amount";
+                if (s != old_amount) {
+                  if (double.tryParse(s) != null && double.tryParse(s) > 100) {
+                    old_amount = s;
+                    RestDatasource()
+                        .getEmralsprice(int.tryParse(s),
+                            StateContainer.of(context).loggedInUser.token)
+                        .then((price) {
+                      setState(() {
+                        print(price);
+                        if (price == "error") {
+                          send_bitcoin =
+                              "Error: " + s + " EMRALS not available";
+                        } else {
+                          send_bitcoin = "Send " + price + " BTC";
+                        }
+                      });
+                    });
+
+                    return null;
+                  } else {
+                    return "Please enter a valid amount > 100";
+                  }
                 }
               },
               controller: amountController,
@@ -106,18 +83,40 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
             ),
             SizedBox(height: 30),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                print('tapped');
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SendBTCScreen(
+                          emralsAmount: int.tryParse(old_amount),
+                          key: UniqueKey(),
+                        ),
+                  ),
+                );
+              },
               child: Container(
                 height: 60,
                 decoration: BoxDecoration(color: Theme.of(context).accentColor),
                 child: Center(
                   child: Text(
-                    "Send .001 BTC",
+                    send_bitcoin,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
-            )
+            ),
+            SizedBox(height: 30),
+            Text(
+              "Emrals charges no fees when you buy or sell EMRALS.",
+              style: TextStyle(color: Colors.black26),
+            ),
+            SizedBox(height: 30),
+            Text(
+              "However, Emrals may apply an exchange rate based on the size of your transaction and a spread determined by volatility across exchanges.",
+              style: TextStyle(color: Colors.black26),
+            ),
           ],
         ),
       ),

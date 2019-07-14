@@ -79,8 +79,9 @@ class SignupScreenState extends State<SignupScreen>
 
   @override
   onAuthStateChanged(AuthState state) {
-    if (state == AuthState.LOGGED_IN)
+    if (state == AuthState.LOGGED_IN) {
       Navigator.of(_ctx).pushReplacementNamed('/home');
+    }
   }
 
   @override
@@ -277,11 +278,11 @@ class SignupScreenState extends State<SignupScreen>
       await db.saveUser(user);
       StateContainer.of(context).updateUser(user);
       Navigator.of(context).pop();
-      Navigator.of(_ctx).pushReplacementNamed('/home');
+      await Navigator.of(_ctx).pushReplacementNamed('/home');
     } else {
       StateContainer.of(context).updateUser(user);
       //Navigator.of(_ctx).pushReplacementNamed('/home');
-      Navigator.of(_ctx).pushReplacement(
+      await Navigator.of(_ctx).pushReplacement(
           MaterialPageRoute(builder: (context) => EmptyScreen()));
     }
   }

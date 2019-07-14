@@ -5,7 +5,7 @@ import 'dart:io' show Platform;
 
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
-import 'package:emrals/models/user.dart' as EmralsUser;
+import 'package:emrals/models/user.dart' as emrals_user;
 import 'package:emrals/routes.dart';
 import 'package:emrals/screens/home_screen.dart';
 import 'package:emrals/screens/login_screen.dart';
@@ -42,7 +42,7 @@ void main() async {
   //debugRepaintRainbowEnabled = true;
 
   // Locks the device orientation to portrait
-  SystemChrome.setPreferredOrientations(
+  await SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
@@ -59,7 +59,7 @@ void main() async {
   String udid = await FlutterUdid.udid;
   String deviceType = Platform.isIOS ? "ios" : "android";
 
-  DatabaseHelper().getUser().then((user) {
+  await DatabaseHelper().getUser().then((user) {
     if (user != null) {
       _firebaseMessaging.getToken().then((token) {
         RestDatasource().registerFCM(user.token, token, udid, deviceType);
@@ -87,9 +87,9 @@ void main() async {
     }
   };
 
-  runZoned<Future<Null>>(() async {
+  await runZoned<Future<Null>>(() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    EmralsUser.User user = await DatabaseHelper().getUser();
+    emrals_user.User user = await DatabaseHelper().getUser();
     runApp(
       StateContainer(
         initialUser: user,
@@ -126,7 +126,7 @@ Future<Null> _reportError(dynamic error, dynamic stackTrace) async {
     return;
   }
 
-  sentry.captureException(
+  await sentry.captureException(
     exception: error,
     stackTrace: stackTrace,
   );

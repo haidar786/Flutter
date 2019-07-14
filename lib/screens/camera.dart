@@ -222,8 +222,8 @@ class _ReportScreenState extends State<ReportScreen> {
               });
         });
       } catch (e) {
-        DatabaseHelper().saveOfflineReport(report);
-        Navigator.pushNamed(_ctx, '/uploads');
+        await DatabaseHelper().saveOfflineReport(report);
+        await Navigator.pushNamed(_ctx, '/uploads');
       }
     } else {
       showInSnackBar("Please enable GPS");

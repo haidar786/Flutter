@@ -54,8 +54,9 @@ class LoginScreenState extends State<LoginScreen>
   @override
   void onAuthStateChanged(AuthState state) {
     // Invoked when the AuthStateProvider is initialised
-    if (state == AuthState.LOGGED_IN)
+    if (state == AuthState.LOGGED_IN) {
       Navigator.of(_ctx).pushReplacementNamed('/home');
+    }
   }
 
   @override
@@ -73,10 +74,10 @@ class LoginScreenState extends State<LoginScreen>
       await DatabaseHelper().saveUser(user);
       StateContainer.of(_ctx).updateUser(user);
       StateContainer.of(context).refreshUser();
-      Navigator.of(_ctx).pushReplacementNamed('/home');
+      await Navigator.of(_ctx).pushReplacementNamed('/home');
     } else {
       StateContainer.of(context).updateUser(user);
-      Navigator.of(_ctx).pushReplacement(
+      await Navigator.of(_ctx).pushReplacement(
           MaterialPageRoute(builder: (context) => EmptyScreen()));
     }
   }

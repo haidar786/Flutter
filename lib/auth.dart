@@ -20,10 +20,11 @@ class AuthStateProvider {
   void initState() async {
     var db = DatabaseHelper();
     var isLoggedIn = await db.isLoggedIn();
-    if (isLoggedIn)
+    if (isLoggedIn) {
       notify(AuthState.LOGGED_IN);
-    else
+    } else {
       notify(AuthState.LOGGED_OUT);
+    }
   }
 
   void subscribe(AuthStateListener listener) {

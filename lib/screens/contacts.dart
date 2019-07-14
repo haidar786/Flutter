@@ -73,10 +73,10 @@ class ContactList extends StatelessWidget {
                 ? contact.displayName.substring(0, 1)
                 : ""),
           ),
-          subtitle: contact.emails.length != 0
+          subtitle: contact.emails.isNotEmpty
               ? Text(contact.emails.first.value)
               : null,
-          trailing: contact.emails.length != 0
+          trailing: contact.emails.isNotEmpty
               ? InviteButton(
                   email: contact.emails.first.value,
                   token: StateContainer.of(context).loggedInUser.token,
@@ -85,9 +85,9 @@ class ContactList extends StatelessWidget {
         );
       },
       separatorBuilder: (ctx, index) => Divider(
-            height: 0,
-            color: Colors.black26,
-          ),
+        height: 0,
+        color: Colors.black26,
+      ),
       itemCount: contacts.length,
     );
   }

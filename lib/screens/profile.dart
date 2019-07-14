@@ -13,12 +13,13 @@ class ProfileDialog extends StatelessWidget {
     return FutureBuilder(
       future: RestDatasource().getUser(id),
       builder: (ctx, snapshot) {
-        if (!snapshot.hasData)
+        if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(
               valueColor: AlwaysStoppedAnimation(Colors.white),
             ),
           );
+        }
         UserProfile userProfile = snapshot.data;
         return Dialog(
           child: Padding(

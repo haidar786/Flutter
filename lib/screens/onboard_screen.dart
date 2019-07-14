@@ -144,8 +144,8 @@ class OnboardScreen extends StatelessWidget {
                 ]);
                 SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
-                sharedPreferences.setBool("onboarded", true);
-                Navigator.pushReplacement(context,
+                await sharedPreferences.setBool("onboarded", true);
+                await Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (ctx) => LoginScreen()));
               },
               child: Container(

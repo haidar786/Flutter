@@ -153,23 +153,23 @@ class ReportDetailState extends State<ReportDetail> {
                                   showDialog(
                                     context: context,
                                     builder: (ctx) => AlertDialog(
-                                          title: Text(
-                                              "Are you sure you want to delete this report?"),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text("Cancel"),
-                                            ),
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop(true);
-                                              },
-                                              child: Text("Yes"),
-                                            ),
-                                          ],
+                                      title: Text(
+                                          "Are you sure you want to delete this report?"),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Cancel"),
                                         ),
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(true);
+                                          },
+                                          child: Text("Yes"),
+                                        ),
+                                      ],
+                                    ),
                                   ).then((d) {
                                     if (d ?? false) {
                                       RestDatasource()
@@ -196,9 +196,9 @@ class ReportDetailState extends State<ReportDetail> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => MapPage(
-                                  report: report,
-                                  key: UniqueKey(),
-                                ),
+                              report: report,
+                              key: UniqueKey(),
+                            ),
                           ),
                         );
                       },
@@ -467,7 +467,7 @@ class ReportDetailState extends State<ReportDetail> {
                                         _commentLoading = true;
                                       });
 
-                                      RestDatasource()
+                                      await RestDatasource()
                                           .addCommentToReport(
                                               widget.report.id,
                                               commentEditingController.text,
@@ -498,7 +498,7 @@ class ReportDetailState extends State<ReportDetail> {
                 builder: (ctx, snapshot) {
                   if (snapshot.hasData) {
                     reportComments = snapshot.data;
-                    if (reportComments.length > 0) {
+                    if (reportComments.isNotEmpty) {
                       return ListView.separated(
                         padding: EdgeInsets.all(16),
                         physics: NeverScrollableScrollPhysics(),
@@ -594,23 +594,23 @@ class ReportCommentListItem extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                                  title: Text(
-                                      "Are you sure you want to ${loggedInUserComment ? "delete" : "flag"} this comment?"),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("Cancel"),
-                                    ),
-                                    FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop(true);
-                                      },
-                                      child: Text("Yes"),
-                                    ),
-                                  ],
+                              title: Text(
+                                  "Are you sure you want to ${loggedInUserComment ? "delete" : "flag"} this comment?"),
+                              actions: <Widget>[
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Cancel"),
                                 ),
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text("Yes"),
+                                ),
+                              ],
+                            ),
                           ).then((d) {
                             if (d ?? false) {
                               if (!loggedInUserComment) {

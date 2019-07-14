@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
-import 'package:location/location.dart' as LocationManager;
+import 'package:location/location.dart' as location_manager;
 
 class MapPage extends StatefulWidget {
   final Report report;
@@ -47,20 +47,20 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-       appBar: AppBar(
-         title: Text('Emrals Map'),
-         actions: singleReport
-             ? [
-                 IconButton(
-                   tooltip: 'Open in map app.',
-                   icon: Icon(Icons.launch),
-                   onPressed: () {
-                     widget.report.launchMaps();
-                   },
-                 ),
-               ]
-             : null,
-       ),
+      appBar: AppBar(
+        title: Text('Emrals Map'),
+        actions: singleReport
+            ? [
+                IconButton(
+                  tooltip: 'Open in map app.',
+                  icon: Icon(Icons.launch),
+                  onPressed: () {
+                    widget.report.launchMaps();
+                  },
+                ),
+              ]
+            : null,
+      ),
       body: Hero(
         tag: singleReport ? widget.report.id : '',
         child: GoogleMap(
@@ -81,7 +81,7 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
 
   Future<LatLng> getUserLocation() async {
     LocationData currentLocation;
-    final location = LocationManager.Location();
+    final location = location_manager.Location();
     try {
       currentLocation = await location.getLocation();
       final lat = currentLocation.latitude;
@@ -99,7 +99,7 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   void centreCamera([LatLng latLng]) async {
     final GoogleMapController mapController = await completer.future;
     final LatLng center = latLng ?? await getUserLocation();
-    mapController.animateCamera(
+    await mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
           target: center == null ? LatLng(0, 0) : center,

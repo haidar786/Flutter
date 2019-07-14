@@ -144,7 +144,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
                               .requestPermissions([PermissionGroup.contacts]);
                       if (permissions[PermissionGroup.contacts] ==
                           PermissionStatus.granted) {
-                        Navigator.pushNamed(context, '/contacts');
+                        await Navigator.pushNamed(context, '/contacts');
                       }
                     },
                     child: Padding(
@@ -174,9 +174,9 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
                         context,
                         MaterialPageRoute(
                           builder: (ctx) => LeaderBoard(
-                                currentUser:
-                                    StateContainer.of(context).loggedInUser,
-                              ),
+                            currentUser:
+                                StateContainer.of(context).loggedInUser,
+                          ),
                         ),
                       );
                     },
@@ -380,6 +380,7 @@ class _SendPageState extends State<SendPage> {
                       if (s.isEmpty) {
                         return "Please enter a valid wallet address";
                       }
+                      return null;
                     },
                     controller: walletAddressController,
                     style: TextStyle(fontSize: 18),
@@ -508,8 +509,9 @@ class TransactionsPage extends StatelessWidget {
     return FutureBuilder(
         future: NetworkUtil().get(apiUrl + "/transactions/", headers),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
+          if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
+          }
           List<Transaction> transactions = [];
           List<Map<String, dynamic>> response = List.from(snapshot.data);
           response.forEach((m) {

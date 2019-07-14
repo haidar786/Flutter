@@ -22,9 +22,10 @@ class FormUtil {
 
   String validate(value, rule, name, warning) {
     RegExp regExp = new RegExp(rule);
-    if (value.length == 0)
+    if (value.length == 0) {
       return "Please enter your " + name;
-    else if (!regExp.hasMatch(value)) return warning;
+    } else if (!regExp.hasMatch(value)) return warning;
+
     return null;
   }
 }

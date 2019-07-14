@@ -43,20 +43,20 @@ class _MyAppState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   //title: Text('Emrals Map'),
-      //   actions: singleReport
-      //       ? [
-      //           IconButton(
-      //             tooltip: 'Open in map app.',
-      //             icon: Icon(Icons.launch),
-      //             onPressed: () {
-      //               widget.report.launchMaps();
-      //             },
-      //           ),
-      //         ]
-      //       : null,
-      // ),
+       appBar: AppBar(
+         title: Text('Emrals Map'),
+         actions: singleReport
+             ? [
+                 IconButton(
+                   tooltip: 'Open in map app.',
+                   icon: Icon(Icons.launch),
+                   onPressed: () {
+                     widget.report.launchMaps();
+                   },
+                 ),
+               ]
+             : null,
+       ),
       body: Hero(
         tag: singleReport ? widget.report.id : '',
         child: GoogleMap(

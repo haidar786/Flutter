@@ -22,9 +22,9 @@ class MapPage extends StatefulWidget {
 class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   final Completer<GoogleMapController> completer =
       Completer<GoogleMapController>();
-  Set<Marker> markers;
   List<Report> reports = [];
   bool singleReport;
+  Future<Set<Marker>> markerFuture;
 
   @override
   bool get wantKeepAlive => true;
@@ -33,13 +33,13 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     singleReport = widget.report != null;
+    markerFuture = singleReport
+        ? Future.value(Set<Marker>.of([reportToMarker(widget.report)]))
+        : loadReports();
     if (singleReport) {
-      markers = Set<Marker>.of([reportToMarker(widget.report)]);
       centreCamera(LatLng(widget.report.latitude, widget.report.longitude));
     } else {
-      markers = Set<Marker>();
       centreCamera();
-      loadReports();
     }
   }
 
@@ -47,31 +47,42 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Emrals Map'),
-        actions: singleReport
-            ? [
+      appBar: singleReport
+          ? AppBar(
+              title: Text('Emrals Map'),
+              actions: [
                 IconButton(
-                  tooltip: 'Open in map app.',
+                  tooltip: 'Open in map app',
                   icon: Icon(Icons.launch),
                   onPressed: () {
                     widget.report.launchMaps();
                   },
                 ),
-              ]
-            : null,
-      ),
-      body: Hero(
-        tag: singleReport ? widget.report.id : '',
-        child: GoogleMap(
-          onMapCreated: _onMapCreated,
-          markers: markers,
-          myLocationEnabled: true,
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(0.0, 0.0),
-          ),
-        ),
-      ),
+              ],
+            )
+          : null,
+      body: FutureBuilder(
+          future: markerFuture,
+          builder: (BuildContext context, AsyncSnapshot<Set<Marker>> snapshot) {
+            if (snapshot.hasData) {
+              return GoogleMap(
+                onMapCreated: _onMapCreated,
+                markers: snapshot.data,
+                myLocationEnabled: true,
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(0.0, 0.0),
+                ),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return Center(
+              child: Text('Unable to load reports.'),
+            );
+          }),
     );
   }
 
@@ -80,52 +91,43 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   }
 
   Future<LatLng> getUserLocation() async {
-    LocationData currentLocation;
-    final location = location_manager.Location();
+    final Location location = location_manager.Location();
     try {
-      currentLocation = await location.getLocation();
-      final lat = currentLocation.latitude;
-      final lng = currentLocation.longitude;
-      final center = singleReport
-          ? LatLng(widget.report.latitude, widget.report.longitude)
-          : LatLng(lat, lng);
-      return center;
-    } on Exception {
-      currentLocation = null;
+      final LocationData currentLocation = await location.getLocation();
+      return LatLng(currentLocation.latitude, currentLocation.longitude);
+    } catch (e) {
       return null;
     }
   }
 
-  void centreCamera([LatLng latLng]) async {
+  Future<void> centreCamera([LatLng latLng]) async {
     final GoogleMapController mapController = await completer.future;
     final LatLng center = latLng ?? await getUserLocation();
     await mapController.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(
-          target: center == null ? LatLng(0, 0) : center,
+          target: center ?? LatLng(0, 0),
           zoom: 15.0,
         ),
       ),
     );
   }
 
-  Future<void> loadReports() async {
+  Future<Set<Marker>> loadReports() async {
     final http.Response response = await http.get(apiUrl + '/alerts/');
-    var data = json.decode(response.body);
-    var parsed = data["results"] as List;
-    setState(() {
-      reports = parsed.map((d) => Report.fromJson(d)).toList();
-      markers = Set<Marker>.of(
-        reports.map(reportToMarker).toList(),
-      );
-    });
+    final Map<String, dynamic> data = json.decode(response.body);
+    final List<dynamic> parsed = data["results"];
+    reports = parsed.map((d) => Report.fromJson(d)).toList();
+    return Set<Marker>.of(
+      reports.map(reportToMarker).toList(),
+    );
   }
 
   Marker reportToMarker(Report report) {
     return Marker(
       markerId: MarkerId(report.id.toString()),
       position: LatLng(report.latitude, report.longitude),
-      consumeTapEvents: false,
+      consumeTapEvents: !singleReport,
       icon: BitmapDescriptor.defaultMarkerWithHue(
           singleReport ? BitmapDescriptor.hueGreen : BitmapDescriptor.hueRed),
       onTap: !singleReport

@@ -58,6 +58,7 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                     return "Please enter a valid amount > 100";
                   }
                 }
+                return null;
               },
               controller: amountController,
               style: TextStyle(fontSize: 22),
@@ -89,9 +90,9 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SendBTCScreen(
-                          emralsAmount: int.tryParse(oldAmount),
-                          key: UniqueKey(),
-                        ),
+                      emralsAmount: int.tryParse(oldAmount),
+                      key: UniqueKey(),
+                    ),
                   ),
                 );
               },

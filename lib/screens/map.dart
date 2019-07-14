@@ -19,12 +19,15 @@ class MapPage extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MapPage> {
+class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   final Completer<GoogleMapController> completer =
       Completer<GoogleMapController>();
   Set<Marker> markers;
   List<Report> reports = [];
   bool singleReport;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -42,6 +45,7 @@ class _MyAppState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
        appBar: AppBar(
          title: Text('Emrals Map'),
@@ -129,16 +133,16 @@ class _MyAppState extends State<MapPage> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (ctx) => ReportDetail(
-                        report: report,
-                        reports: reports,
-                        showSnackbar: (String message) {
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(message),
-                            ),
-                          );
-                        },
-                      ),
+                    report: report,
+                    reports: reports,
+                    showSnackbar: (String message) {
+                      Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(message),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               );
             }

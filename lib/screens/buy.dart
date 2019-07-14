@@ -13,8 +13,8 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
   final TextEditingController walletAddressController = TextEditingController();
 
   final TextEditingController amountController = TextEditingController();
-  String send_bitcoin = "Send BTC";
-  String old_amount = "";
+  String sendBitcoin = "Send BTC";
+  String oldAmount = "";
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +36,9 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
             TextFormField(
               autovalidate: true,
               validator: (s) {
-                if (s != old_amount) {
+                if (s != oldAmount) {
                   if (double.tryParse(s) != null && double.tryParse(s) > 100) {
-                    old_amount = s;
+                    oldAmount = s;
                     RestDatasource()
                         .getEmralsprice(int.tryParse(s),
                             StateContainer.of(context).loggedInUser.token)
@@ -46,10 +46,9 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                       setState(() {
                         print(price);
                         if (price == "error") {
-                          send_bitcoin =
-                              "Error: " + s + " EMRALS not available";
+                          sendBitcoin = "Error: " + s + " EMRALS not available";
                         } else {
-                          send_bitcoin = "Send " + price + " BTC";
+                          sendBitcoin = "Send " + price + " BTC";
                         }
                       });
                     });
@@ -90,7 +89,7 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SendBTCScreen(
-                          emralsAmount: int.tryParse(old_amount),
+                          emralsAmount: int.tryParse(oldAmount),
                           key: UniqueKey(),
                         ),
                   ),
@@ -101,7 +100,7 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                 decoration: BoxDecoration(color: Theme.of(context).accentColor),
                 child: Center(
                   child: Text(
-                    send_bitcoin,
+                    sendBitcoin,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

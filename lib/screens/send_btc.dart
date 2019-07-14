@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:emrals/state_container.dart';
+//import 'package:emrals/state_container.dart';
 import 'package:flutter/services.dart';
-import 'package:emrals/data/rest_ds.dart';
+//import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/utils/qr.dart';
 
 class SendBTCScreen extends StatefulWidget {

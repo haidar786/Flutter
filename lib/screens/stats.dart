@@ -49,35 +49,6 @@ class StatsScreenState extends State<StatsScreen>
       child: Scaffold(
         body: Column(
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              color: emralsColor()[400],
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Icon(Icons.multiline_chart),
-                      SizedBox(width: 4),
-                      Text(
-                        'Stats',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                  CountDownText(
-                    onUpdate: () {
-                      _statsApi = StatsApi();
-                      if (!mounted) return;
-                      setState(() {});
-                    },
-                  )
-                ],
-              ),
-            ),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
@@ -96,6 +67,13 @@ class StatsScreenState extends State<StatsScreen>
                 padding: EdgeInsets.only(top: 4),
                 child: ListView(
                   children: <Widget>[
+                    CountDownText(
+                      onUpdate: () {
+                        _statsApi = StatsApi();
+                        if (!mounted) return;
+                        setState(() {});
+                      },
+                    ),
                     _statsRow1(context),
                     _statsRow2(context),
                     _statsRow3(context),
@@ -124,6 +102,13 @@ class StatsScreenState extends State<StatsScreen>
                 : CrossFadeState.showFirst,
             firstChild: Row(
               children: <Widget>[
+                CountDownText(
+                  onUpdate: () {
+                    _statsApi = StatsApi();
+                    if (!mounted) return;
+                    setState(() {});
+                  },
+                ),
                 Expanded(
                   flex: 2,
                   child: Container(
@@ -190,7 +175,7 @@ class StatsScreenState extends State<StatsScreen>
                       Expanded(
                         flex: 2,
                         child: Container(
-                          height: 170,
+                          height: 160,
                           color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Column(
@@ -367,6 +352,31 @@ class StatsScreenState extends State<StatsScreen>
                                         ),
                                       ],
                                     ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: Text(
+                                            'Subscribers',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Text(
+                                            '${formatter.format(data.subscribers)}',
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: emralsColor(),
+                                            ),
+                                            textAlign: TextAlign.end,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               )
@@ -378,7 +388,7 @@ class StatsScreenState extends State<StatsScreen>
                       Expanded(
                         flex: 1,
                         child: Container(
-                          height: 170,
+                          height: 160,
                           color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Column(
@@ -567,7 +577,7 @@ class StatsScreenState extends State<StatsScreen>
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Exchanges',
+                                      'Links',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -584,6 +594,20 @@ class StatsScreenState extends State<StatsScreen>
                                   },
                                   child: Text(
                                     'Crex24',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                GestureDetector(
+                                  onTap: () {
+                                    launchURL(
+                                        'https://poolexplorer.com/coin/4742');
+                                  },
+                                  child: Text(
+                                    'Pools',
                                     style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       fontSize: 20,
@@ -732,7 +756,7 @@ class StatsScreenState extends State<StatsScreen>
       child: Column(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 4),
+            padding: EdgeInsets.symmetric(vertical: 2),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -835,7 +859,7 @@ class StatsScreenState extends State<StatsScreen>
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 4),
+            padding: EdgeInsets.symmetric(vertical: 2),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -917,7 +941,7 @@ class StatsScreenState extends State<StatsScreen>
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 4),
+            padding: EdgeInsets.symmetric(vertical: 2),
             child: Row(
               children: <Widget>[
                 Expanded(
@@ -1127,11 +1151,15 @@ class _CountDownTextState extends State<CountDownText> {
             setState(() {});
           },
         );
-    return Text(
-      'Updating in ${countdown}s',
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 20,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+      child: Text(
+        'Updating in ${countdown}s',
+        textAlign: TextAlign.end,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
       ),
     );
   }

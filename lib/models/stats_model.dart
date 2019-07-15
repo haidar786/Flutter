@@ -6,6 +6,7 @@ class StatsModel {
   final int users;
   final int emralsWon;
   final int emralsAdded;
+  final int subscribers;
   final int eCans;
   final int tosses;
   final int scans;
@@ -35,5 +36,6 @@ class StatsModel {
         users = json['users'],
         emralsWon = json['emrals_won'],
         emralsAdded = json['emrals_added'],
+        subscribers = json['subscribers'],
         countries = json['country_count'];
 }

@@ -31,7 +31,7 @@ class _MyAppState extends State<MapPage> {
     super.initState();
     singleReport = widget.report != null;
     markerFuture = singleReport
-        ? Future.value(reportToMarker(widget.report))
+        ? Future.value(Set<Marker>.of([reportToMarker(widget.report)]))
         : loadReports();
     if (singleReport) {
       centreCamera(LatLng(widget.report.latitude, widget.report.longitude));

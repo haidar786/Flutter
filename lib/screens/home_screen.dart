@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:emrals/state_container.dart';
 import 'package:emrals/data/rest_ds.dart';
-import 'dart:async';
 import 'package:emrals/data/database_helper.dart';
 
 class MyHomePage extends StatefulWidget {

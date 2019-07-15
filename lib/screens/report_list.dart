@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
+import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/data/database_helper.dart';
 
 class ViewReportsScreen extends StatefulWidget {
   @override
@@ -438,6 +440,16 @@ class _ReportListPageState extends State<ReportListPage>
         setState(() {
           refreshedOnce = true;
         });
+        RestDatasource()
+            .updateEmralsBalance(StateContainer.of(context).loggedInUser.token)
+            .then((m) {
+          StateContainer.of(context).loggedInUser.emrals =
+              double.tryParse(m['emrals_amount']);
+          DatabaseHelper().updateUser(StateContainer.of(context).loggedInUser);
+          StateContainer.of(context).refreshUser();
+        });
+        StateContainer.of(context).refreshUser();
+
         pageLoadController.reset();
       },
       child: PagewiseListView(

@@ -10,6 +10,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:emrals/state_container.dart';
+import 'package:emrals/data/rest_ds.dart';
+import 'dart:async';
+import 'package:emrals/data/database_helper.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key key}) : super(key: key);
@@ -18,8 +21,10 @@ class MyHomePage extends StatefulWidget {
   _MyHomePage createState() => _MyHomePage();
 }
 
-class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
+class _MyHomePage extends State<MyHomePage>
+    with TickerProviderStateMixin, WidgetsBindingObserver {
   int _selectedIndex = 0;
+  AppLifecycleState _lastLifecyleState;
   final PageController pageController = PageController();
   final List<Widget> _children = [
     ViewReportsScreen(),
@@ -33,6 +38,28 @@ class _MyHomePage extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      RestDatasource()
+          .updateEmralsBalance(StateContainer.of(context).loggedInUser.token)
+          .then((m) {
+        StateContainer.of(context).loggedInUser.emrals =
+            double.tryParse(m['emrals_amount']);
+        DatabaseHelper().updateUser(StateContainer.of(context).loggedInUser);
+        StateContainer.of(context).refreshUser();
+      });
+      StateContainer.of(context).refreshUser();
+    }
   }
 
   @override

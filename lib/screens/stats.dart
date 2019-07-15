@@ -102,36 +102,23 @@ class StatsScreenState extends State<StatsScreen>
                 : CrossFadeState.showFirst,
             firstChild: Row(
               children: <Widget>[
-                CountDownText(
-                  onUpdate: () {
-                    _statsApi = StatsApi();
-                    if (!mounted) return;
-                    setState(() {});
-                  },
-                ),
                 Expanded(
                   flex: 2,
                   child: Container(
-                    height: 170,
+                    height: 160,
                     color: Theme.of(context).primaryColor,
                     padding: EdgeInsets.all(8),
                     alignment: Alignment.center,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(emralsColor()),
-                    ),
                   ),
                 ),
                 SizedBox(width: 8),
                 Expanded(
                   flex: 1,
                   child: Container(
-                    height: 170,
+                    height: 160,
                     color: Theme.of(context).primaryColor,
                     padding: EdgeInsets.all(8),
                     alignment: Alignment.center,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(emralsColor()),
-                    ),
                   ),
                 ),
               ],
@@ -144,7 +131,7 @@ class StatsScreenState extends State<StatsScreen>
                       Expanded(
                         flex: 2,
                         child: Container(
-                          height: 170,
+                          height: 160,
                           color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Icon(
@@ -157,7 +144,7 @@ class StatsScreenState extends State<StatsScreen>
                       Expanded(
                         flex: 1,
                         child: Container(
-                          height: 170,
+                          height: 160,
                           color: Theme.of(context).primaryColor,
                           padding: EdgeInsets.all(8),
                           child: Icon(
@@ -358,7 +345,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Subscribers',
+                                            'Subscriptions',
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -506,10 +493,6 @@ class StatsScreenState extends State<StatsScreen>
                       height: 150,
                       color: Theme.of(context).primaryColor,
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(emralsColor()),
-                      ),
                     ),
                   ),
                   SizedBox(width: 8),
@@ -519,10 +502,6 @@ class StatsScreenState extends State<StatsScreen>
                       height: 150,
                       color: Theme.of(context).primaryColor,
                       alignment: Alignment.center,
-                      child: CircularProgressIndicator(
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(emralsColor()),
-                      ),
                     ),
                   ),
                 ],
@@ -770,18 +749,17 @@ class StatsScreenState extends State<StatsScreen>
                       ),
                       FutureBuilder(
                         future: _statsApi.getBlockHeight(),
-                        initialData: '-',
                         builder: (context, snapshot) {
                           String value;
                           if (snapshot.hasData &&
                               snapshot.connectionState !=
                                   ConnectionState.waiting &&
-                              snapshot.data != '-') {
+                              snapshot.data != '') {
                             value =
                                 formatter.format(double.parse(snapshot.data));
                           }
                           return Text(
-                            '${value ?? '-'}',
+                            '${value ?? ''}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -805,18 +783,18 @@ class StatsScreenState extends State<StatsScreen>
                       ),
                       FutureBuilder(
                         future: _statsApi.getNetworkHashRate(),
-                        initialData: '-',
                         builder: (context, snapshot) {
                           String value;
                           if (snapshot.hasData &&
                               snapshot.connectionState !=
                                   ConnectionState.waiting) {
                             value = formatter.format(double.parse(
-                                (snapshot.data / (pow(10, 9)))
-                                    .toStringAsFixed(1)));
+                                    (snapshot.data / (pow(10, 9)))
+                                        .toStringAsFixed(1))) +
+                                'Gh/s';
                           }
                           return Text(
-                            '${value ?? '-'}Gh/s',
+                            '${value ?? ''}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -842,7 +820,7 @@ class StatsScreenState extends State<StatsScreen>
                         future: _statsApi.getDifficulty(),
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(2))) : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(2))) : ''}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -894,10 +872,9 @@ class StatsScreenState extends State<StatsScreen>
                       ),
                       FutureBuilder(
                         future: _statsApi.getMNWorth(),
-                        initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '\$${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(snapshot.data) : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? '\$' + formatter.format(snapshot.data) : ''}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -921,10 +898,9 @@ class StatsScreenState extends State<StatsScreen>
                       ),
                       FutureBuilder(
                         future: _statsApi.getMoneySupply(),
-                        initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(0))) : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(double.parse(snapshot.data.toStringAsFixed(0))) : ''}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -955,10 +931,9 @@ class StatsScreenState extends State<StatsScreen>
                       ),
                       FutureBuilder(
                         future: _statsApi.getConnectionCount(),
-                        initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(snapshot.data) : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? formatter.format(snapshot.data) : ''}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -1003,10 +978,9 @@ class StatsScreenState extends State<StatsScreen>
                       ),
                       FutureBuilder(
                         future: _statsApi.getLastBlockTime(),
-                        initialData: '-',
                         builder: (context, snapshot) {
                           return Text(
-                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? snapshot.data : '-'}',
+                            '${snapshot.hasData && snapshot.connectionState != ConnectionState.waiting ? snapshot.data : ''}',
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,

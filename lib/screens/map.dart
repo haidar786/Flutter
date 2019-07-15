@@ -66,15 +66,15 @@ class _MyAppState extends State<MapPage> {
                 onMapCreated: _onMapCreated,
                 markers: snapshot.data,
                 myLocationEnabled: true,
-                //initialCameraPosition: const CameraPosition(
-                //  target: LatLng(0.0, 0.0),
-                //),
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(0.0, 0.0),
+                ),
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
+              //return Center(
+               // child: CircularProgressIndicator(),
+              //);
             }
             return Center(
               child: Text('Unable to load reports.'),

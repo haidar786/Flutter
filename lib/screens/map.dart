@@ -19,15 +19,12 @@ class MapPage extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
+class _MyAppState extends State<MapPage> {
   final Completer<GoogleMapController> completer =
       Completer<GoogleMapController>();
   List<Report> reports = [];
   bool singleReport;
   Future<Set<Marker>> markerFuture;
-
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -45,7 +42,6 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       appBar: singleReport
           ? AppBar(

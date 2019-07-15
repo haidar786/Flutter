@@ -14,6 +14,7 @@ import 'package:async/async.dart';
 import 'package:emrals/styles.dart';
 import 'dart:convert';
 import 'package:emrals/models/offline_report.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 
 class ReportScreen extends StatefulWidget {
   final Report report;
@@ -165,9 +166,14 @@ class _ReportScreenState extends State<ReportScreen> {
 
   upload(File imageFile) async {
     if (currentLocation != null) {
+      File compressedFile = await FlutterNativeImage.compressImage(
+          imageFile.path,
+          quality: 80,
+          percentage: 80);
+
       var stream =
-          http.ByteStream(DelegatingStream.typed(imageFile.openRead()));
-      var length = await imageFile.length();
+          http.ByteStream(DelegatingStream.typed(compressedFile.openRead()));
+      var length = await compressedFile.length();
 
       var uri = Uri.parse(apiUrl + "/upload/");
 
@@ -188,7 +194,7 @@ class _ReportScreenState extends State<ReportScreen> {
         'file',
         stream,
         length,
-        filename: basename(imageFile.path),
+        filename: basename(compressedFile.path),
       );
       Map<String, String> headers = {"Authorization": "token " + userToken};
 

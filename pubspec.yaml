@@ -35,6 +35,8 @@ dependencies:
   flutter_udid: ^1.0.0
   flutter_pagewise: ^1.2.3
   permission_handler: ^3.1.0
+  flutter_native_image:
+    git: https://github.com/btastic/flutter_native_image.git
 
 dev_dependencies:
   flutter_test:

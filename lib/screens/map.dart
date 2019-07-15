@@ -61,6 +61,12 @@ class _MyAppState extends State<MapPage> {
           future: markerFuture,
           builder: (BuildContext context, AsyncSnapshot<Set<Marker>> snapshot) {
             if (snapshot.hasData) {
+              if (singleReport) {
+                centreCamera(
+                    LatLng(widget.report.latitude, widget.report.longitude));
+              } else {
+                centreCamera();
+              }
               return GoogleMap(
                 onMapCreated: _onMapCreated,
                 markers: snapshot.data,

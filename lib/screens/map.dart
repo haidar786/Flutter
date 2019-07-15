@@ -114,7 +114,12 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
   }
 
   Future<Set<Marker>> loadReports() async {
-    final http.Response response = await http.get(apiUrl + '/alerts/');
+    String reportListUrl;
+    final Location location = location_manager.Location();
+    final LocationData currentLocation = await location.getLocation();
+    reportListUrl =
+        '$apiUrl/alerts/?longitude=${currentLocation.longitude}&latitude=${currentLocation.latitude}';
+    final http.Response response = await http.get(reportListUrl);
     final Map<String, dynamic> data = json.decode(response.body);
     final List<dynamic> parsed = data["results"];
     reports = parsed.map((d) => Report.fromJson(d)).toList();

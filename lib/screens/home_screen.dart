@@ -23,7 +23,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePage extends State<MyHomePage>
     with TickerProviderStateMixin, WidgetsBindingObserver {
   int _selectedIndex = 0;
-  AppLifecycleState _lastLifecyleState;
   final PageController pageController = PageController();
   final List<Widget> _children = [
     ViewReportsScreen(),

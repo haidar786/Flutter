@@ -3,6 +3,7 @@ import 'package:emrals/models/user_profile.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:emrals/screens/settings.dart';
 
 class ProfileDialog extends StatelessWidget {
   final int id;
@@ -77,7 +78,7 @@ class ProfilePage extends StatelessWidget {
             Column(
               children: <Widget>[
                 Text(
-                  "Emrals Won",
+                  "Emrals Earned",
                   style: titleStyle,
                 ),
                 Text(
@@ -124,6 +125,35 @@ class ProfilePage extends StatelessWidget {
         ),
         SizedBox(
           height: 20,
+        ),
+        RaisedButton.icon(
+          icon: Icon(
+            Icons.add,
+            color: emralsColor(),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (ctx) => SendPage()));
+
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => SendPage(
+            //         // emralsAmount: int.tryParse(oldAmount),
+            //         // key: UniqueKey(),
+            //         ),
+            //   ),
+            // );
+          },
+          label: Text(
+            "Send Emrals",
+            style: TextStyle(color: emralsColor()),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+            side: BorderSide(color: Theme.of(context).accentColor, width: 2),
+          ),
+          color: Colors.white,
         ),
       ],
     );

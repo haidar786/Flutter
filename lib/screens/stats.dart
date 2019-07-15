@@ -323,7 +323,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Emrals Won',
+                                            'Emrals Earned',
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),

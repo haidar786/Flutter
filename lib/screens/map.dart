@@ -85,6 +85,15 @@ class _MyAppState extends State<MapPage> {
 
   void _onMapCreated(GoogleMapController controller) {
     if (completer.isCompleted == false) completer.complete(controller);
+
+    singleReport = widget.report != null;
+   
+    if (singleReport) {
+      centreCamera(LatLng(widget.report.latitude, widget.report.longitude));
+    } else {
+      centreCamera();
+    }
+
   }
 
   Future<LatLng> getUserLocation() async {

@@ -92,12 +92,12 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
 
   Future<LatLng> getUserLocation() async {
     final Location location = location_manager.Location();
-    try {
-      final LocationData currentLocation = await location.getLocation();
-      return LatLng(currentLocation.latitude, currentLocation.longitude);
-    } catch (e) {
-      return null;
-    }
+    //try {
+    final LocationData currentLocation = await location.getLocation();
+    return LatLng(currentLocation.latitude, currentLocation.longitude);
+    // } catch (e) {
+    //   return null;
+    // }
   }
 
   Future<void> centreCamera([LatLng latLng]) async {
@@ -135,16 +135,16 @@ class _MyAppState extends State<MapPage> with AutomaticKeepAliveClientMixin {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (ctx) => ReportDetail(
-                    report: report,
-                    reports: reports,
-                    showSnackbar: (String message) {
-                      Scaffold.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(message),
-                        ),
-                      );
-                    },
-                  ),
+                        report: report,
+                        reports: reports,
+                        showSnackbar: (String message) {
+                          Scaffold.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(message),
+                            ),
+                          );
+                        },
+                      ),
                 ),
               );
             }

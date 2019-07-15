@@ -31,7 +31,7 @@ class _MyAppState extends State<MapPage> {
     super.initState();
     singleReport = widget.report != null;
     markerFuture = singleReport
-        ? Future.value(Set<Marker>.of([reportToMarker(widget.report)]))
+        ? Future.value(reportToMarker(widget.report))
         : loadReports();
     if (singleReport) {
       centreCamera(LatLng(widget.report.latitude, widget.report.longitude));
@@ -72,9 +72,9 @@ class _MyAppState extends State<MapPage> {
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
-              //return Center(
-               // child: CircularProgressIndicator(),
-              //);
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
             return Center(
               child: Text('Unable to load reports.'),

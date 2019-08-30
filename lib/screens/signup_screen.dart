@@ -89,163 +89,165 @@ class SignupScreenState extends State<SignupScreen>
     _ctx = context;
     FormUtil _formUtil = FormUtil();
 
-    var signupForm = Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Form(
-          key: formKey,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: TextFormField(
-                  key: SignupScreen.usernameFieldKey,
-                  autofocus: true,
-                  autocorrect: false,
-                  onSaved: (val) => _username = val,
-                  validator: _formUtil.validateName,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.person,
-                      size: 17.0,
-                      semanticLabel: 'username sign up icon',
-                    ),
-                    filled: true,
-                    labelText: 'Username',
-                    labelStyle: TextStyle(
-                      background: Paint()..color = Colors.white,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(10),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  key: SignupScreen.emailFieldKey,
-                  autocorrect: false,
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (val) => _email = val,
-                  validator: _formUtil.validateEmail,
-                  decoration: InputDecoration(
-                    filled: true,
-                    prefixIcon: Icon(
-                      Icons.mail,
-                      size: 17.0,
-                      semanticLabel: 'user sign up email icon',
-                    ),
-                    labelText: 'Email',
-                    labelStyle: TextStyle(
-                      background: Paint()..color = Colors.white,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(10),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  key: SignupScreen.passwordFieldKey,
-                  autocorrect: false,
-                  maxLength: 20,
-                  obscureText: !passwordVisible,
-                  onSaved: (val) => _password = val,
-                  // validator: _formUtil.validatePassword,
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      size: 17.0,
-                      semanticLabel: 'password sign up icon',
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        passwordVisible
-                            ? Icons.visibility
-                            : Icons.visibility_off,
-                        size: 22,
+    var signupForm = Center(
+      child: ListView(
+        shrinkWrap: true,
+        children: <Widget>[
+          Form(
+            key: formKey,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: TextFormField(
+                    key: SignupScreen.usernameFieldKey,
+                    autofocus: true,
+                    autocorrect: false,
+                    onSaved: (val) => _username = val,
+                    validator: _formUtil.validateName,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.person,
+                        size: 17.0,
+                        semanticLabel: 'username sign up icon',
                       ),
-                      onPressed: () {
-                        setState(() {
-                          passwordVisible = !passwordVisible;
-                        });
-                      },
-                    ),
-                    filled: true,
-                    labelText: 'Password',
-                    labelStyle: TextStyle(
-                      background: Paint()..color = Colors.white,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(10),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      filled: true,
+                      labelText: 'Username',
+                      labelStyle: TextStyle(
+                        background: Paint()..color = Colors.white,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.all(10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: Center(
-            child: RevealProgressButton(
-              key: SignupScreen.signUpButtonKey,
-              startColor: emralsColor().shade50,
-              endColor: Colors.green,
-              name: 'SIGN UP',
-              onPressed: () {
-                print('Signup button pressed');
-                setState(() {
-                  buttonState = 1;
-                  _submit();
-                });
-              },
-              state: buttonState,
-            ),
-          ),
-        ),
-        InkWell(
-          child: Text.rich(
-            TextSpan(
-              text:
-                  'By signing up you agree to our', // default text style'By signing up you agree to our \n Terms and Conditions',
-              style: TextStyle(color: Colors.white),
-              children: <TextSpan>[
-                TextSpan(
-                    text: '\nTerms and Conditions ',
-                    style: TextStyle(decoration: TextDecoration.underline)),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    key: SignupScreen.emailFieldKey,
+                    autocorrect: false,
+                    keyboardType: TextInputType.emailAddress,
+                    onSaved: (val) => _email = val,
+                    validator: _formUtil.validateEmail,
+                    decoration: InputDecoration(
+                      filled: true,
+                      prefixIcon: Icon(
+                        Icons.mail,
+                        size: 17.0,
+                        semanticLabel: 'user sign up email icon',
+                      ),
+                      labelText: 'Email',
+                      labelStyle: TextStyle(
+                        background: Paint()..color = Colors.white,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.all(10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    key: SignupScreen.passwordFieldKey,
+                    autocorrect: false,
+                    maxLength: 20,
+                    obscureText: !passwordVisible,
+                    onSaved: (val) => _password = val,
+                    // validator: _formUtil.validatePassword,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        size: 17.0,
+                        semanticLabel: 'password sign up icon',
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          size: 22,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            passwordVisible = !passwordVisible;
+                          });
+                        },
+                      ),
+                      filled: true,
+                      labelText: 'Password',
+                      labelStyle: TextStyle(
+                        background: Paint()..color = Colors.white,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.all(10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-            textAlign: TextAlign.center,
           ),
-          onTap: () => launchURL('https://www.emrals.com/terms/'),
-        ),
-      ],
-      //crossAxisAlignment: CrossAxisAlignment.stretch,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Center(
+              child: RevealProgressButton(
+                key: SignupScreen.signUpButtonKey,
+                startColor: emralsColor().shade50,
+                endColor: Colors.green,
+                name: 'SIGN UP',
+                onPressed: () {
+                  print('Signup button pressed');
+                  setState(() {
+                    buttonState = 1;
+                    _submit();
+                  });
+                },
+                state: buttonState,
+              ),
+            ),
+          ),
+          InkWell(
+            child: Text.rich(
+              TextSpan(
+                text:
+                    'By signing up you agree to our', // default text style'By signing up you agree to our \n Terms and Conditions',
+                style: TextStyle(color: Colors.white),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: '\nTerms and Conditions ',
+                      style: TextStyle(decoration: TextDecoration.underline)),
+                ],
+              ),
+              textAlign: TextAlign.center,
+            ),
+            onTap: () => launchURL('https://www.emrals.com/terms/'),
+          ),
+        ],
+        //crossAxisAlignment: CrossAxisAlignment.stretch,
+      ),
     );
 
     return Scaffold(

@@ -108,152 +108,166 @@ class LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     _ctx = context;
     FormUtil _formUtil = FormUtil();
-    var loginForm = Column(
-      children: <Widget>[
-        Image(image: AssetImage("assets/logo.png")),
-        Center(
-          child: Text(
-            "rewarding cleanup",
-            textScaleFactor: 1,
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Center(
-          child: Text(
-            "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
-            textScaleFactor: .9,
-            style: TextStyle(
-              color: Colors.white,
+    var loginForm = Center(
+      child: ListView(
+        children: <Widget>[
+          Image(image: AssetImage("assets/logo.png")),
+          Center(
+            child: Text(
+              "rewarding cleanup",
+              textScaleFactor: 1,
             ),
           ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Form(
-          key: formKey,
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  onSaved: (val) => _username = val,
-                  key: LoginScreen.usernameFieldKey,
-                  validator: _formUtil.validateName,
-                  decoration: InputDecoration(
-                    filled: true,
-                    labelText: "Username",
-                    labelStyle: TextStyle(
-                      background: Paint()..color = Colors.white,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                    fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(10),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  obscureText: true,
-                  onSaved: (val) => _password = val,
-                  validator: _formUtil.validatePasswordEntered,
-                  key: LoginScreen.passwordFieldKey,
-                  decoration: InputDecoration(
-                    filled: true,
-                    labelText: "Password",
-                    labelStyle: TextStyle(
-                      background: Paint()..color = Colors.white,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                    fillColor: Colors.white,
-                    //border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(10),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          SizedBox(
+            height: 10,
           ),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: Center(
-            child: RevealProgressButton(
-              key: LoginScreen.loginButtonKey,
-              startColor: emralsColor(),
-              endColor: Colors.green,
-              name: 'LOGIN',
-              onPressed: () {
-                if (!mounted) return;
-                setState(() {
-                  buttonState = 1;
-                  _submit(context);
-                });
+          Center(
+            child: Text(
+              "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
+              textScaleFactor: .9,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Form(
+            key: formKey,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    onSaved: (val) => _username = val,
+                    key: LoginScreen.usernameFieldKey,
+                    validator: _formUtil.validateName,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: "Username",
+                      labelStyle: TextStyle(
+                        background: Paint()..color = Colors.white,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      fillColor: Colors.white,
+                      contentPadding: EdgeInsets.all(10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    obscureText: true,
+                    onSaved: (val) => _password = val,
+                    validator: _formUtil.validatePasswordEntered,
+                    key: LoginScreen.passwordFieldKey,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: "Password",
+                      labelStyle: TextStyle(
+                        background: Paint()..color = Colors.white,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      fillColor: Colors.white,
+                      //border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(10),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+            child: Center(
+              child: RevealProgressButton(
+                key: LoginScreen.loginButtonKey,
+                startColor: emralsColor(),
+                endColor: Colors.green,
+                name: 'LOGIN',
+                onPressed: () {
+                  if (!mounted) return;
+                  setState(() {
+                    buttonState = 1;
+                    _submit(context);
+                  });
+                },
+                state: buttonState,
+              ),
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/signup');
               },
-              state: buttonState,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/signup');
-          },
-          child: Center(
-            child: Text(
-              "SIGN UP HERE",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+              child: Center(
+                child: Text(
+                  "SIGN UP HERE",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          height: 5,
-        ),
-        Center(
-          child: InkWell(
-            child: Text(
-              "Forgot password?",
-              style: TextStyle(
-                color: Colors.white,
-                decoration: TextDecoration.underline,
+          SizedBox(
+            height: 5,
+          ),
+          Center(
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                child: Center(
+                  child: Container(
+                    height: 24,
+                    child: Center(
+                      child: Text(
+                        "Forgot password?",
+                        style: TextStyle(
+                          color: Colors.white,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                onTap: () =>
+                    launchURL('https://www.emrals.com/accounts/password/reset'),
               ),
             ),
-            onTap: () =>
-                launchURL('https://www.emrals.com/accounts/password/reset'),
           ),
-        ),
-      ],
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+        ],
+      ),
     );
 
     return Scaffold(

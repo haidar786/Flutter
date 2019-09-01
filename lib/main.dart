@@ -40,6 +40,7 @@ void main() async {
   //debugPaintPointersEnabled = true;
   //debugPaintBaselinesEnabled = true;
   //debugRepaintRainbowEnabled = true;
+  WidgetsFlutterBinding.ensureInitialized();
 
   // Locks the device orientation to portrait
   await SystemChrome.setPreferredOrientations(

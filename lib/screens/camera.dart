@@ -35,7 +35,7 @@ class _ReportScreenState extends State<ReportScreen> {
   bool _isLoading = false;
   LocationData currentLocation;
   String userToken;
-
+  bool isLocationEnabled;
   var location = Location();
 
   Future<void> _setupCameras() async {
@@ -43,10 +43,18 @@ class _ReportScreenState extends State<ReportScreen> {
       cameras = await availableCameras();
       controller = CameraController(cameras[0], ResolutionPreset.medium);
       await controller.initialize();
-      try {
-        currentLocation = await location.getLocation();
-      } on PlatformException {
-        currentLocation = null;
+      isLocationEnabled = await location.serviceEnabled();
+      if (!isLocationEnabled) {
+        isLocationEnabled = await location.requestService();
+      }
+      if (isLocationEnabled) {
+        try {
+          currentLocation = await location.getLocation();
+        } on PlatformException catch (locationErr) {
+          showInSnackBar(locationErr.details);
+        } catch (PlatformException) {
+          currentLocation = null;
+        }
       }
     } on CameraException catch (e) {
       _showCameraException(e);
@@ -75,7 +83,13 @@ class _ReportScreenState extends State<ReportScreen> {
   Widget build(BuildContext context) {
     userToken = StateContainer.of(context).loggedInUser.token;
     _ctx = context;
-    if (!_isReady) return Container();
+    if (!_isReady) {
+      return Container(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       key: _scaffoldKey,
       appBar: widget.report != null

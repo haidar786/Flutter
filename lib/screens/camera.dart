@@ -234,7 +234,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     FlatButton(
                       child: Text('Go to Activity'),
                       onPressed: () {
-                        Navigator.pushNamed(_ctx, '/home');
+                        Navigator.pushNamedAndRemoveUntil(_ctx, '/home', ModalRoute.withName('/'));
                       },
                     ),
                   ],

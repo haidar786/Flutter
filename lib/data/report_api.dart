@@ -38,8 +38,9 @@ class ReportApi {
         }
         break;
     }
-    final Response response = await _httpClient.get(reportListUrl);
-    final Map data = json.decode(response.body);
+    final Response response = await _httpClient.get(reportListUrl,headers:{"charset":"utf-8"});
+    String body = utf8.decode(response.bodyBytes);
+    final Map data = json.decode(body);
     final List results = data['results'] as List;
     reportList = results.map<Report>((json) => Report.fromJson(json)).toList();
     return reportList;

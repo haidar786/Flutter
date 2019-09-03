@@ -31,8 +31,10 @@ class ZoneApi {
       zoneListUrl =
           '$apiUrl/zones/?limit=$limit&offset=$offset&sort=${zoneSortType.toString()}';
     }
-    final Response response = await _httpClient.get(zoneListUrl);
-    final Map data = json.decode(response.body);
+    final Response response =
+        await _httpClient.get(zoneListUrl, headers: {"charset": "utf-8"});
+    String body = utf8.decode(response.bodyBytes);
+    final Map data = json.decode(body);
     final List results = data['results'] as List;
     zoneList = results.map<Zone>((json) => Zone.fromJson(json)).toList();
     return zoneList;

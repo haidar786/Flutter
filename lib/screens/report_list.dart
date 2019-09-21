@@ -291,9 +291,9 @@ class ReportWidget extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => MapPage(
-                                    report: report,
-                                    key: UniqueKey(),
-                                  ),
+                                report: report,
+                                key: UniqueKey(),
+                              ),
                             ),
                           );
                         },
@@ -425,10 +425,10 @@ class _ReportListPageState extends State<ReportListPage>
     pageLoadController = PagewiseLoadController(
       pageSize: 50,
       pageFuture: (int batch) => widget.reportApi.getReports(
-            offset: batch * limit,
-            limit: limit,
-            reportFilter: widget.reportFilter,
-          ),
+        offset: batch * limit,
+        limit: limit,
+        reportFilter: widget.reportFilter,
+      ),
     );
   }
 
@@ -455,31 +455,31 @@ class _ReportListPageState extends State<ReportListPage>
       child: PagewiseListView(
         padding: const EdgeInsets.symmetric(vertical: 6),
         loadingBuilder: (BuildContext context) => Center(
-              child: CircularProgressIndicator(),
-            ),
+          child: CircularProgressIndicator(),
+        ),
         pageLoadController: pageLoadController,
         itemBuilder: (BuildContext context, Report report, int index) =>
             ReportWidget(
-              report: report,
-              animateText: !refreshedOnce,
-              onTipPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (ctx) {
-                      return TipDialog(report, (String message) {
-                        Scaffold.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(message),
-                            action: SnackBarAction(
-                              label: 'OKAY',
-                              onPressed: () {},
-                            ),
-                          ),
-                        );
-                      });
-                    }).then((d) {
-                  if (d != null) {
-                    /* showDialog(
+          report: report,
+          animateText: !refreshedOnce,
+          onTipPressed: () {
+            showDialog(
+                context: context,
+                builder: (ctx) {
+                  return TipDialog(report, (String message) {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(message),
+                        action: SnackBarAction(
+                          label: 'OKAY',
+                          onPressed: () {},
+                        ),
+                      ),
+                    );
+                  });
+                }).then((d) {
+              if (d != null) {
+                /* showDialog(
                         context: context,
                         builder: (ctx) {
                           return AlertDialog(
@@ -491,19 +491,19 @@ class _ReportListPageState extends State<ReportListPage>
                             ),
                           );
                         }); */
-                    pageLoadController.reset();
-                    StateContainer.of(context).updateEmrals(
-                        StateContainer.of(context).emralsBalance - d);
-                    /* if (Navigator.canPop(context)) {
+                pageLoadController.reset();
+                StateContainer.of(context)
+                    .updateEmrals(StateContainer.of(context).emralsBalance - d);
+                /* if (Navigator.canPop(context)) {
                       Navigator.pop(context);
                     } */
-                  }
-                });
-              },
-            ),
+              }
+            });
+          },
+        ),
         noItemsFoundBuilder: (BuildContext context) => Center(
-              child: Text('No posts found.'),
-            ),
+          child: Text('No posts found.'),
+        ),
       ),
     );
   }

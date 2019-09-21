@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/models/user_profile.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:emrals/screens/settings.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class ProfileDialog extends StatelessWidget {
   final int id;
@@ -34,10 +39,135 @@ class ProfileDialog extends StatelessWidget {
   }
 }
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   final UserProfile userProfile;
   ProfilePage({this.userProfile});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   final formatter = new NumberFormat("#,###");
+  static const String urlEndpoint = 'http://198.143.183.66:3000/image';
+  Future<File> future;
+  File tmpFile;
+  String base64Image;
+  String errMessage = 'Error Uploading Image';
+  String imageUrl;
+  bool isUploading;
+  bool isUploaded;
+  @override
+  void initState() {
+    super.initState();
+    isUploading = false;
+    isUploaded = false;
+    imageUrl = widget.userProfile.picture;
+  }
+
+  void pickImage() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.fromLTRB(30, 15, 15, 15),
+                child: Text(
+                  "Profile photo",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        FloatingActionButton(
+                          child: Icon(
+                            Icons.image,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            chooseImage(ImageSource.gallery);
+                          },
+                          elevation: 0,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            "Gallery",
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      children: <Widget>[
+                        FloatingActionButton(
+                          child: Icon(
+                            Icons.camera_alt,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            chooseImage(ImageSource.camera);
+                          },
+                          elevation: 0,
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            "Camera",
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
+  void chooseImage(ImageSource imgSource) async {
+    tmpFile = await ImagePicker.pickImage(
+        source: imgSource, maxWidth: 1000, maxHeight: 1000);
+    if (tmpFile == null) {
+      setState(() {
+        isUploading = false;
+        isUploaded = false;
+      });
+      return;
+    }
+    String fileName = tmpFile.path.split('/').last;
+    base64Image = base64Encode(tmpFile.readAsBytesSync());
+    uploadFile(fileName);
+  }
+
+  void uploadFile(String fileName) async {
+    setState(() {
+      isUploading = true;
+      isUploaded = false;
+    });
+    http.post(urlEndpoint, body: {
+      'image': base64Image,
+      'name': fileName,
+    }).then((result) {
+      var resultJson = json.decode(result.body);
+      if (resultJson['code'] == 200) {
+        setState(() {
+          isUploading = false;
+          isUploaded = true;
+        });
+      }
+    }).catchError((err) {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,21 +179,47 @@ class ProfilePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Align(
-          child: Container(
-              margin: EdgeInsets.only(top: 25),
-              width: 150.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                color: Colors.grey[50],
-                image: DecorationImage(
-                    image: NetworkImage(userProfile.picture),
-                    fit: BoxFit.cover),
-                borderRadius: BorderRadius.all(Radius.circular(75.0)),
-              )),
+          child: Stack(
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(top: 25),
+                  width: 150.0,
+                  height: 150.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    image: DecorationImage(
+                        image: isUploaded
+                            ? FileImage(tmpFile)
+                            : CachedNetworkImageProvider(
+                                imageUrl,
+                              ),
+                        fit: BoxFit.cover),
+                    borderRadius: BorderRadius.all(Radius.circular(75.0)),
+                  ),
+                  child: isUploading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : null),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: FloatingActionButton(
+                  child: Icon(
+                    Icons.camera_alt,
+                    color: Colors.white,
+                  ),
+                  onPressed: pickImage,
+                  mini: true,
+                  elevation: 0,
+                ),
+              )
+            ],
+          ),
         ),
         SizedBox(height: 20.0),
         Text(
-          userProfile.username,
+          widget.userProfile.username,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 40.0,
@@ -83,7 +239,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Text(
                   formatter.format(int.parse(
-                      "${userProfile.earnedCount.isNotEmpty ? userProfile.earnedCount : 0}")),
+                      "${widget.userProfile.earnedCount.isNotEmpty ? widget.userProfile.earnedCount : 0}")),
                   style: valueStyle,
                 ),
                 SizedBox(height: 10),
@@ -93,7 +249,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Text(
                   formatter.format(int.parse(
-                      "${userProfile.alertCount > 0 ? userProfile.alertCount : userProfile.alertCount}")),
+                      "${widget.userProfile.alertCount > 0 ? widget.userProfile.alertCount : widget.userProfile.alertCount}")),
                   style: valueStyle,
                 )
               ],
@@ -106,7 +262,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Text(
                   formatter.format(int.parse(
-                      "${userProfile.addedCount.isNotEmpty ? userProfile.addedCount : 0}")),
+                      "${widget.userProfile.addedCount.isNotEmpty ? widget.userProfile.addedCount : 0}")),
                   style: valueStyle,
                 ),
                 SizedBox(height: 10),
@@ -116,7 +272,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 Text(
                   formatter.format(int.parse(
-                      "${userProfile.cleanedCount > 0 ? userProfile.cleanedCount : userProfile.cleanedCount}")),
+                      "${widget.userProfile.cleanedCount > 0 ? widget.userProfile.cleanedCount : widget.userProfile.cleanedCount}")),
                   style: valueStyle,
                 )
               ],

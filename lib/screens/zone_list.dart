@@ -11,7 +11,8 @@ class ZoneListScreen extends StatefulWidget {
   _ZoneList createState() => _ZoneList();
 }
 
-class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin{
+class _ZoneList extends State<ZoneListScreen>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
   final int limit = 50;
@@ -29,10 +30,10 @@ class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin
     pageLoadController = PagewiseLoadController(
       pageSize: limit,
       pageFuture: (int batch) => zoneApi.getZones(
-            limit: limit,
-            offset: limit * batch,
-            zoneSortType: sortType,
-          ),
+        limit: limit,
+        offset: limit * batch,
+        zoneSortType: sortType,
+      ),
     );
   }
 
@@ -60,10 +61,10 @@ class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin
                   pageLoadController = PagewiseLoadController(
                     pageSize: limit,
                     pageFuture: (int batch) => zoneApi.getZones(
-                          limit: limit,
-                          offset: limit * batch,
-                          zoneSortType: sortType,
-                        ),
+                      limit: limit,
+                      offset: limit * batch,
+                      zoneSortType: sortType,
+                    ),
                   );
                 });
               });
@@ -139,8 +140,8 @@ class _ZoneList extends State<ZoneListScreen> with AutomaticKeepAliveClientMixin
           padding: const EdgeInsets.symmetric(vertical: 6),
           pageLoadController: pageLoadController,
           noItemsFoundBuilder: (BuildContext context) => Center(
-                child: Text('No zones found.'),
-              ),
+            child: Text('No zones found.'),
+          ),
           loadingBuilder: (BuildContext context) =>
               Center(child: CircularProgressIndicator()),
           itemBuilder: (BuildContext context, Zone zone, int index) =>
@@ -180,9 +181,9 @@ class _ZoneListItemState extends State<ZoneListItem> {
                       widget.zone.image != null
                           ? CachedNetworkImage(
                               placeholder: (context, _) => Image.asset(
-                                    'assets/placeholder.png',
-                                    fit: BoxFit.cover,
-                                  ),
+                                'assets/placeholder.png',
+                                fit: BoxFit.cover,
+                              ),
                               imageUrl: widget.zone.image,
                               errorWidget: (context, _, error) =>
                                   Icon(Icons.error),
@@ -223,6 +224,34 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           SizedBox(width: 5),
                           Text(
                             "${widget.zone.emralsAmount} emrals",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.camera_alt,
+                            color: emralsColor()[1500],
+                            size: 15,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "${widget.zone.reportCount} reports",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(width: 15),
+                          Image.asset("assets/trophy.png",
+                              width: 15,
+                              height: 15,
+                              color: emralsColor()[1400]),
+                          SizedBox(width: 5),
+                          Text(
+                            "${widget.zone.cleanupCount} cleanups",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],
@@ -239,34 +268,16 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           Text(
                             "${widget.zone.subscriberCount} sponsors",
                             style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 2),
-                      Row(
-                        children: [
+                          ),
+                          SizedBox(width: 15),
                           Icon(
-                            Icons.camera_alt,
-                            color: emralsColor()[1500],
+                            Icons.remove_red_eye,
+                            color: emralsColor()[900],
                             size: 15,
                           ),
                           SizedBox(width: 5),
                           Text(
-                            "${widget.zone.reportCount} reports",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 2),
-                      Row(
-                        children: [
-                          Image.asset("assets/trophy.png",
-                              width: 15,
-                              height: 15,
-                              color: emralsColor()[1400]),
-                          SizedBox(width: 5),
-                          Text(
-                            "${widget.zone.cleanupCount} cleanups",
+                            "${widget.zone.views} views",
                             style: TextStyle(fontWeight: FontWeight.bold),
                           )
                         ],

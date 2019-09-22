@@ -5,6 +5,7 @@ import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:location/location.dart';
+import 'package:intl/intl.dart';
 
 class ZoneListScreen extends StatefulWidget {
   @override
@@ -164,6 +165,7 @@ class ZoneListItem extends StatefulWidget {
 class _ZoneListItemState extends State<ZoneListItem> {
   @override
   Widget build(BuildContext context) {
+    final formatter = new NumberFormat("#,###");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: Material(
@@ -223,91 +225,128 @@ class _ZoneListItemState extends State<ZoneListItem> {
                               width: 18, height: 18),
                           SizedBox(width: 5),
                           Text(
-                            "${widget.zone.emralsAmount} emrals",
+                            "${formatter.format(int.parse(widget.zone.emralsAmount))} EMRALS",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 18,
+                              fontSize: 20,
+                              color: emralsColor().shade500,
                             ),
                           )
                         ],
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       Row(
                         children: [
-                          Icon(
-                            Icons.camera_alt,
-                            color: emralsColor()[1500],
-                            size: 15,
+                          Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.camera_alt,
+                                    color: emralsColor()[1500],
+                                    size: 15,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "${widget.zone.reportCount}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                "reports",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 5),
-                          Text(
-                            "${widget.zone.reportCount} reports",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          SizedBox(width: 10),
+                          Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Image.asset("assets/trophy.png",
+                                      width: 15,
+                                      height: 15,
+                                      color: emralsColor()[1400]),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "${widget.zone.cleanupCount}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              Text(
+                                "cleanups",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 15),
-                          Image.asset("assets/trophy.png",
-                              width: 15,
-                              height: 15,
-                              color: emralsColor()[1400]),
-                          SizedBox(width: 5),
-                          Text(
-                            "${widget.zone.cleanupCount} cleanups",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )
+                          SizedBox(width: 10),
+                          Column(
+                            children: <Widget>[
+                              Row(
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.remove_red_eye,
+                                    color: emralsColor()[900],
+                                    size: 15,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    "${widget.zone.views}",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                              Text(
+                                "views",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                      SizedBox(height: 2),
+                      SizedBox(height: 20),
                       Row(
                         children: [
-                          Icon(
-                            Icons.favorite,
+                          RaisedButton(
+                            padding: EdgeInsets.zero,
+                            shape: StadiumBorder(),
                             color: emralsColor()[1000],
-                            size: 15,
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            "${widget.zone.subscriberCount} sponsors",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            onPressed: () {
+                              _showModal(widget.zone);
+                            },
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Icon(
+                                  Icons.favorite,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  "FUND",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
                           ),
                           SizedBox(width: 15),
-                          Icon(
-                            Icons.remove_red_eye,
-                            color: emralsColor()[900],
-                            size: 15,
-                          ),
-                          SizedBox(width: 5),
                           Text(
-                            "${widget.zone.views} views",
+                            "${widget.zone.subscriberCount} sponsor" +
+                                (widget.zone.subscriberCount > 1 ? "s" : "") +
+                                (widget.zone.subscriberCount == 0 ? "s" : ""),
                             style: TextStyle(fontWeight: FontWeight.bold),
-                          )
+                          ),
                         ],
                       ),
                       SizedBox(height: 10),
-                      RaisedButton(
-                        padding: EdgeInsets.zero,
-                        shape: StadiumBorder(),
-                        color: emralsColor()[1000],
-                        onPressed: () {
-                          _showModal(widget.zone);
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(
-                              Icons.favorite,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "FUND",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      )
                     ],
                   ),
                 )

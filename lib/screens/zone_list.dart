@@ -237,7 +237,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           )
                         ],
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 15),
                       Row(
                         children: [
                           Column(
@@ -312,7 +312,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 15),
                       Row(
                         children: [
                           RaisedButton(

@@ -287,35 +287,29 @@ class _ProfilePageState extends State<ProfilePage> {
         SizedBox(
           height: 20,
         ),
-        RaisedButton.icon(
-          icon: Icon(
-            Icons.add,
-            color: emralsColor(),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (ctx) => SendPage()));
-
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => SendPage(
-            //         // emralsAmount: int.tryParse(oldAmount),
-            //         // key: UniqueKey(),
-            //         ),
-            //   ),
-            // );
-          },
-          label: Text(
-            "Send Emrals",
-            style: TextStyle(color: emralsColor()),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
-            side: BorderSide(color: Theme.of(context).accentColor, width: 2),
-          ),
-          color: Colors.white,
-        ),
+        widget.userProfile.username !=
+                StateContainer.of(context).loggedInUser.username
+            ? RaisedButton.icon(
+                icon: Icon(
+                  Icons.add,
+                  color: emralsColor(),
+                ),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (ctx) => SendPage()));
+                },
+                label: Text(
+                  "Send Emrals",
+                  style: TextStyle(color: emralsColor()),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                  side: BorderSide(
+                      color: Theme.of(context).accentColor, width: 2),
+                ),
+                color: Colors.white,
+              )
+            : SizedBox(height: 0),
       ],
     );
   }

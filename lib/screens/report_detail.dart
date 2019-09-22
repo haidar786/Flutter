@@ -95,7 +95,9 @@ class ReportDetailState extends State<ReportDetail> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ZoomImage(report),
+                          builder: (context) => report.solution != ""
+                              ? ZoomImageSolution(report)
+                              : ZoomImage(report),
                         ),
                       );
                     },
@@ -125,18 +127,28 @@ class ReportDetailState extends State<ReportDetail> {
                                   fontSize: 15.0,
                                 ),
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width / 3,
-                                height: MediaQuery.of(context).size.width / 3,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff7c94b6),
-                                  image: DecorationImage(
-                                    image: NetworkImage(report.thumbnail),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 1,
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ZoomImage(report),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  height: MediaQuery.of(context).size.width / 3,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff7c94b6),
+                                    image: DecorationImage(
+                                      image: NetworkImage(report.thumbnail),
+                                      fit: BoxFit.cover,
+                                    ),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 1,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -186,9 +198,16 @@ class ReportDetailState extends State<ReportDetail> {
                                     }
                                   });
                                 },
-                                child: Icon(Icons.delete,color: Colors.white,),
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                ),
                                 elevation: 0,
-                                backgroundColor: Color.fromRGBO(emralsColor().red, emralsColor().green, emralsColor().blue, 0.9),
+                                backgroundColor: Color.fromRGBO(
+                                    emralsColor().red,
+                                    emralsColor().green,
+                                    emralsColor().blue,
+                                    0.9),
                                 // mini: true,
                               ),
                             )
@@ -713,6 +732,23 @@ class ZoomImage extends StatelessWidget {
           loadingChild: Center(child: CircularProgressIndicator()),
           initialScale: 0.2,
           imageProvider: NetworkImage(report.image),
+        ));
+  }
+}
+
+class ZoomImageSolution extends StatelessWidget {
+  final Report report;
+
+  ZoomImageSolution(this.report);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(),
+        body: PhotoView(
+          loadingChild: Center(child: CircularProgressIndicator()),
+          initialScale: 0.2,
+          imageProvider: NetworkImage(report.solution),
         ));
   }
 }

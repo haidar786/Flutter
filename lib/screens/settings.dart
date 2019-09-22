@@ -325,7 +325,7 @@ class ReceivePage extends StatelessWidget {
 class SendPage extends StatefulWidget {
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldState;
-  String sendto;
+  final String sendto;
 
   SendPage({this.scaffoldState, this.sendto});
 

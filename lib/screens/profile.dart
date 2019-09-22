@@ -206,19 +206,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: CircularProgressIndicator(),
                         )
                       : null),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: FloatingActionButton(
-                  child: Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
-                  ),
-                  onPressed: pickImage,
-                  mini: true,
-                  elevation: 0,
-                ),
-              )
+              widget.userProfile.username ==
+                      StateContainer.of(context).loggedInUser.username
+                  ? Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: FloatingActionButton(
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                        ),
+                        onPressed: pickImage,
+                        mini: true,
+                        elevation: 0,
+                      ),
+                    )
+                  : SizedBox(height: 0),
             ],
           ),
         ),

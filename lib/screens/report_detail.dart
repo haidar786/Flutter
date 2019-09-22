@@ -146,30 +146,30 @@ class ReportDetailState extends State<ReportDetail> {
                       : (loggedInUser != null &&
                               report.posterUsername == loggedInUser.username)
                           ? Positioned(
-                              bottom: 2,
-                              left: 10,
-                              child: RaisedButton(
+                              bottom: 5,
+                              left: 5,
+                              child: FloatingActionButton(
                                 onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (ctx) => AlertDialog(
-                                          title: Text(
-                                              "Are you sure you want to delete this report?"),
-                                          actions: <Widget>[
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Text("Cancel"),
-                                            ),
-                                            FlatButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop(true);
-                                              },
-                                              child: Text("Yes"),
-                                            ),
-                                          ],
+                                      title: Text(
+                                          "Are you sure you want to delete this report?"),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Cancel"),
                                         ),
+                                        FlatButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(true);
+                                          },
+                                          child: Text("Yes"),
+                                        ),
+                                      ],
+                                    ),
                                   ).then((d) {
                                     if (d ?? false) {
                                       RestDatasource()
@@ -178,12 +178,18 @@ class ReportDetailState extends State<ReportDetail> {
                                           .then((m) {
                                         widget.reports.removeWhere(
                                             (item) => item.id == report.id);
-                                        Navigator.of(context).pop();
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            '/home',
+                                            ModalRoute.withName('/'));
                                       });
                                     }
                                   });
                                 },
-                                child: Text('delete'),
+                                child: Icon(Icons.delete,color: Colors.white,),
+                                elevation: 0,
+                                backgroundColor: Color.fromRGBO(emralsColor().red, emralsColor().green, emralsColor().blue, 0.9),
+                                // mini: true,
                               ),
                             )
                           : Container(),
@@ -196,9 +202,9 @@ class ReportDetailState extends State<ReportDetail> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => MapPage(
-                                  report: report,
-                                  key: UniqueKey(),
-                                ),
+                              report: report,
+                              key: UniqueKey(),
+                            ),
                           ),
                         );
                       },
@@ -594,23 +600,23 @@ class ReportCommentListItem extends StatelessWidget {
                           showDialog(
                             context: context,
                             builder: (ctx) => AlertDialog(
-                                  title: Text(
-                                      "Are you sure you want to ${loggedInUserComment ? "delete" : "flag"} this comment?"),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text("Cancel"),
-                                    ),
-                                    FlatButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop(true);
-                                      },
-                                      child: Text("Yes"),
-                                    ),
-                                  ],
+                              title: Text(
+                                  "Are you sure you want to ${loggedInUserComment ? "delete" : "flag"} this comment?"),
+                              actions: <Widget>[
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Cancel"),
                                 ),
+                                FlatButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(true);
+                                  },
+                                  child: Text("Yes"),
+                                ),
+                              ],
+                            ),
                           ).then((d) {
                             if (d ?? false) {
                               if (!loggedInUserComment) {

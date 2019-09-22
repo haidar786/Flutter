@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pagewise/flutter_pagewise.dart';
 import 'package:location/location.dart';
 import 'package:intl/intl.dart';
+import 'package:emrals/state_container.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ZoneListScreen extends StatefulWidget {
   @override
@@ -370,17 +373,86 @@ class _ZoneListItemState extends State<ZoneListItem> {
               ListTile(
                 leading: Icon(Icons.directions_walk),
                 title: Text('100 EMRALS / month ' + zone.city),
-                onTap: () {},
+                onTap: () {
+                  Map<String, String> headers = {
+                    "Authorization": "token " +
+                        StateContainer.of(context).loggedInUser.token,
+                  };
+                  http.post(apiUrl + "/subscribe/" + zone.slug + "/30/100/",
+                      headers: headers, body: {}).then((result) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text(json.decode(result.body)),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            child: Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+                },
               ),
               ListTile(
                 leading: Icon(Icons.directions_run),
                 title: Text('200 EMRALS / month ' + zone.city),
-                onTap: () {},
+                onTap: () {
+                  Map<String, String> headers = {
+                    "Authorization": "token " +
+                        StateContainer.of(context).loggedInUser.token,
+                  };
+                  http.post(apiUrl + "/subscribe/" + zone.slug + "/30/200/",
+                      headers: headers, body: {}).then((result) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text(json.decode(result.body)),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            child: Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+                },
               ),
               ListTile(
                 leading: Icon(Icons.directions_bike),
                 title: Text('500 EMRALS / month ' + zone.city),
-                onTap: () {},
+                onTap: () {
+                  Map<String, String> headers = {
+                    "Authorization": "token " +
+                        StateContainer.of(context).loggedInUser.token,
+                  };
+                  http.post(apiUrl + "/subscribe/" + zone.slug + "/30/500/",
+                      headers: headers, body: {}).then((result) {
+                    showDialog(
+                      context: context,
+                      builder: (ctx) => AlertDialog(
+                        title: Text(json.decode(result.body)),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            },
+                            child: Text("OK"),
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+                },
               ),
             ],
           ),

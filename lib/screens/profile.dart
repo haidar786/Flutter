@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:emrals/screens/settings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'package:emrals/state_container.dart';
 
 class ProfileDialog extends StatelessWidget {
   final int id;
@@ -49,7 +50,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final formatter = new NumberFormat("#,###");
-  static const String urlEndpoint = 'http://198.143.183.66:3000/image';
+  static const String urlEndpoint = apiUrl + "/avatarupload/";
   Future<File> future;
   File tmpFile;
   String base64Image;
@@ -155,7 +156,11 @@ class _ProfilePageState extends State<ProfilePage> {
       isUploading = true;
       isUploaded = false;
     });
-    http.post(urlEndpoint, body: {
+    Map<String, String> headers = {
+      "Authorization": "token " + StateContainer.of(context).loggedInUser.token,
+    };
+
+    http.post(urlEndpoint, headers: headers, body: {
       'image': base64Image,
       'name': fileName,
     }).then((result) {

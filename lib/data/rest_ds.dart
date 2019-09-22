@@ -56,10 +56,12 @@ class RestDatasource {
     });
   }
 
-  Future<dynamic> sendEmrals(double amount, String address, String token) {
+  Future<dynamic> sendEmrals(
+      double amount, String address, String sendto, String token) {
     Map<String, dynamic> payload = {
       "amount": amount,
       "address": address,
+      "username": sendto,
     };
 
     Map<String, String> headers = {

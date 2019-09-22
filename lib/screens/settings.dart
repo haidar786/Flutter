@@ -16,7 +16,8 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Settings extends StatefulWidget {
-  const Settings({Key key}) : super(key: key);
+  final String sendto;
+  const Settings({Key key, this.sendto}) : super(key: key);
 
   @override
   _SettingsPage createState() => _SettingsPage();
@@ -39,65 +40,66 @@ class _SettingsPage extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        key: key,
-        appBar: AppBar(
-          bottom: TabBar(
-            labelPadding: EdgeInsets.all(0.0),
-            tabs: [
-              Tab(
-                icon: Icon(Icons.account_circle),
-                text: 'profile',
-              ),
-              Tab(
-                icon: Icon(Icons.archive),
-                text: 'receive',
-              ),
-              Tab(
-                icon: RotatedBox(
-                  quarterTurns: 2,
-                  child: Icon(Icons.archive),
+        length: 4,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          key: key,
+          appBar: AppBar(
+            bottom: TabBar(
+              labelPadding: EdgeInsets.all(0.0),
+              tabs: [
+                Tab(
+                  icon: Icon(Icons.account_circle),
+                  text: 'profile',
                 ),
-                text: 'send',
+                Tab(
+                  icon: Icon(Icons.archive),
+                  text: 'receive',
+                ),
+                Tab(
+                  icon: RotatedBox(
+                    quarterTurns: 2,
+                    child: Icon(Icons.archive),
+                  ),
+                  text: 'send',
+                ),
+                Tab(
+                  icon: Icon(Icons.list),
+                  text: "transactions",
+                )
+              ],
+            ),
+            actions: <Widget>[
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: AnimatedUserEmrals(
+                  initialEmrals: StateContainer.of(context).emralsBalance,
+                ),
               ),
-              Tab(
-                icon: Icon(Icons.list),
-                text: "transactions",
-              )
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  "assets/JustElogo.png",
+                  width: 32,
+                ),
+              ),
             ],
           ),
-          actions: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: AnimatedUserEmrals(
-                initialEmrals: StateContainer.of(context).emralsBalance,
+          body: TabBarView(
+            children: [
+              Profile(),
+              ReceivePage(
+                scaffoldKey: key,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Image.asset(
-                "assets/JustElogo.png",
-                width: 32,
+              SendPage(
+                scaffoldState: key,
+                sendto: widget.sendto,
               ),
-            ),
-          ],
+              TransactionsPage()
+            ],
+          ),
         ),
-        body: TabBarView(
-          children: [
-            Profile(),
-            ReceivePage(
-              scaffoldKey: key,
-            ),
-            SendPage(
-              scaffoldState: key,
-            ),
-            TransactionsPage()
-          ],
-        ),
-      ),
-    );
+        initialIndex: widget.sendto != null ? 2 : 0);
   }
 }
 
@@ -323,8 +325,9 @@ class ReceivePage extends StatelessWidget {
 class SendPage extends StatefulWidget {
   static GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> scaffoldState;
+  String sendto;
 
-  SendPage({this.scaffoldState});
+  SendPage({this.scaffoldState, this.sendto});
 
   @override
   _SendPageState createState() => _SendPageState();
@@ -364,53 +367,57 @@ class _SendPageState extends State<SendPage> {
         padding: EdgeInsets.all(16),
         children: <Widget>[
           Text(
-            "Wallet Address",
+            widget.sendto != null
+                ? "Send EMRALS to " + widget.sendto
+                : "Wallet Address",
             style: TextStyle(fontSize: 16),
           ),
           SizedBox(
             height: 10,
           ),
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Expanded(
-                  child: TextFormField(
-                    validator: (s) {
-                      if (s.isEmpty) {
-                        return "Please enter a valid wallet address";
-                      }
-                      return null;
-                    },
-                    controller: walletAddressController,
-                    style: TextStyle(fontSize: 18),
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(0),
-                          borderSide: BorderSide(color: Colors.black54)),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10),
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    color: Colors.black54,
-                    child: IconButton(
-                      icon: Icon(Icons.nfc),
-                      color: Colors.white,
-                      onPressed: () {
-                        scan();
-                      },
-                    ),
+          widget.sendto == null
+              ? IntrinsicHeight(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      Expanded(
+                        child: TextFormField(
+                          validator: (s) {
+                            if (s.isEmpty) {
+                              return "Please enter a valid wallet address";
+                            }
+                            return null;
+                          },
+                          controller: walletAddressController,
+                          style: TextStyle(fontSize: 18),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.all(10),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(0),
+                                borderSide: BorderSide(color: Colors.black54)),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      AspectRatio(
+                        aspectRatio: 1,
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          color: Colors.black54,
+                          child: IconButton(
+                            icon: Icon(Icons.nfc),
+                            color: Colors.white,
+                            onPressed: () {
+                              scan();
+                            },
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 )
-              ],
-            ),
-          ),
+              : SizedBox(height: 0),
           SizedBox(height: 25),
           Text(
             "Amount",
@@ -451,13 +458,15 @@ class _SendPageState extends State<SendPage> {
             onTap: () {
               if (SendPage.formKey.currentState.validate()) {
                 String walletAddress = walletAddressController.text;
+                String sendto = widget.sendto;
                 double amount = double.tryParse(amountController.text) ??
                     widget.scaffoldState.currentState.showSnackBar(
                         SnackBar(content: Text("Please enter a valid amount")));
 
                 if (loggedInUser.emrals >= amount) {
                   RestDatasource()
-                      .sendEmrals(amount, walletAddress, loggedInUser.token)
+                      .sendEmrals(
+                          amount, walletAddress, sendto, loggedInUser.token)
                       .then((m) {
                     widget.scaffoldState.currentState
                         .showSnackBar(SnackBar(content: Text(m)));

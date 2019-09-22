@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/models/user_profile.dart';
+import 'package:emrals/screens/settings.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:emrals/screens/settings.dart';
+//import 'package:emrals/screens/settings.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:emrals/state_container.dart';
@@ -299,7 +300,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 onPressed: () {
                   Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (ctx) => SendPage()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (ctx) =>
+                              Settings(sendto: widget.userProfile.username)));
                 },
                 label: Text(
                   "Send Emrals",

@@ -1,8 +1,12 @@
+import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 //import 'package:emrals/state_container.dart';
 import 'package:flutter/services.dart';
 //import 'package:emrals/data/rest_ds.dart';
 import 'package:emrals/utils/qr.dart';
+import 'package:http/http.dart' as http;
+import 'package:emrals/state_container.dart';
+import 'dart:convert';
 
 class SendBTCScreen extends StatefulWidget {
   final int emralsAmount;
@@ -16,14 +20,38 @@ class SendBTCScreen extends StatefulWidget {
 class _SendBTCScreenState extends State<SendBTCScreen> {
   final TextEditingController walletAddressController = TextEditingController();
 
-  // final TextEditingController amountController = TextEditingController();
-  // String send_bitcoin = "Send BTC";
-  // String old_amount = "";
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  String bitcoinAddress = '';
+  String newemralsAmount = '';
+  String bitcoinAmount = '';
+  QrImage qrImageOne;
+
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    //User loggedInUser = StateContainer.of(context).loggedInUser;
+    if (bitcoinAddress == '') {
+      Map<String, String> headers = {
+        "Authorization":
+            "token " + StateContainer.of(context).loggedInUser.token,
+      };
+      http.post(apiUrl + "/payment/", headers: headers, body: {
+        'emrals_amount': widget.emralsAmount.toString(),
+      }).then((result) {
+        var resultJson = json.decode(result.body);
+        setState(() {
+          bitcoinAddress = resultJson['bitcoin_address'];
+          newemralsAmount = resultJson['emrals_amount'];
+          bitcoinAmount = resultJson['bitcoin_amount'];
+          qrImageOne = QrImage(
+            data: bitcoinAddress,
+            size: 300,
+          );
+        });
+      });
+    }
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -35,12 +63,12 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
           padding: EdgeInsets.all(16),
           children: <Widget>[
             Text(
-              "Buying " + widget.emralsAmount.toString() + " EMRALS",
+              "Buying " + newemralsAmount + " EMRALS",
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
             Text(
-              "Send 0.0002 BTC to address:",
+              "Send " + bitcoinAmount + " BTC to address:",
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
@@ -48,9 +76,9 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
               child: Row(
                 children: <Widget>[
                   Text(
-                    "lkj234lkj2l3k4jlkj2l3kj4lkj2lkj34lkjlkj234lkj",
+                    bitcoinAddress,
                     style: TextStyle(
-                      fontSize: 17.0,
+                      fontSize: 12.0,
                       color: Colors.black,
                     ),
                   ),
@@ -63,8 +91,7 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
               ),
               onTap: () {
                 Clipboard.setData(
-                  new ClipboardData(
-                      text: "lkj2lk3jlkj34lkj2l3kj4lkjlkj234lkj234"),
+                  new ClipboardData(text: bitcoinAddress),
                 );
                 scaffoldKey.currentState.showSnackBar(new SnackBar(
                   content: new Text("Copied to Clipboard"),
@@ -72,13 +99,10 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
               },
             ),
             SizedBox(height: 10),
-            QrImage(
-              data: "23423423lkj234",
-              size: 300,
-            ),
+            qrImageOne,
             SizedBox(height: 10),
             Text(
-              widget.emralsAmount.toString() +
+              newemralsAmount +
                   " EMRALS will be added to your balance after 1 blockchain confirmation. This usually takes 10 - 30 minutes. You will get an email when the purchase is complete.",
               style: TextStyle(fontSize: 16),
             ),

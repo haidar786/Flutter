@@ -1,7 +1,7 @@
 name: emrals
 description: Earn money cleaning up
 
-version: 0.2.7+404
+version: 0.2.8+405
 
 environment:
   sdk: ">=2.4.0 <3.0.0"

@@ -593,6 +593,19 @@ class StatsScreenState extends State<StatsScreen>
                                     ),
                                   ),
                                 ),
+                                SizedBox(height: 8),
+                                GestureDetector(
+                                  onTap: () {
+                                    launchURL('http://explorer.emrals.com');
+                                  },
+                                  child: Text(
+                                    'Explorer',
+                                    style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

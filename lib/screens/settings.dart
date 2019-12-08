@@ -238,8 +238,8 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
                     onTap: () {
                       var db = DatabaseHelper();
                       db.deleteUsers().then((_) {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                            "/login", ModalRoute.withName("/home"));
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil("/login", (_) => false);
                       });
                     },
                     child: Padding(

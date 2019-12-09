@@ -7,6 +7,8 @@ import '../localizations.dart';
 class OnboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Locale myLocale = Localizations.localeOf(context);
+    print(myLocale);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -148,17 +150,35 @@ class OnboardScreen extends StatelessWidget {
                 await Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (ctx) => LoginScreen()));
               },
-              child: Container(
-                height: 80,
-                color: emralsColor(),
-                child: Center(
-                    child: Text(
-                  AppLocalizations.of(context).letsGo,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold),
-                )),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: 60,
+                    color: emralsColor(),
+                    child: Center(
+                        child: Text(
+                      AppLocalizations.of(context).letsGo,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                  Container(
+                    height: 20,
+                    color: emralsColor(),
+                    child: Center(
+                        child: Text(
+                      AppLocalizations.of(context).language +
+                          " " +
+                          myLocale.toString(),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
+                ],
               ),
             )
           ],

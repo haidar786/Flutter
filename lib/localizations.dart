@@ -57,6 +57,10 @@ class AppLocalizations {
   String get letsGo {
     return Intl.message("Lets Go!");
   }
+
+  String get language {
+    return Intl.message("Language");
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

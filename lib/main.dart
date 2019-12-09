@@ -124,7 +124,7 @@ void main() async {
           supportedLocales: [
             const Locale('en'),
             const Locale('es'),
-            const Locale.fromSubtags(languageCode: 'zh'),
+            const Locale('zh'),
           ],
         ),
       ),

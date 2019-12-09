@@ -2,7 +2,7 @@ import 'package:emrals/screens/login_screen.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
+import '../localizations.dart';
 
 class OnboardScreen extends StatelessWidget {
   @override
@@ -17,7 +17,7 @@ class OnboardScreen extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Container(
-                padding: const EdgeInsets.all(32.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Image.asset(
                   "assets/logo.png",
                 ),
@@ -32,7 +32,7 @@ class OnboardScreen extends StatelessWidget {
                     Expanded(
                       child: Container(
                         child: Image.asset("assets/onboard_1.png"),
-                        height: 125,
+                        height: 100,
                       ),
                     ),
                     SizedBox(width: 10),
@@ -42,7 +42,7 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Report trash",
+                            AppLocalizations.of(context).reportTrash,
                             style: TextStyle(
                                 fontSize: 25,
                                 fontWeight: FontWeight.bold,
@@ -50,7 +50,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Report trash from anywhere in the world",
+                            AppLocalizations.of(context).reportTrashAnywhere,
                             style: TextStyle(color: Colors.black54),
                           )
                         ],
@@ -71,7 +71,7 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Clean it up",
+                            AppLocalizations.of(context).cleanItUp,
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontSize: 25,
@@ -80,7 +80,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Clean it up and post a picture",
+                            AppLocalizations.of(context).cleanItUpAndPost,
                             textAlign: TextAlign.left,
                             style: TextStyle(color: Colors.black54),
                           )
@@ -116,7 +116,7 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Text(
-                            "Earn EMRALS!",
+                            AppLocalizations.of(context).earnMoney,
                             style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -124,7 +124,7 @@ class OnboardScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Earn EMRALS when your cleanup is verified",
+                            AppLocalizations.of(context).earnMoneyCleaning,
                             style: TextStyle(color: Colors.black54),
                           )
                         ],
@@ -137,11 +137,11 @@ class OnboardScreen extends StatelessWidget {
             SizedBox(height: 10),
             GestureDetector(
               onTap: () async {
-                await PermissionHandler().requestPermissions([
-                  PermissionGroup.camera,
-                  PermissionGroup.microphone,
-                  PermissionGroup.location
-                ]);
+                // await PermissionHandler().requestPermissions([
+                //   PermissionGroup.camera,
+                //   PermissionGroup.microphone,
+                //   PermissionGroup.location
+                // ]);
                 SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
                 await sharedPreferences.setBool("onboarded", true);
@@ -153,7 +153,7 @@ class OnboardScreen extends StatelessWidget {
                 color: emralsColor(),
                 child: Center(
                     child: Text(
-                  "Lets Go!",
+                  AppLocalizations.of(context).letsGo,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,

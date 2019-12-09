@@ -19,7 +19,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
 import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'localizations.dart';
 
 final SentryClient sentry = new SentryClient(
   dsn: "SENTRY_DSN",
@@ -113,6 +115,17 @@ void main() async {
             scaffoldBackgroundColor: Colors.white,
           ),
           routes: routes,
+          localizationsDelegates: [
+            AppLocalizationsDelegate(),
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en'),
+            const Locale('es'),
+            const Locale.fromSubtags(languageCode: 'zh'),
+          ],
         ),
       ),
     );

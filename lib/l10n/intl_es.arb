@@ -1,0 +1,24 @@
+{
+  "@@last_modified": "2019-12-08T20:01:05.678148",
+  "title": "Hello world App",
+  "@title": {
+    "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hello": "Hello",
+  "@hello": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Report Trash": "Informar basura",
+  "@Report Trash": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Report trash from anywhere in the world": "Reporte basura desde cualquier parte del mundo",
+  "@Report trash from anywhere in the world": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

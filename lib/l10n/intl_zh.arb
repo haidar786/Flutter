@@ -1,0 +1,49 @@
+{
+  "@@last_modified": "2019-12-08T21:18:09.382961",
+  "title": "Hello world App",
+  "@title": {
+    "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hello": "Hello",
+  "@hello": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Report Trash": "报告垃圾桶",
+  "@Report Trash": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Report trash from anywhere in the world": "报告来自世界各地的垃圾",
+  "@Report trash from anywhere in the world": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Clean it up": "捡垃圾",
+  "@Clean it up": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Clean it up and post a picture": "捡垃圾并拍照",
+  "@Clean it up and post a picture": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Earn MONEY!": "挣钱",
+  "@Earn MONEY!": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Earn MONEY when your cleanup is verified": "图片验证后赚钱",
+  "@Earn MONEY when your cleanup is verified": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Lets Go!": "我们走吧",
+  "@Lets Go!": {
+    "type": "text",
+    "placeholders": {}
+  }
+}

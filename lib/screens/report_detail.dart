@@ -6,8 +6,8 @@ import 'package:emrals/models/report.dart';
 import 'package:emrals/models/report_comment.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/camera.dart';
-import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/profile.dart';
+import 'package:emrals/screens/report_map.dart';
 import 'package:emrals/state_container.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
@@ -220,10 +220,7 @@ class ReportDetailState extends State<ReportDetail> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MapPage(
-                              report: report,
-                              key: UniqueKey(),
-                            ),
+                            builder: (context) => ReportMap(report: report),
                           ),
                         );
                       },

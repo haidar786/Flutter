@@ -3,9 +3,9 @@ import 'package:emrals/components/animated_text.dart';
 import 'package:emrals/data/report_api.dart';
 import 'package:emrals/models/report.dart';
 import 'package:emrals/screens/camera.dart';
-import 'package:emrals/screens/map.dart';
 import 'package:emrals/screens/profile.dart';
 import 'package:emrals/screens/report_detail.dart';
+import 'package:emrals/screens/report_map.dart';
 import 'package:emrals/state_container.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
@@ -290,10 +290,7 @@ class ReportWidget extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MapPage(
-                                report: report,
-                                key: UniqueKey(),
-                              ),
+                              builder: (context) => ReportMap(report: report),
                             ),
                           );
                         },

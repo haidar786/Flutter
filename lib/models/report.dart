@@ -61,7 +61,7 @@ class Report {
     );
   }
 
-  launchMaps() async {
+  Future<void> launchMaps() async {
     String googleUrl = 'geo:0,0?q=$latitude,$longitude';
     String googleiOSUrl = 'googlemaps://?q=$latitude,$longitude';
     String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';

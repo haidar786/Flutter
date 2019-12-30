@@ -11,9 +11,7 @@ import 'package:location/location.dart';
 import 'package:location/location.dart' as location_manager;
 
 class MapPage extends StatefulWidget {
-  final Report report;
-
-  MapPage({Key key, this.report}) : super(key: key);
+  MapPage({Key key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -29,71 +27,42 @@ class _MyAppState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-    singleReport = widget.report != null;
-    markerFuture = singleReport
-        ? Future.value(Set<Marker>.of([reportToMarker(widget.report)]))
-        : loadReports();
-    if (singleReport) {
-      centreCamera(LatLng(widget.report.latitude, widget.report.longitude));
-    } else {
-      centreCamera();
-    }
+    markerFuture = loadReports();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: singleReport
-          ? AppBar(
-              title: Text('Emrals Map'),
-              actions: [
-                IconButton(
-                  tooltip: 'Open in map app',
-                  icon: Icon(Icons.launch),
-                  onPressed: () {
-                    widget.report.launchMaps();
-                  },
-                ),
-              ],
-            )
-          : null,
       body: FutureBuilder(
-          future: markerFuture,
-          builder: (BuildContext context, AsyncSnapshot<Set<Marker>> snapshot) {
-            if (snapshot.hasData) {
-         
-              return GoogleMap(
-                onMapCreated: _onMapCreated,
-                markers: snapshot.data,
-                myLocationEnabled: true,
-                initialCameraPosition: const CameraPosition(
-                  target: LatLng(0.0, 0.0),
-                ),
-              );
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return Center(
-              child: Text('Unable to load reports.'),
+        future: markerFuture,
+        builder: (BuildContext context, AsyncSnapshot<Set<Marker>> snapshot) {
+          if (snapshot.hasData) {
+            return GoogleMap(
+              onMapCreated: _onMapCreated,
+              markers: snapshot.data,
+              myLocationEnabled: true,
+              initialCameraPosition: CameraPosition(
+                target: LatLng(0.0, 0.0),
+              ),
             );
-          }),
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return Center(
+            child: Text('Unable to load reports.'),
+          );
+        },
+      ),
     );
   }
 
   void _onMapCreated(GoogleMapController controller) {
     if (completer.isCompleted == false) completer.complete(controller);
 
-    singleReport = widget.report != null;
-   
-    if (singleReport) {
-      centreCamera(LatLng(widget.report.latitude, widget.report.longitude));
-    } else {
-      centreCamera();
-    }
-
+    centreCamera();
   }
 
   Future<LatLng> getUserLocation() async {
@@ -106,17 +75,17 @@ class _MyAppState extends State<MapPage> {
     // }
   }
 
-  Future<void> centreCamera([LatLng latLng]) async {
+  Future<void> centreCamera() async {
     final GoogleMapController mapController = await completer.future;
-    final LatLng center = latLng ?? await getUserLocation();
-    await mapController.animateCamera(
-      CameraUpdate.newCameraPosition(
-        CameraPosition(
-          target: center ?? LatLng(0, 0),
-          zoom: 15.0,
+    final LatLng center = await getUserLocation();
+
+    if (center != null) {
+      await mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: center, zoom: 15.0),
         ),
-      ),
-    );
+      );
+    }
   }
 
   Future<Set<Marker>> loadReports() async {
@@ -138,30 +107,29 @@ class _MyAppState extends State<MapPage> {
     return Marker(
       markerId: MarkerId(report.id.toString()),
       position: LatLng(report.latitude, report.longitude),
-      consumeTapEvents: !singleReport,
-      icon: BitmapDescriptor.defaultMarkerWithHue(
-          singleReport ? BitmapDescriptor.hueGreen : BitmapDescriptor.hueRed),
-      onTap: !singleReport
-          ? () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (ctx) => ReportDetail(
-                        report: report,
-                        reports: reports,
-                        showSnackbar: (String message) {
-                          Scaffold.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(message),
-                            ),
-                          );
-                        },
-                      ),
-                ),
-              );
-            }
-          : null,
-      infoWindow:
-          InfoWindow(title: report.title, snippet: 'Report #${report.id}'),
+      consumeTapEvents: true,
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => ReportDetail(
+              report: report,
+              reports: reports,
+              showSnackbar: (String message) {
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(message),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+      infoWindow: InfoWindow(
+        title: report.title,
+        snippet: 'Report #${report.id}',
+      ),
     );
   }
 }

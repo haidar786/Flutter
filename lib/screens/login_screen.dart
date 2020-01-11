@@ -9,6 +9,7 @@ import 'package:emrals/styles.dart';
 import 'package:emrals/utils/form_util.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   static const usernameFieldKey = Key('username_field');
@@ -114,7 +115,7 @@ class LoginScreenState extends State<LoginScreen>
           Image(image: AssetImage("assets/logo.png")),
           Center(
             child: Text(
-              "rewarding cleanup",
+              AppLocalizations.of(context).rewardingCleanup,
               textScaleFactor: 1,
             ),
           ),
@@ -230,7 +231,7 @@ class LoginScreenState extends State<LoginScreen>
               },
               child: Center(
                 child: Text(
-                  "SIGN UP HERE",
+                   AppLocalizations.of(context).signUpHere,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,

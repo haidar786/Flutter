@@ -61,6 +61,14 @@ class AppLocalizations {
   String get language {
     return Intl.message("Language");
   }
+
+  String get rewardingCleanup {
+    return Intl.message("rewarding cleanup");
+  }
+  
+  String get signUpHere {
+    return Intl.message("SIGN UP HERE");
+  }
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

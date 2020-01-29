@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:emrals/localizations.dart';
+
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
 
 class MockLoginScreenPresenter extends Mock implements LoginScreenPresenter {
@@ -35,6 +38,17 @@ void main() {
               loginScreenPresenter: loginScreenPresenter,
               isMock: true,
             ),
+            localizationsDelegates: [
+              AppLocalizationsDelegate(),
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale('en'),
+              const Locale('es'),
+              const Locale('zh'),
+            ],
             //routes: routes,
 
             // This mocked observer will now receive all navigation events

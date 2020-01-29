@@ -21,7 +21,7 @@ import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'localizations.dart';
+import 'package:emrals/localizations.dart';
 
 final SentryClient sentry = new SentryClient(
   dsn: "SENTRY_DSN",

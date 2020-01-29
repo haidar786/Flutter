@@ -22,9 +22,7 @@ class StateContainer extends StatefulWidget {
   final double initialEmrals;
   StateContainer({@required this.child, this.initialUser, this.initialEmrals});
   static StateContainerState of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(_InheritedStateContainer)
-            as _InheritedStateContainer)
-        .data;
+    return (context.dependOnInheritedWidgetOfExactType<_InheritedStateContainer>().data);
   }
 
   @override

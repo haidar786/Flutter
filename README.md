@@ -24,3 +24,21 @@ samples, guidance on mobile development, and a full API reference.
 
 https://stackoverflow.com/questions/43916323/how-do-i-create-an-animated-number-counter
 https://pub.dartlang.org/packages/qr_mobile_vision
+
+files to translate:
+buy
+camera
+ęontacts
+home_screen
+leaderboard
+login_screen
+profile
+report_detail
+report_list
+send_btc
+settings
+signup_screen
+zone_list
+form_util
+network_util
+s

@@ -115,7 +115,7 @@ class LoginScreenState extends State<LoginScreen>
           Image(image: AssetImage("assets/logo.png")),
           Center(
             child: Text(
-              AppLocalizations.of(context).rewardingCleanup,
+              "Rewarding city cleanup",
               textScaleFactor: 1,
             ),
           ),
@@ -231,7 +231,7 @@ class LoginScreenState extends State<LoginScreen>
               },
               child: Center(
                 child: Text(
-                  AppLocalizations.of(context).signUpHere,
+                  "SIGN UP HERE",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,

@@ -38,17 +38,6 @@ void main() {
               loginScreenPresenter: loginScreenPresenter,
               isMock: true,
             ),
-            localizationsDelegates: [
-              AppLocalizationsDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: [
-              const Locale('en'),
-              const Locale('es'),
-              const Locale('zh'),
-            ],
             //routes: routes,
 
             // This mocked observer will now receive all navigation events

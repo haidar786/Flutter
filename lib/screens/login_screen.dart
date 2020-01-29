@@ -9,7 +9,7 @@ import 'package:emrals/styles.dart';
 import 'package:emrals/utils/form_util.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:emrals/localizations.dart';
+//import 'package:emrals/localizations.dart';
 
 class LoginScreen extends StatefulWidget {
   static const usernameFieldKey = Key('username_field');

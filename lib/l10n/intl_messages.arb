@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2019-12-08T21:18:09.382961",
+  "@@last_modified": "2020-01-28T22:18:54.425345",
   "title": "Hello world App",
   "@title": {
     "description": "The application title",
@@ -43,6 +43,21 @@
   },
   "Lets Go!": "Lets Go!",
   "@Lets Go!": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "Language": "Language",
+  "@Language": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rewarding city cleanup": "rewarding city cleanup",
+  "@rewarding city cleanup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "SIGN UP HERE": "SIGN UP HERE",
+  "@SIGN UP HERE": {
     "type": "text",
     "placeholders": {}
   }

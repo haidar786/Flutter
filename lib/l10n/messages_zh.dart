@@ -25,10 +25,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "Clean it up and post a picture" : MessageLookupByLibrary.simpleMessage("捡垃圾并拍照"),
     "Earn MONEY when your cleanup is verified" : MessageLookupByLibrary.simpleMessage("图片验证后赚钱"),
     "Earn MONEY!" : MessageLookupByLibrary.simpleMessage("挣钱"),
+    "Language" : MessageLookupByLibrary.simpleMessage("语言"),
     "Lets Go!" : MessageLookupByLibrary.simpleMessage("我们走吧"),
     "Report Trash" : MessageLookupByLibrary.simpleMessage("报告垃圾桶"),
     "Report trash from anywhere in the world" : MessageLookupByLibrary.simpleMessage("报告来自世界各地的垃圾"),
+    "SIGN UP HERE" : MessageLookupByLibrary.simpleMessage("在这里注册"),
     "hello" : MessageLookupByLibrary.simpleMessage("Hello"),
+    "rewarding city cleanup" : MessageLookupByLibrary.simpleMessage("有益的城市清理"),
     "title" : MessageLookupByLibrary.simpleMessage("Hello world App")
   };
 }

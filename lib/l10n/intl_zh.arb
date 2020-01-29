@@ -45,5 +45,20 @@
   "@Lets Go!": {
     "type": "text",
     "placeholders": {}
+  },
+  "Language": "语言",
+  "@Language": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "rewarding city cleanup": "有益的城市清理",
+  "@rewarding city cleanup": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "SIGN UP HERE": "在这里注册",
+  "@SIGN UP HERE": {
+    "type": "text",
+    "placeholders": {}
   }
 }

@@ -63,9 +63,9 @@ class AppLocalizations {
   }
 
   String get rewardingCleanup {
-    return Intl.message("rewarding cleanup");
+    return Intl.message("rewarding city cleanup");
   }
-  
+
   String get signUpHere {
     return Intl.message("SIGN UP HERE");
   }

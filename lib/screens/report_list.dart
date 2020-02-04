@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/components/animated_text.dart';
 import 'package:emrals/data/report_api.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/report.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/profile.dart';
@@ -28,6 +29,7 @@ class _ViewReportsScreen extends State<ViewReportsScreen>
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -41,10 +43,10 @@ class _ViewReportsScreen extends State<ViewReportsScreen>
                 labelColor: Colors.white,
                 tabs: [
                   Tab(
-                    text: 'RECENT',
+                    text: _appLocalization.recent.toUpperCase(),
                   ),
                   Tab(
-                    text: 'CLOSEST',
+                    text: _appLocalization.closest.toUpperCase(),
                   ),
                 ],
               ),
@@ -83,6 +85,7 @@ class ReportWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
       child: Material(
@@ -146,8 +149,8 @@ class ReportWidget extends StatelessWidget {
                             color: emralsColor(), fontWeight: FontWeight.bold),
                       ),
                       Text(report.solution != ''
-                          ? 'cleans ${report.timeAgo} ago '
-                          : 'reports ${report.timeAgo} ago '),
+                          ? _appLocalization.cleans+' ${report.timeAgo} '+_appLocalization.ago+ " "
+                          : _appLocalization.reports+' ${report.timeAgo} '+_appLocalization.ago+" "),
                     ],
                   ),
                 ),
@@ -156,7 +159,7 @@ class ReportWidget extends StatelessWidget {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'earned',
+                        _appLocalization.earned,
                         style: TextStyle(
                           fontSize: 12,
                           color: emralsColor(),
@@ -255,7 +258,7 @@ class ReportWidget extends StatelessWidget {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                "Before",
+                                _appLocalization.before,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15.0,
@@ -340,7 +343,7 @@ class ReportWidget extends StatelessWidget {
                             );
                           },
                     label: Text(
-                      "Clean",
+                      _appLocalization.clean,
                       style: TextStyle(color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
@@ -362,7 +365,7 @@ class ReportWidget extends StatelessWidget {
                       Share.share(
                           "http://www.emrals.com/alerts/" + report.slug);
                     },
-                    child: Text("SHARE"),
+                    child: Text(_appLocalization.share.toUpperCase()),
                     shape: StadiumBorder(
                       side: BorderSide(color: emralsColor(), width: 2),
                     ),
@@ -378,7 +381,7 @@ class ReportWidget extends StatelessWidget {
                       color: emralsColor(),
                     ), */
                     onPressed: onTipPressed,
-                    child: Text("TIP"),
+                    child: Text(_appLocalization.tip),
                     shape: StadiumBorder(
                       side: BorderSide(color: emralsColor(), width: 2),
                     ),
@@ -431,6 +434,7 @@ class _ReportListPageState extends State<ReportListPage>
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     super.build(context);
     return RefreshIndicator(
       onRefresh: () async {
@@ -468,7 +472,7 @@ class _ReportListPageState extends State<ReportListPage>
                       SnackBar(
                         content: Text(message),
                         action: SnackBarAction(
-                          label: 'OKAY',
+                          label: _appLocalization.okay,
                           onPressed: () {},
                         ),
                       ),
@@ -499,7 +503,7 @@ class _ReportListPageState extends State<ReportListPage>
           },
         ),
         noItemsFoundBuilder: (BuildContext context) => Center(
-          child: Text('No posts found.'),
+          child: Text(_appLocalization.noPostFound),
         ),
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:emrals/auth.dart';
 import 'package:emrals/components/reveal_progress_button.dart';
 import 'package:emrals/data/database_helper.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/empty_screen.dart';
 import 'package:emrals/screens/login_screen_presenter.dart';
@@ -108,6 +109,7 @@ class LoginScreenState extends State<LoginScreen>
   @override
   Widget build(BuildContext context) {
     _ctx = context;
+    final _appLocalization = AppLocalizations.of(context);
     FormUtil _formUtil = FormUtil();
     var loginForm = Center(
       child: ListView(
@@ -115,7 +117,7 @@ class LoginScreenState extends State<LoginScreen>
           Image(image: AssetImage("assets/logo.png")),
           Center(
             child: Text(
-              "Rewarding city cleanup",
+              _appLocalization.rewardingCityCleanUp,
               textScaleFactor: 1,
             ),
           ),
@@ -124,7 +126,7 @@ class LoginScreenState extends State<LoginScreen>
           ),
           Center(
             child: Text(
-              "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
+              _appLocalization.versionApp,
               textScaleFactor: .9,
               style: TextStyle(
                 color: Colors.white,
@@ -146,7 +148,7 @@ class LoginScreenState extends State<LoginScreen>
                     validator: _formUtil.validateName,
                     decoration: InputDecoration(
                       filled: true,
-                      labelText: "Username",
+                      labelText: _appLocalization.userName,
                       labelStyle: TextStyle(
                         background: Paint()..color = Colors.white,
                       ),
@@ -176,7 +178,7 @@ class LoginScreenState extends State<LoginScreen>
                     key: LoginScreen.passwordFieldKey,
                     decoration: InputDecoration(
                       filled: true,
-                      labelText: "Password",
+                      labelText: _appLocalization.password,
                       labelStyle: TextStyle(
                         background: Paint()..color = Colors.white,
                       ),
@@ -208,7 +210,7 @@ class LoginScreenState extends State<LoginScreen>
                 key: LoginScreen.loginButtonKey,
                 startColor: emralsColor(),
                 endColor: Colors.green,
-                name: 'LOGIN',
+                name: _appLocalization.login,
                 onPressed: () {
                   if (!mounted) return;
                   setState(() {
@@ -231,7 +233,7 @@ class LoginScreenState extends State<LoginScreen>
               },
               child: Center(
                 child: Text(
-                  "SIGN UP HERE",
+                  _appLocalization.signUpHere,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
@@ -253,7 +255,7 @@ class LoginScreenState extends State<LoginScreen>
                     height: 24,
                     child: Center(
                       child: Text(
-                        "Forgot password?",
+                        _appLocalization.forgetPassword,
                         style: TextStyle(
                           color: Colors.white,
                           decoration: TextDecoration.underline,

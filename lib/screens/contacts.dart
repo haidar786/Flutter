@@ -1,5 +1,6 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/state_container.dart';
@@ -14,9 +15,10 @@ class Contacts extends StatefulWidget {
 class ContactsState extends State<Contacts> {
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Invite Contacts'),
+          title: Text(_appLocalization.inviteContacts),
         ),
         body: FutureBuilder(
           future: ContactsService.getContacts(),
@@ -161,7 +163,7 @@ class _InviteButtonState extends State<InviteButton>
         }
       },
       label: Text(
-        "Invite",
+        AppLocalizations.of(context).invite,
         style: TextStyle(color: Colors.white),
       ),
       icon: icon,

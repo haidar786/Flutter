@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/report.dart';
 import 'package:emrals/screens/report_detail.dart';
 import 'package:emrals/styles.dart';
@@ -52,7 +53,7 @@ class _MyAppState extends State<MapPage> {
             );
           }
           return Center(
-            child: Text('Unable to load reports.'),
+            child: Text(AppLocalizations.of(context).unableToLoadReports),
           );
         },
       ),
@@ -128,7 +129,7 @@ class _MyAppState extends State<MapPage> {
       },
       infoWindow: InfoWindow(
         title: report.title,
-        snippet: 'Report #${report.id}',
+        snippet: 'Report #${report.id}', // i'm not so sure about this.
       ),
     );
   }

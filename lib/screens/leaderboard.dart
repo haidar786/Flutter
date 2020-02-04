@@ -1,4 +1,5 @@
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/profile.dart';
 import 'package:emrals/styles.dart';
@@ -11,18 +12,19 @@ class LeaderBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text("Leaderboard"),
+          title: Text(_appLocalization.leaderBoard),
           bottom: TabBar(tabs: [
             Tab(
-              text: "Top Reporters",
+              text: _appLocalization.topReporters,
             ),
             Tab(
-              text: "Top Cleaners",
+              text: _appLocalization.topCleaners,
             ),
           ]),
         ),

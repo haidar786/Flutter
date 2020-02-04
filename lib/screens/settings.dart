@@ -2,6 +2,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:emrals/components/animated_user_emrals.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/transaction.dart';
 import 'package:emrals/models/user.dart';
 import 'package:emrals/screens/leaderboard.dart';
@@ -39,6 +40,7 @@ class _SettingsPage extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return DefaultTabController(
         length: 4,
         child: Scaffold(
@@ -50,22 +52,22 @@ class _SettingsPage extends State<Settings> {
               tabs: [
                 Tab(
                   icon: Icon(Icons.account_circle),
-                  text: 'profile',
+                  text: _appLocalization.profile,
                 ),
                 Tab(
                   icon: Icon(Icons.archive),
-                  text: 'receive',
+                  text: _appLocalization.receive,
                 ),
                 Tab(
                   icon: RotatedBox(
                     quarterTurns: 2,
                     child: Icon(Icons.archive),
                   ),
-                  text: 'send',
+                  text: _appLocalization.send.toLowerCase(),
                 ),
                 Tab(
                   icon: Icon(Icons.list),
-                  text: "transactions",
+                  text: _appLocalization.transactions,
                 )
               ],
             ),
@@ -119,6 +121,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final _appLocalization = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
@@ -154,7 +157,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
                           horizontal: 12, vertical: 8),
                       child: Center(
                         child: Text(
-                          'Invite Contacts',
+                          _appLocalization.inviteContacts,
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -187,7 +190,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
                           horizontal: 12, vertical: 8),
                       child: Center(
                         child: Text(
-                          'Leaderboard',
+                          _appLocalization.leaderBoard,
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -218,7 +221,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
                           horizontal: 12, vertical: 8),
                       child: Center(
                         child: Text(
-                          'Uploads',
+                          _appLocalization.uploads,
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -264,7 +267,7 @@ class ProfileState extends State<Profile> with AutomaticKeepAliveClientMixin {
           ),
           Center(
             child: Text(
-              "Version APP_VERSION_NUMBER (BUILD_NUMBER)",
+              _appLocalization.versionApp,
               textScaleFactor: .9,
               style: TextStyle(),
             ),
@@ -285,13 +288,14 @@ class ReceivePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     User loggedInUser = StateContainer.of(context).loggedInUser;
     return Center(
         child: Column(
       children: <Widget>[
         SizedBox(height: 15.0),
         Text(
-          'wallet address',
+          _appLocalization.walletAddress.toLowerCase(),
           style: TextStyle(fontSize: 17.0),
         ),
         SizedBox(height: 25.0),
@@ -308,7 +312,7 @@ class ReceivePage extends StatelessWidget {
               new ClipboardData(text: loggedInUser.emralsAddress),
             );
             scaffoldKey.currentState.showSnackBar(new SnackBar(
-              content: new Text("Copied to Clipboard"),
+              content: new Text(_appLocalization.copiedToClipBoard),
             ));
           },
         ),
@@ -338,28 +342,29 @@ class _SendPageState extends State<SendPage> {
 
   final TextEditingController amountController = TextEditingController();
 
-  Future scan() async {
+  Future scan(AppLocalizations appLocalization) async {
     try {
       String barcode = await BarcodeScanner.scan();
       walletAddressController.text = barcode;
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         walletAddressController.text =
-            'The user did not grant the camera permission!';
+            appLocalization.userNotGrantCameraPermission;
       } else {
-        walletAddressController.text = 'Unknown error: $e';
+        walletAddressController.text = appLocalization.unknownError +': $e';
       }
     } on FormatException {
       walletAddressController.text =
-          'null (User returned using the "back"-button before scanning anything. Result)';
+          appLocalization.userReturnUsingBack;
     } catch (e) {
-      walletAddressController.text = 'Unknown error: $e';
+      walletAddressController.text = appLocalization.unknownError+': $e';
     }
   }
 
   @override
   Widget build(BuildContext context) {
     User loggedInUser = StateContainer.of(context).loggedInUser;
+    final _appLocalization = AppLocalizations.of(context);
     return Form(
       key: SendPage.formKey,
       child: ListView(
@@ -368,8 +373,8 @@ class _SendPageState extends State<SendPage> {
         children: <Widget>[
           Text(
             widget.sendto != null
-                ? "Send EMRALS to " + widget.sendto
-                : "Wallet Address",
+                ? _appLocalization.sendEmralsto+" " + widget.sendto
+                : _appLocalization.walletAddress,
             style: TextStyle(fontSize: 16),
           ),
           SizedBox(
@@ -384,7 +389,7 @@ class _SendPageState extends State<SendPage> {
                         child: TextFormField(
                           validator: (s) {
                             if (s.isEmpty) {
-                              return "Please enter a valid wallet address";
+                              return _appLocalization.pleaseEnterValidWalletAddress;
                             }
                             return null;
                           },
@@ -409,7 +414,7 @@ class _SendPageState extends State<SendPage> {
                             icon: Icon(Icons.nfc),
                             color: Colors.white,
                             onPressed: () {
-                              scan();
+                              scan(_appLocalization);
                             },
                           ),
                         ),
@@ -420,7 +425,7 @@ class _SendPageState extends State<SendPage> {
               : SizedBox(height: 0),
           SizedBox(height: 25),
           Text(
-            "Amount",
+            _appLocalization.amount,
             style: TextStyle(fontSize: 16),
           ),
           SizedBox(height: 10),
@@ -429,7 +434,7 @@ class _SendPageState extends State<SendPage> {
               if (double.tryParse(s) != null && double.tryParse(s) > 0) {
                 return null;
               } else {
-                return "Please enter a valid amount";
+                return _appLocalization.enterValidAmount;
               }
             },
             controller: amountController,
@@ -441,7 +446,7 @@ class _SendPageState extends State<SendPage> {
                 child: Align(
                   widthFactor: 1,
                   child: Text(
-                    "EMRALS",
+                    _appLocalization.emrals,
                     style: TextStyle(color: Colors.black26),
                   ),
                   alignment: Alignment.centerRight,
@@ -461,7 +466,7 @@ class _SendPageState extends State<SendPage> {
                 String sendto = widget.sendto;
                 double amount = double.tryParse(amountController.text) ??
                     widget.scaffoldState.currentState.showSnackBar(
-                        SnackBar(content: Text("Please enter a valid amount")));
+                        SnackBar(content: Text(_appLocalization.enterValidAmount)));
 
                 if (loggedInUser.emrals >= amount) {
                   RestDatasource()
@@ -477,7 +482,7 @@ class _SendPageState extends State<SendPage> {
                   });
                 } else {
                   widget.scaffoldState.currentState.showSnackBar(SnackBar(
-                      content: Text("You don't have enough emrals for that!")));
+                      content: Text(_appLocalization.notHaveEnoughEmrals+"!")));
                 }
               }
             },
@@ -486,7 +491,7 @@ class _SendPageState extends State<SendPage> {
               decoration: BoxDecoration(color: Theme.of(context).accentColor),
               child: Center(
                 child: Text(
-                  "Send",
+                  _appLocalization.send,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -518,6 +523,7 @@ class TransactionsPage extends StatelessWidget {
     return FutureBuilder(
         future: NetworkUtil().get(apiUrl + "/transactions/", headers),
         builder: (context, snapshot) {
+          final _appLocalization = AppLocalizations.of(context);
           if (!snapshot.hasData) {
             return Center(child: CircularProgressIndicator());
           }
@@ -529,7 +535,7 @@ class TransactionsPage extends StatelessWidget {
 
           return transactions.isEmpty
               ? Center(
-                  child: Text('No transactions have been made.'),
+                  child: Text(_appLocalization.noTransactionMade),
                 )
               : ListView.builder(
                   itemCount: transactions.length,
@@ -554,13 +560,13 @@ class TransactionsPage extends StatelessWidget {
                               children: <Widget>[
                                 Text(
                                   transaction.note == "reporting"
-                                      ? "tipped user for reporting alert #" +
+                                      ? _appLocalization.tippedUserReportingAlert+" #" +
                                           transaction.alert.toString()
                                       : transaction.note == "cleaning"
-                                          ? "tipped user for cleaning alert #" +
+                                          ? _appLocalization.tippedUserCleaningAlert+" #" +
                                               transaction.alert.toString()
                                           : transaction.subscription != null
-                                              ? "subscription id:" +
+                                              ? _appLocalization.subscriptionId+":" +
                                                   transaction.subscription
                                                       .toString()
                                               : transaction.note,

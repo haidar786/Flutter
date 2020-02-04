@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/state_container.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -81,6 +82,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     userToken = StateContainer.of(context).loggedInUser.token;
     _ctx = context;
     if (!_isReady) {
@@ -94,7 +96,7 @@ class _ReportScreenState extends State<ReportScreen> {
       key: _scaffoldKey,
       appBar: widget.report != null
           ? AppBar(
-              title: Text('Cleanup Report #' + widget.report.id.toString()),
+              title: Text(_appLocalization.cleanUpReport+' #' + widget.report.id.toString()),
             )
           : null,
       body: Column(
@@ -115,7 +117,9 @@ class _ReportScreenState extends State<ReportScreen> {
             )
           : FloatingActionButton(
               onPressed: controller != null && controller.value.isInitialized
-                  ? onTakePictureButtonPressed
+                  ? (){
+                onTakePictureButtonPressed(_appLocalization);
+              }
                   : null,
               child: Icon(Icons.camera_alt),
             ),
@@ -136,7 +140,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Future<String> takePicture() async {
     if (!controller.value.isInitialized) {
-      showInSnackBar('Error: select a camera first.');
+      showInSnackBar(AppLocalizations.of(_ctx).error+': '+AppLocalizations.of(_ctx).selectCameraFirst);
       return null;
     }
     final Directory extDir = await getApplicationDocumentsDirectory();
@@ -158,14 +162,14 @@ class _ReportScreenState extends State<ReportScreen> {
   }
 
   void _showCameraException(CameraException e) {
-    showInSnackBar('Error: ${e.code}\n${e.description}');
+    showInSnackBar(AppLocalizations.of(_ctx).error+': ${e.code}\n${e.description}');
   }
 
   Future getLocation() async {
     currentLocation = await location.getLocation();
   }
 
-  void onTakePictureButtonPressed() {
+  void onTakePictureButtonPressed(AppLocalizations appLocalization) {
     _isLoading = true;
     takePicture().then((String filePath) {
       if (mounted) {
@@ -232,7 +236,7 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                   actions: <Widget>[
                     FlatButton(
-                      child: Text('Go to Activity'),
+                      child: Text(AppLocalizations.of(_ctx).goToActivity), //check if _ctx context works
                       onPressed: () {
                         Navigator.pushNamedAndRemoveUntil(_ctx, '/home', ModalRoute.withName('/'));
                       },
@@ -246,7 +250,7 @@ class _ReportScreenState extends State<ReportScreen> {
         await Navigator.pushNamed(_ctx, '/uploads');
       }
     } else {
-      showInSnackBar("Please enable GPS");
+      showInSnackBar(AppLocalizations.of(_ctx).pleaseEnterValidAmountGreaterThan100);
       _isLoading = false;
     }
   }

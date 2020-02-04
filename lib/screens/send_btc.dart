@@ -1,3 +1,4 @@
+import 'package:emrals/localizations.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
 //import 'package:emrals/state_container.dart';
@@ -32,6 +33,7 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     if (bitcoinAddress == '') {
       Map<String, String> headers = {
         "Authorization":
@@ -55,7 +57,7 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Buy Emrals'),
+        title: Text(_appLocalization.buyEmrals),
       ),
       body: Form(
         child: ListView(
@@ -63,12 +65,12 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
           padding: EdgeInsets.all(16),
           children: <Widget>[
             Text(
-              "Buying " + newemralsAmount + " EMRALS",
+              _appLocalization.buying+" " + newemralsAmount + " "+_appLocalization.emrals,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
             Text(
-              "Send " + bitcoinAmount + " BTC to address:",
+              _appLocalization.send+" " + bitcoinAmount + " "+_appLocalization.btcToAddress+":",
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
@@ -94,7 +96,7 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
                   new ClipboardData(text: bitcoinAddress),
                 );
                 scaffoldKey.currentState.showSnackBar(new SnackBar(
-                  content: new Text("Copied to Clipboard"),
+                  content: new Text(_appLocalization.copiedToClipBoard),
                 ));
               },
             ),
@@ -103,12 +105,12 @@ class _SendBTCScreenState extends State<SendBTCScreen> {
             SizedBox(height: 10),
             Text(
               newemralsAmount +
-                  " EMRALS will be added to your balance after 1 blockchain confirmation. This usually takes 10 - 30 minutes. You will get an email when the purchase is complete.",
+                  " "+_appLocalization.emralsToBeAdded,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
             Text(
-              "BTC Address: \nBalance: 0 | Confirmations: 0",
+              _appLocalization.btcAddress+": \n"+_appLocalization.balance+": 0 | "+_appLocalization.confirmation+": 0",
               style: TextStyle(fontSize: 16),
             ),
           ],

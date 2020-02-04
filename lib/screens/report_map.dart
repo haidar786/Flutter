@@ -1,3 +1,4 @@
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/report.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -27,12 +28,13 @@ class ReportMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Emrals Map'),
+        title: Text(_appLocalization.emralsMap),
         actions: [
           IconButton(
-            tooltip: 'Open in map app.',
+            tooltip: _appLocalization.openInMapApp,
             icon: const Icon(Icons.launch),
             onPressed: () => report.launchMaps(),
           ),

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/components/animated_user_emrals.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/report.dart';
 import 'package:emrals/models/report_comment.dart';
 import 'package:emrals/models/user.dart';
@@ -58,11 +59,12 @@ class ReportDetailState extends State<ReportDetail> {
   @override
   Widget build(BuildContext context) {
     loggedInUser = StateContainer.of(context).loggedInUser;
+    final _appLocalization = AppLocalizations.of(context);
 
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text("Report Detail"),
+        title: Text(_appLocalization.reportDetail),
         actions: <Widget>[
           Padding(
               padding: EdgeInsets.symmetric(vertical: 16),
@@ -121,7 +123,7 @@ class ReportDetailState extends State<ReportDetail> {
                           child: Column(
                             children: <Widget>[
                               Text(
-                                "Before",
+                                _appLocalization.before,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 15.0,
@@ -166,13 +168,13 @@ class ReportDetailState extends State<ReportDetail> {
                                     context: context,
                                     builder: (ctx) => AlertDialog(
                                       title: Text(
-                                          "Are you sure you want to delete this report?"),
+                                          _appLocalization.areYouSureAboutDeleteReport),
                                       actions: <Widget>[
                                         FlatButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text("Cancel"),
+                                          child: Text(_appLocalization.cancel),
                                         ),
                                         FlatButton(
                                           onPressed: () {
@@ -333,7 +335,7 @@ class ReportDetailState extends State<ReportDetail> {
                             });
                           },
                           label: Text(
-                            "Tip Emrals",
+                            _appLocalization.tipEmrals,
                             style:
                                 TextStyle(color: Theme.of(context).accentColor),
                           ),
@@ -357,7 +359,7 @@ class ReportDetailState extends State<ReportDetail> {
                                       "http://www.emrals.com/alerts/${report.slug}");
                                 },
                                 label: Text(
-                                  "Share",
+                                  _appLocalization.share,
                                   style: TextStyle(color: emralsColor()),
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -387,7 +389,7 @@ class ReportDetailState extends State<ReportDetail> {
                                   width: 5,
                                 ),
                                 Text(
-                                  "CLEANED",
+                                  _appLocalization.cleaned,
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -396,14 +398,14 @@ class ReportDetailState extends State<ReportDetail> {
                               ],
                             ),
                             Text(
-                              "${report.solutionEmralsAmount} EMRALS EARNED!",
+                              "${report.solutionEmralsAmount} "+_appLocalization.emralsEarned+"!",
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: emralsColor()),
                             ),
                             Text(
-                              "Good Job ${report.posterUsername}",
+                              _appLocalization.goodJob+" ${report.posterUsername}",
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -426,7 +428,7 @@ class ReportDetailState extends State<ReportDetail> {
                             );
                           },
                           label: Text(
-                            "Clean",
+                            _appLocalization.clean,
                             style: TextStyle(color: Colors.white),
                           ),
                           shape: RoundedRectangleBorder(
@@ -440,7 +442,7 @@ class ReportDetailState extends State<ReportDetail> {
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Text(
-                  "Comments",
+                  _appLocalization.comments,
                   style: Theme.of(context).textTheme.title,
                 ),
               ),
@@ -459,7 +461,7 @@ class ReportDetailState extends State<ReportDetail> {
                           controller: commentEditingController,
                           style: TextStyle(fontSize: 18, color: Colors.black87),
                           decoration: InputDecoration(
-                            hintText: "Add Comment...",
+                            hintText: _appLocalization.add+" "+_appLocalization.comments+"...",
                             contentPadding: EdgeInsets.all(10),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(0),
@@ -504,7 +506,7 @@ class ReportDetailState extends State<ReportDetail> {
                                         scaffoldKey.currentState.showSnackBar(
                                             SnackBar(
                                                 content:
-                                                    Text("Comment Posted!")));
+                                                    Text(_appLocalization.commentsPosted+"!")));
                                       });
                                     }
                                   },
@@ -540,7 +542,7 @@ class ReportDetailState extends State<ReportDetail> {
                         padding: const EdgeInsets.all(38.0),
                         child: Center(
                           child: Text(
-                            "No comments :(",
+                            _appLocalization.noComments,
                             style: TextStyle(color: Colors.black45),
                           ),
                         ),
@@ -570,6 +572,7 @@ class ReportCommentListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     User loggedInUser = StateContainer.of(context).loggedInUser;
     bool loggedInUserComment = loggedInUser.id == comment.userid;
     return InkWell(
@@ -608,7 +611,7 @@ class ReportCommentListItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "${DateTime.now().difference(comment.time).inHours} hours ago",
+                        "${DateTime.now().difference(comment.time).inHours} "+_appLocalization.hoursAgo,
                         style: TextStyle(fontSize: 12, color: Colors.black54),
                       ),
                       InkWell(
@@ -617,19 +620,19 @@ class ReportCommentListItem extends StatelessWidget {
                             context: context,
                             builder: (ctx) => AlertDialog(
                               title: Text(
-                                  "Are you sure you want to ${loggedInUserComment ? "delete" : "flag"} this comment?"),
+                                  _appLocalization.areYouSureYouWantTo+" ${loggedInUserComment ? _appLocalization.delete : _appLocalization.flag} "+_appLocalization.thisComment),
                               actions: <Widget>[
                                 FlatButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text("Cancel"),
+                                  child: Text(_appLocalization.cancel),
                                 ),
                                 FlatButton(
                                   onPressed: () {
                                     Navigator.of(context).pop(true);
                                   },
-                                  child: Text("Yes"),
+                                  child: Text(_appLocalization.yes),
                                 ),
                               ],
                             ),
@@ -660,7 +663,7 @@ class ReportCommentListItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            !loggedInUserComment ? "Flag" : "Delete",
+                            !loggedInUserComment ? _appLocalization.flag : _appLocalization.delete,
                             style:
                                 TextStyle(fontSize: 10, color: Colors.black54),
                           ),
@@ -686,6 +689,7 @@ class TipDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.only(left: 12.0, right: 12, bottom: 12),
@@ -693,7 +697,7 @@ class TipDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-              "Tip Emrals".toUpperCase(),
+              AppLocalizations.of(context).tipEmrals.toUpperCase(),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             SizedBox(
@@ -785,7 +789,7 @@ class EmralsTipCircleButton extends StatelessWidget {
             });
           }
         } else {
-          showSnackbar('Insufficient balance');
+          showSnackbar(AppLocalizations.of(context).insufficientBalance);
           /* scaffoldKey.currentState.showSnackBar(SnackBar(
             content: Text("Insufficient balance"),
             action: SnackBarAction(

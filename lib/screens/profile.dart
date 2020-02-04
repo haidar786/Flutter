@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/data/rest_ds.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/user_profile.dart';
 import 'package:emrals/screens/settings.dart';
 import 'package:emrals/styles.dart';
@@ -55,7 +56,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<File> future;
   File tmpFile;
   String base64Image;
-  String errMessage = 'Error Uploading Image';
+  String errMessage = 'Error Uploading Image'; // no usage found in any function or widget
   String imageUrl;
   bool isUploading;
   bool isUploaded;
@@ -67,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
     imageUrl = widget.userProfile.picture;
   }
 
-  void pickImage() {
+  void pickImage(AppLocalizations appLocalization) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -78,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.fromLTRB(30, 15, 15, 15),
                 child: Text(
-                  "Profile photo",
+                  appLocalization.profilePhoto,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                 ),
               ),
@@ -103,7 +104,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           padding: EdgeInsets.all(10),
                           child: Text(
-                            "Gallery",
+                            appLocalization.gallery,
                           ),
                         ),
                       ],
@@ -124,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         Container(
                           padding: EdgeInsets.all(10),
                           child: Text(
-                            "Camera",
+                            appLocalization.camera,
                           ),
                         ),
                       ],
@@ -177,6 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     TextStyle titleStyle = TextStyle(
         fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black54);
     TextStyle valueStyle = TextStyle(fontSize: 24, color: emralsColor());
@@ -217,7 +219,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           Icons.camera_alt,
                           color: Colors.white,
                         ),
-                        onPressed: pickImage,
+                        onPressed: (){
+                          pickImage(_appLocalization);
+                        },
                         mini: true,
                         elevation: 0,
                       ),
@@ -243,7 +247,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Column(
               children: <Widget>[
                 Text(
-                  "Emrals Earned",
+                  _appLocalization.emralsEarned,
                   style: titleStyle,
                 ),
                 Text(
@@ -253,7 +257,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "Reports Posted",
+                  _appLocalization.reportsPosted,
                   style: titleStyle,
                 ),
                 Text(
@@ -266,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
             Column(
               children: <Widget>[
                 Text(
-                  "Emrals Donated",
+                  _appLocalization.emralsDonated,
                   style: titleStyle,
                 ),
                 Text(
@@ -276,7 +280,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "Reports Cleaned",
+                  _appLocalization.reportsCleaned,
                   style: titleStyle,
                 ),
                 Text(
@@ -306,7 +310,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               Settings(sendto: widget.userProfile.username)));
                 },
                 label: Text(
-                  "Send Emrals",
+                  _appLocalization.sendEmrals,
                   style: TextStyle(color: emralsColor()),
                 ),
                 shape: RoundedRectangleBorder(

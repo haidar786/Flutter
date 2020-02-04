@@ -1,3 +1,4 @@
+import 'package:emrals/localizations.dart';
 import 'package:emrals/screens/send_btc.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/state_container.dart';
@@ -13,15 +14,16 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
   final TextEditingController walletAddressController = TextEditingController();
 
   final TextEditingController amountController = TextEditingController();
-  String sendBitcoin = "Send BTC";
+  String sendBitcoin;
   String oldAmount = "";
 
   @override
   Widget build(BuildContext context) {
     //User loggedInUser = StateContainer.of(context).loggedInUser;
+    final _appLocalization = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Buy Emrals'),
+        title: Text(_appLocalization.buyEmrals),
       ),
       body: Form(
         child: ListView(
@@ -29,7 +31,7 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
           padding: EdgeInsets.all(16),
           children: <Widget>[
             Text(
-              "Amount of EMRALS to buy",
+              _appLocalization.amountOfEmralsToBuy,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 10),
@@ -46,16 +48,16 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                       setState(() {
                         print(price);
                         if (price == "error") {
-                          sendBitcoin = "Error: " + s + " EMRALS not available";
+                          sendBitcoin = _appLocalization.error+": " + s + " "+ _appLocalization.emralsNotAvailable;
                         } else {
-                          sendBitcoin = "Send " + price + " BTC";
+                          sendBitcoin = _appLocalization.send+" " + price + " "+_appLocalization.btc;
                         }
                       });
                     });
 
                     return null;
                   } else {
-                    return "Please enter a valid amount > 100";
+                    return _appLocalization.pleaseEnterValidAmountGreaterThan100;
                   }
                 }
                 return null;
@@ -69,7 +71,7 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                   child: Align(
                     widthFactor: 1,
                     child: Text(
-                      "EMRALS",
+                      _appLocalization.emrals,
                       style: TextStyle(color: Colors.black26),
                     ),
                     alignment: Alignment.centerRight,
@@ -101,7 +103,7 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
                 decoration: BoxDecoration(color: Theme.of(context).accentColor),
                 child: Center(
                   child: Text(
-                    sendBitcoin,
+                    sendBitcoin != null ? sendBitcoin : _appLocalization.sendBitcoin,
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -109,12 +111,12 @@ class _BuyEmralsScreenState extends State<BuyEmralsScreen> {
             ),
             SizedBox(height: 30),
             Text(
-              "Emrals charges no fees when you buy or sell EMRALS.",
+              _appLocalization.emralsChargesNoFees,
               style: TextStyle(color: Colors.black26),
             ),
             SizedBox(height: 30),
             Text(
-              "However, Emrals may apply an exchange rate based on the size of your transaction and a spread determined by volatility across exchanges.",
+              _appLocalization.howeverEmralsMayApplyExchangeRate,
               style: TextStyle(color: Colors.black26),
             ),
           ],

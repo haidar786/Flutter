@@ -1,4 +1,5 @@
 import 'package:emrals/components/animated_user_emrals.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/screens/camera.dart';
 import 'package:emrals/screens/report_list.dart';
 //import 'package:emrals/screens/scanner.dart';
@@ -62,6 +63,7 @@ class _MyHomePage extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
         title: RaisedButton.icon(
@@ -85,7 +87,7 @@ class _MyHomePage extends State<MyHomePage>
             );
           },
           label: Text(
-            "BUY EMRALS",
+            _appLocalization.buyEmrals,
             style: TextStyle(color: Colors.white),
           ),
           shape: StadiumBorder(
@@ -132,25 +134,25 @@ class _MyHomePage extends State<MyHomePage>
             icon: Icon(
               Icons.view_agenda,
             ),
-            title: Text('Activity'),
+            title: Text(_appLocalization.activity),
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.map,
             ),
-            title: Text('Zones'),
+            title: Text(_appLocalization.zones),
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.photo_camera,
             ),
-            title: Text('Report'),
+            title: Text(_appLocalization.report),
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.multiline_chart,
             ),
-            title: Text('Stats'),
+            title: Text(_appLocalization.stats),
           ),
           // BottomNavigationBarItem(
           //   icon: Icon(
@@ -162,7 +164,7 @@ class _MyHomePage extends State<MyHomePage>
             icon: Icon(
               FontAwesomeIcons.map,
             ),
-            title: Text('Map'),
+            title: Text(_appLocalization.map),
           ),
         ],
       ),

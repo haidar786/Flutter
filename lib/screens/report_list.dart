@@ -150,7 +150,7 @@ class ReportWidget extends StatelessWidget {
                       ),
                       Text(report.solution != ''
                           ? _appLocalization.cleans+' ${report.timeAgo} '+_appLocalization.ago+ " "
-                          : _appLocalization.reports+' ${report.timeAgo} '+_appLocalization.ago+" "),
+                          : _appLocalization.reports.toLowerCase()+' ${report.timeAgo} '+_appLocalization.ago+" "),
                     ],
                   ),
                 ),

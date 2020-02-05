@@ -348,7 +348,7 @@ class AppLocalizations {
   }
 
   String get reports {
-    return Intl.message("reports");
+    return Intl.message("Reports");
   }
 
   String get earned {
@@ -388,8 +388,10 @@ class AppLocalizations {
   String get copiedToClipBoard {
     return Intl.message("Copied to Clipboard");
   }
+
   String get emralsToBeAdded {
-    return Intl.message("EMRALS will be added to your balance after 1 blockchain confirmation. This usually takes 10 - 30 minutes. You will get an email when the purchase is complete.");
+    return Intl.message(
+        "EMRALS will be added to your balance after 1 blockchain confirmation. This usually takes 10 - 30 minutes. You will get an email when the purchase is complete.");
   }
 
   String get btcAddress {
@@ -438,7 +440,8 @@ class AppLocalizations {
   }
 
   String get userReturnUsingBack {
-    return Intl.message('null (User returned using the "back"-button before scanning anything. Result)');
+    return Intl.message(
+        'null (User returned using the "back"-button before scanning anything. Result)');
   }
 
   String get sendEmralsto {
@@ -476,6 +479,211 @@ class AppLocalizations {
   String get subscriptionId {
     return Intl.message("subscription id");
   }
+
+  ///most use in sign up
+
+  String get email {
+    return Intl.message("Email");
+  }
+
+  String get signUp {
+    return Intl.message("SIGN UP");
+  }
+
+  String get bySigningUpAgreeToTerms {
+    return Intl.message("By signing up you agree to our");
+  }
+
+  String get termsAndConditions {
+    return Intl.message("Terms and Conditions");
+  }
+
+  String get emralsSignUp {
+    return Intl.message("Emrals Signup");
+  }
+
+  String get loggedInAs {
+    return Intl.message("Logged in as");
+  }
+
+  ///most use in stats
+
+  String get cities {
+    return Intl.message("Cities");
+  }
+
+  String get countries {
+    return Intl.message("Countries");
+  }
+
+  String get cleansUp {
+    return Intl.message("Cleanups");
+  }
+
+  String get users {
+    return Intl.message("Users");
+  }
+
+  String get emralsAdded {
+    return Intl.message("Emrals Added");
+  }
+
+  String get subscriptions {
+    return Intl.message("Subscriptions");
+  }
+
+  String get tosses {
+    return Intl.message("Tosses");
+  }
+
+  String get scans {
+    return Intl.message("Scans");
+  }
+
+  String get barcodes {
+    return Intl.message("Barcodes");
+  }
+
+  String get links {
+    return Intl.message("Links");
+  }
+
+  String get pools {
+    return Intl.message("Pools");
+  }
+
+  String get explorer {
+    return Intl.message("Explorer");
+  }
+
+  String get price {
+    return Intl.message("Price");
+  }
+
+  String get high {
+    return Intl.message("High");
+  }
+
+  String get low {
+    return Intl.message("Low");
+  }
+
+  String get bid {
+    return Intl.message("Bid");
+  }
+
+  String get ask {
+    return Intl.message("Ask");
+  }
+
+  String get height {
+    return Intl.message("Height");
+  }
+
+  String get hashRate {
+    return Intl.message("Hashrate");
+  }
+
+  String get difficulty {
+    return Intl.message("Difficulty");
+  }
+
+  String get masterNodes {
+    return Intl.message("Masternodes");
+  }
+
+  String get mnWorth {
+    return Intl.message("MN Worth");
+  }
+
+  String get supply {
+    return Intl.message("Supply");
+  }
+
+  String get connections {
+    return Intl.message("Connections");
+  }
+
+  String get hosts {
+    return Intl.message("Hosts");
+  }
+
+  String get lastBlkTime {
+    return Intl.message("Last BlkTime");
+  }
+
+  String get updatingIn {
+    return Intl.message("Updating in");
+  }
+
+  ///most use in uploads
+  String get pendingUploads {
+    return Intl.message("Pending Uploads");
+  }
+
+  ///most use in zone_list
+  String get noZonesFound {
+    return Intl.message("No zones found.");
+  }
+
+  String get noImage {
+    return Intl.message("No Image");
+  }
+
+  String get cleanUps {
+    return Intl.message("cleanups");
+  }
+
+  String get views {
+    return Intl.message("views");
+  }
+
+  String get fund {
+    return Intl.message("FUND");
+  }
+
+  String get sponser {
+    return Intl.message("sponser");
+  }
+
+  String get emralsPerMonth {
+    return Intl.message("EMRALS / month");
+  }
+
+  String get ok {
+    return Intl.message("OK");
+  }
+
+  String get sortZones {
+    return Intl.message("Sort Zones");
+  }
+
+  ///most in form util
+  String get pleaseEnterYour {
+    return Intl.message("Please enter your");
+  }
+
+  String get enterYourPassword {
+    return Intl.message("Please enter your password");
+  }
+
+  String get nameInvalidMessage {
+    return Intl.message("Please enter 3-20 upper or lowercase characters");
+  }
+
+  String get emailInvalidMessage {
+    return Intl.message("Please enter a valid email address");
+  }
+
+  String get passwordInvalidMessage {
+    return Intl.message("8-200 letters, 1 number, 1 special character");
+  }
+
+  ///most in network util
+  String get errorWhileFetchingData {
+    return Intl.message("Error while fetching data"); // not implemented in network util
+  }
+
 }
 
 class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

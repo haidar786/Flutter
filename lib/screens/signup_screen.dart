@@ -1,4 +1,5 @@
 import 'package:emrals/components/reveal_progress_button.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/screens/empty_screen.dart';
 import 'package:emrals/utils/form_util.dart';
 import 'package:flutter/material.dart';
@@ -86,8 +87,9 @@ class SignupScreenState extends State<SignupScreen>
 
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     _ctx = context;
-    FormUtil _formUtil = FormUtil();
+    FormUtil _formUtil = FormUtil(appLocalizations: _appLocalization);
 
     var signupForm = Center(
       child: ListView(
@@ -112,7 +114,7 @@ class SignupScreenState extends State<SignupScreen>
                         semanticLabel: 'username sign up icon',
                       ),
                       filled: true,
-                      labelText: 'Username',
+                      labelText: _appLocalization.userName,
                       labelStyle: TextStyle(
                         background: Paint()..color = Colors.white,
                       ),
@@ -144,7 +146,7 @@ class SignupScreenState extends State<SignupScreen>
                         size: 17.0,
                         semanticLabel: 'user sign up email icon',
                       ),
-                      labelText: 'Email',
+                      labelText: _appLocalization.email,
                       labelStyle: TextStyle(
                         background: Paint()..color = Colors.white,
                       ),
@@ -190,7 +192,7 @@ class SignupScreenState extends State<SignupScreen>
                         },
                       ),
                       filled: true,
-                      labelText: 'Password',
+                      labelText: _appLocalization.password,
                       labelStyle: TextStyle(
                         background: Paint()..color = Colors.white,
                       ),
@@ -217,7 +219,7 @@ class SignupScreenState extends State<SignupScreen>
                 key: SignupScreen.signUpButtonKey,
                 startColor: emralsColor().shade50,
                 endColor: Colors.green,
-                name: 'SIGN UP',
+                name: _appLocalization.signUp,
                 onPressed: () {
                   print('Signup button pressed');
                   setState(() {
@@ -233,11 +235,11 @@ class SignupScreenState extends State<SignupScreen>
             child: Text.rich(
               TextSpan(
                 text:
-                    'By signing up you agree to our', // default text style'By signing up you agree to our \n Terms and Conditions',
+                    _appLocalization.bySigningUpAgreeToTerms, // default text style'By signing up you agree to our \n Terms and Conditions',
                 style: TextStyle(color: Colors.white),
                 children: <TextSpan>[
                   TextSpan(
-                      text: '\nTerms and Conditions ',
+                      text: '\n'+_appLocalization.termsAndConditions+" ",
                       style: TextStyle(decoration: TextDecoration.underline)),
                 ],
               ),
@@ -251,7 +253,7 @@ class SignupScreenState extends State<SignupScreen>
     );
 
     return Scaffold(
-      appBar: AppBar(title: Text('Emrals Signup')),
+      appBar: AppBar(title: Text(_appLocalization.emralsSignUp)),
       key: scaffoldKey,
       backgroundColor: emralsColor().shade50,
       body: Center(
@@ -275,7 +277,7 @@ class SignupScreenState extends State<SignupScreen>
   void onSignupSuccess(User user) async {
     print('Sign up successful: ${user.toString()}');
     if (widget.isMock == false) {
-      _showSnackBar("Logged in as" + user.username);
+      _showSnackBar(AppLocalizations.of(_ctx).loggedInAs + user.username);
       var db = DatabaseHelper();
       await db.saveUser(user);
       StateContainer.of(context).updateUser(user);

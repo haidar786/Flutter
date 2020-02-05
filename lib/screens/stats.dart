@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:emrals/data/stats_api.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/stats_exchange_model.dart';
 import 'package:emrals/models/stats_model.dart';
 import 'package:emrals/styles.dart';
@@ -89,6 +90,7 @@ class StatsScreenState extends State<StatsScreen>
   }
 
   Widget _statsRow1(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       child: FutureBuilder(
@@ -180,7 +182,7 @@ class StatsScreenState extends State<StatsScreen>
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${formatter.format(data.cities)} Cities',
+                                          '${formatter.format(data.cities)} '+_appLocalization.cities,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
@@ -199,7 +201,7 @@ class StatsScreenState extends State<StatsScreen>
                                       ),
                                       child: Center(
                                         child: Text(
-                                          '${formatter.format(data.countries)} Countries',
+                                          '${formatter.format(data.countries)} '+_appLocalization.cities,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 16),
@@ -220,7 +222,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Cleanups',
+                                            _appLocalization.cleansUp,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -245,7 +247,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Reports',
+                                            _appLocalization.reports,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -270,7 +272,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Users',
+                                            _appLocalization.users,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -295,7 +297,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Emrals Earned',
+                                            _appLocalization.emralsEarned,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -320,7 +322,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Emrals Added',
+                                            _appLocalization.emralsAdded,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -345,7 +347,7 @@ class StatsScreenState extends State<StatsScreen>
                                       children: <Widget>[
                                         Expanded(
                                           child: Text(
-                                            'Subscriptions',
+                                            _appLocalization.subscriptions,
                                             style: TextStyle(
                                               fontSize: 14,
                                             ),
@@ -413,7 +415,7 @@ class StatsScreenState extends State<StatsScreen>
                                           textAlign: TextAlign.end,
                                         ),
                                         Text(
-                                          'Tosses',
+                                          _appLocalization.tosses,
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
@@ -432,7 +434,7 @@ class StatsScreenState extends State<StatsScreen>
                                           textAlign: TextAlign.end,
                                         ),
                                         Text(
-                                          'Scans',
+                                          _appLocalization.scans,
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
@@ -451,7 +453,7 @@ class StatsScreenState extends State<StatsScreen>
                                           textAlign: TextAlign.end,
                                         ),
                                         Text(
-                                          'Barcodes',
+                                          _appLocalization.barcodes,
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
@@ -474,6 +476,7 @@ class StatsScreenState extends State<StatsScreen>
   }
 
   Widget _statsRow2(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return Padding(
         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
         child: FutureBuilder(
@@ -556,7 +559,7 @@ class StatsScreenState extends State<StatsScreen>
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Links',
+                                      _appLocalization.links,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -586,7 +589,7 @@ class StatsScreenState extends State<StatsScreen>
                                         'https://poolexplorer.com/coin/4742');
                                   },
                                   child: Text(
-                                    'Pools',
+                                    _appLocalization.pools,
                                     style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       fontSize: 20,
@@ -599,7 +602,7 @@ class StatsScreenState extends State<StatsScreen>
                                     launchURL('http://explorer.emrals.com');
                                   },
                                   child: Text(
-                                    'Explorer',
+                                    _appLocalization.explorer,
                                     style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       fontSize: 20,
@@ -627,7 +630,7 @@ class StatsScreenState extends State<StatsScreen>
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Price',
+                                      _appLocalization.price,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 16,
@@ -671,7 +674,7 @@ class StatsScreenState extends State<StatsScreen>
                                               ),
                                             ),
                                             Text(
-                                              'EMRALS'.toUpperCase(),
+                                              _appLocalization.emrals,
                                               style: TextStyle(
                                                 fontSize: 14,
                                               ),
@@ -687,19 +690,19 @@ class StatsScreenState extends State<StatsScreen>
                                               MainAxisAlignment.spaceEvenly,
                                           children: <Widget>[
                                             _row2NameValueWidget(context,
-                                                name: 'High',
+                                                name: _appLocalization.high,
                                                 value: data.high
                                                     .toStringAsFixed(5)),
                                             _row2NameValueWidget(context,
-                                                name: 'Low',
+                                                name: _appLocalization.low,
                                                 value: data.low
                                                     .toStringAsFixed(5)),
                                             _row2NameValueWidget(context,
-                                                name: 'Bid',
+                                                name: _appLocalization.bid,
                                                 value: data.bid
                                                     .toStringAsFixed(5)),
                                             _row2NameValueWidget(context,
-                                                name: 'Ask',
+                                                name: _appLocalization.ask,
                                                 value: data.ask
                                                     .toStringAsFixed(5)),
                                           ],
@@ -741,6 +744,7 @@ class StatsScreenState extends State<StatsScreen>
   }
 
   Widget _statsRow3(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     return Container(
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       color: Theme.of(context).primaryColor,
@@ -755,7 +759,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Height',
+                        _appLocalization.height,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -789,7 +793,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Hashrate',
+                        _appLocalization.hashRate,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -824,7 +828,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Difficulty',
+                        _appLocalization.difficulty,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -857,7 +861,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Masternodes',
+                        _appLocalization.masterNodes,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -878,7 +882,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'MN Worth',
+                        _appLocalization.mnWorth,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -904,7 +908,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Supply',
+                        _appLocalization.supply,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -937,7 +941,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Connections',
+                        _appLocalization.connections,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -963,7 +967,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Hosts',
+                        _appLocalization.hosts,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -984,7 +988,7 @@ class StatsScreenState extends State<StatsScreen>
                   child: Column(
                     children: <Widget>[
                       Text(
-                        'Last BlkTime',
+                        _appLocalization.lastBlkTime,
                         style: TextStyle(
                           fontSize: 14,
                         ),
@@ -1141,7 +1145,7 @@ class _CountDownTextState extends State<CountDownText> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 0, horizontal: 8),
       child: Text(
-        'Updating in ${countdown}s',
+        AppLocalizations.of(context).updatingIn+' ${countdown}s',
         textAlign: TextAlign.end,
         style: TextStyle(
           fontWeight: FontWeight.bold,

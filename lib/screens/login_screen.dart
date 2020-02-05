@@ -110,7 +110,7 @@ class LoginScreenState extends State<LoginScreen>
   Widget build(BuildContext context) {
     _ctx = context;
     final _appLocalization = AppLocalizations.of(context);
-    FormUtil _formUtil = FormUtil();
+    FormUtil _formUtil = FormUtil(appLocalizations: _appLocalization);
     var loginForm = Center(
       child: ListView(
         children: <Widget>[

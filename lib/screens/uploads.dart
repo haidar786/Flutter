@@ -1,3 +1,4 @@
+import 'package:emrals/localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:emrals/data/database_helper.dart';
 import 'package:emrals/models/offline_report.dart';
@@ -20,7 +21,7 @@ class UploadsState extends State<Uploads> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pending Uploads'),
+        title: Text(AppLocalizations.of(context).pendingUploads),
       ),
       body: StreamBuilder(
         stream: DatabaseHelper().getReports().asStream(),
@@ -77,7 +78,7 @@ class ReportList extends StatelessWidget {
                 report.latitude.toString() + ", " + report.longitude.toString(),
               ),
               trailing: RaisedButton(
-                child: Text('delete'),
+                child: Text(AppLocalizations.of(context).delete),
                 onPressed: () {
                   DatabaseHelper().deletereport(report.filename).then((d) {
                     reports.removeWhere(

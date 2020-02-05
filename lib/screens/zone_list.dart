@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emrals/data/zone_api.dart';
+import 'package:emrals/localizations.dart';
 import 'package:emrals/models/zone.dart';
 import 'package:emrals/styles.dart';
 import 'package:flutter/material.dart';
@@ -144,7 +145,7 @@ class _ZoneList extends State<ZoneListScreen>
           padding: const EdgeInsets.symmetric(vertical: 6),
           pageLoadController: pageLoadController,
           noItemsFoundBuilder: (BuildContext context) => Center(
-            child: Text('No zones found.'),
+            child: Text(AppLocalizations.of(context).noZonesFound),
           ),
           loadingBuilder: (BuildContext context) =>
               Center(child: CircularProgressIndicator()),
@@ -168,6 +169,7 @@ class ZoneListItem extends StatefulWidget {
 class _ZoneListItemState extends State<ZoneListItem> {
   @override
   Widget build(BuildContext context) {
+    final _appLocalization = AppLocalizations.of(context);
     final formatter = new NumberFormat("#,###");
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
@@ -195,7 +197,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                             )
                           : Container(
                               alignment: Alignment.center,
-                              child: Text('No Image'),
+                              child: Text(_appLocalization.noImage),
                             ),
                       Positioned(
                         top: 0,
@@ -228,7 +230,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                               width: 18, height: 18),
                           SizedBox(width: 5),
                           Text(
-                            "${formatter.format(int.parse(widget.zone.emralsAmount))} EMRALS",
+                            "${formatter.format(int.parse(widget.zone.emralsAmount))} "+_appLocalization.emrals,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -258,7 +260,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                                 ],
                               ),
                               Text(
-                                "reports",
+                                _appLocalization.reports.toLowerCase(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -281,7 +283,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                                 ],
                               ),
                               Text(
-                                "cleanups",
+                                _appLocalization.cleanUps,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -305,7 +307,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                                 ],
                               ),
                               Text(
-                                "views",
+                                _appLocalization.views,
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -320,7 +322,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                             shape: StadiumBorder(),
                             color: emralsColor()[1000],
                             onPressed: () {
-                              _showModal(widget.zone);
+                              _showModal(widget.zone,_appLocalization);
                             },
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -334,7 +336,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                                   width: 5,
                                 ),
                                 Text(
-                                  "FUND",
+                                  _appLocalization.fund,
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ],
@@ -342,7 +344,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                           ),
                           SizedBox(width: 15),
                           Text(
-                            "${widget.zone.subscriberCount} sponsor" +
+                            "${widget.zone.subscriberCount} "+_appLocalization.sponser +
                                 (widget.zone.subscriberCount > 1 ? "s" : "") +
                                 (widget.zone.subscriberCount == 0 ? "s" : ""),
                             style: TextStyle(fontWeight: FontWeight.bold),
@@ -361,7 +363,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
     );
   }
 
-  void _showModal(zone) {
+  void _showModal(zone, AppLocalizations appLocalization) {
     Future<void> future = showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
@@ -372,7 +374,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
             children: <Widget>[
               ListTile(
                 leading: Icon(Icons.directions_walk),
-                title: Text('100 EMRALS / month ' + zone.city),
+                title: Text("100 "+appLocalization.emralsPerMonth+' ' + zone.city),
                 onTap: () {
                   Map<String, String> headers = {
                     "Authorization": "token " +
@@ -400,7 +402,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
               ),
               ListTile(
                 leading: Icon(Icons.directions_run),
-                title: Text('200 EMRALS / month ' + zone.city),
+                title: Text("200 "+appLocalization.emralsPerMonth+" " + zone.city),
                 onTap: () {
                   Map<String, String> headers = {
                     "Authorization": "token " +
@@ -418,7 +420,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
-                            child: Text("OK"),
+                            child: Text(appLocalization.ok),
                           ),
                         ],
                       ),
@@ -428,7 +430,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
               ),
               ListTile(
                 leading: Icon(Icons.directions_bike),
-                title: Text('500 EMRALS / month ' + zone.city),
+                title: Text("500 "+appLocalization.emralsPerMonth+" " + zone.city),
                 onTap: () {
                   Map<String, String> headers = {
                     "Authorization": "token " +
@@ -446,7 +448,7 @@ class _ZoneListItemState extends State<ZoneListItem> {
                               Navigator.pop(context);
                               Navigator.pop(context);
                             },
-                            child: Text("OK"),
+                            child: Text(appLocalization.ok),
                           ),
                         ],
                       ),
@@ -480,7 +482,7 @@ class _ZoneSortDialogState extends State<ZoneSortDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Sort Zones"),
+      title: Text(AppLocalizations.of(context).sortZones),
       content: SingleChildScrollView(
         child: Column(
           children: ZoneSortType.values.map((z) {
